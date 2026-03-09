@@ -33,7 +33,7 @@
 
     .navbar a {
       display: inline-block;
-      margin: 0 16px;
+      margin: 0 14px;
       text-decoration: none;
       color: #2f5d62;
       font-weight: bold;
@@ -53,44 +53,22 @@
     .hero {
       background: white;
       border-radius: 18px;
-      padding: 28px 28px;
-      margin: 6px auto 24px;
+      padding: 34px 28px;
+      margin: 0 auto 24px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-    }
-
-    .hero-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      max-width: 760px;
-      margin: 0 auto;
-    }
-
-    .hero-text {
-      flex: 1;
       text-align: center;
     }
 
-    .hero-text h1 {
+    .hero h1 {
       color: #2f5d62;
-      font-size: 2.2rem;
+      font-size: 2.3rem;
       margin: 0 0 12px;
     }
 
-    .hero-text p {
-      max-width: 560px;
+    .hero p {
+      max-width: 700px;
       margin: 0 auto;
-      font-size: 1.02rem;
-    }
-
-    .hero-photo {
-      width: 78px;
-      height: 78px;
-      border-radius: 12px;
-      object-fit: cover;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.10);
-      flex-shrink: 0;
+      font-size: 1.05rem;
     }
 
     .section {
@@ -112,6 +90,28 @@
     .section p {
       max-width: 720px;
       margin: 0 auto 14px;
+    }
+
+    .about-container {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .about-photo {
+      width: 110px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 14px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+      flex-shrink: 0;
+    }
+
+    .about-text p {
+      margin-bottom: 12px;
     }
 
     .details p {
@@ -139,7 +139,7 @@
       padding: 18px;
       margin: 18px auto;
       max-width: 720px;
-      text-align: center;
+      text-align: left;
     }
 
     .audio-item h3 {
@@ -149,7 +149,8 @@
     }
 
     .audio-item p {
-      margin-bottom: 10px;
+      margin: 0 0 10px;
+      max-width: none;
     }
 
     audio {
@@ -165,28 +166,32 @@
     }
 
     @media (max-width: 760px) {
-      .hero-container {
+      .about-container {
         flex-direction: column;
-        gap: 14px;
+        text-align: center;
       }
 
-      .hero-photo {
-        width: 72px;
-        height: 72px;
+      .about-photo {
+        width: 90px;
+        height: 90px;
       }
 
-      .hero-text h1 {
-        font-size: 1.9rem;
+      .hero h1 {
+        font-size: 2rem;
       }
 
       .navbar a {
-        margin: 0 10px;
+        margin: 0 8px;
         font-size: 14px;
       }
 
       .hero,
       .section {
         padding: 22px 18px;
+      }
+
+      .audio-item {
+        text-align: center;
       }
     }
   </style>
@@ -195,6 +200,7 @@
 
   <div class="navbar">
     <a href="#home">Home</a>
+    <a href="#about">About</a>
     <a href="#workshops">Workshops</a>
     <a href="#audio">Relaxation Audio</a>
     <a href="#contact">Contact</a>
@@ -203,41 +209,54 @@
   <div class="page">
 
     <section class="hero" id="home">
-      <div class="hero-container">
-        <div class="hero-text">
-          <h1>Stress & Anxiety Management Workshops</h1>
+      <h1>MindEase</h1>
+      <p>
+        Stress and anxiety management workshops offering practical tools for emotional balance,
+        relaxation, and everyday wellbeing.
+      </p>
+    </section>
+
+    <section class="section" id="about">
+      <h2>About Me</h2>
+
+      <div class="about-container">
+        <img src="me.jpg" alt="Dr Krisztian Kasos" class="about-photo">
+
+        <div class="about-text">
           <p>
-            Supportive, practical workshops to help you better understand stress and anxiety,
-            learn effective calming techniques, and build healthier ways of coping in everyday life.
+            <strong>Krisztian Kasos, PhD</strong> is a psychologist and researcher specializing in
+            stress and anxiety regulation, emotional processes, and behavioural science.
+          </p>
+
+          <p>
+            He holds a PhD in Psychology from Eötvös Loránd University and has worked as a
+            researcher and assistant professor, studying emotional regulation, anxiety,
+            and psychophysiological responses to stress.
+          </p>
+
+          <p>
+            His work includes stress and anxiety management, guided meditation, relaxation techniques,
+            mindfulness-based approaches, biofeedback, and cognitive-behavioural methods.
+          </p>
+
+          <p>
+            Through workshops and guided practices, he aims to help people better understand stress,
+            develop practical coping tools, and build healthier ways of responding to challenging situations.
           </p>
         </div>
-
-        <img src="me.jpg" alt="Photo of workshop facilitator" class="hero-photo">
       </div>
     </section>
 
     <section class="section" id="workshops">
-      <h2>About the Workshops</h2>
+      <h2>Workshops</h2>
       <p>
         These workshops are designed for people who would like to better understand how stress
         and anxiety affect the mind and body, and how to respond to them in healthier, more balanced ways.
       </p>
       <p>
         Participants are introduced to practical tools such as breathing exercises,
-        relaxation techniques, grounding methods, and everyday coping strategies that can
-        support emotional wellbeing and resilience.
-      </p>
-    </section>
-
-    <section class="section">
-      <h2>What You Will Learn</h2>
-      <p>
-        The workshops explore common physical symptoms, emotional reactions, thought patterns,
-        and behavioural responses connected to stress and anxiety.
-      </p>
-      <p>
-        The aim is to help participants develop greater awareness, learn simple self-regulation skills,
-        and feel more confident using supportive strategies in daily life.
+        relaxation techniques, grounding methods, guided meditation, and cognitive-behavioural strategies
+        that can support emotional wellbeing and resilience.
       </p>
     </section>
 

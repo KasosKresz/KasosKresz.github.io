@@ -1,200 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MindEase | Stress & Anxiety Workshops</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MindEase | Stress & Anxiety Workshops</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-<style>
+    html {
+      scroll-behavior: smooth;
+    }
 
-body{
-font-family: Arial, sans-serif;
-max-width:950px;
-margin:0 auto;
-padding:20px;
-background:#f7f9f8;
-color:#2f3a3a;
-line-height:1.7;
-}
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f6f8f7;
+      color: #2f3a3a;
+      line-height: 1.7;
+    }
 
-h1,h2,h3{
-color:#2f5d62;
-}
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
 
-h1{
-text-align:center;
-margin-top:10px;
-}
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255,255,255,0.96);
+      border-bottom: 1px solid #e4ebea;
+      text-align: center;
+      padding: 16px 10px;
+      backdrop-filter: blur(6px);
+    }
 
-.section{
-background:white;
-padding:28px;
-margin:30px 0;
-border-radius:12px;
-box-shadow:0 2px 10px rgba(0,0,0,0.06);
-}
+    .navbar a {
+      display: inline-block;
+      margin: 0 16px;
+      text-decoration: none;
+      color: #2f5d62;
+      font-weight: bold;
+      font-size: 15px;
+    }
 
-.top-image{
-float:right;
-width:140px;
-border-radius:12px;
-margin-left:20px;
-margin-bottom:10px;
-}
+    .navbar a:hover {
+      opacity: 0.75;
+    }
 
-.navbar{
-position:sticky;
-top:0;
-background:white;
-padding:12px 0;
-margin-bottom:30px;
-border-bottom:1px solid #e6eceb;
-text-align:center;
-}
+    .hero {
+      position: relative;
+      text-align: center;
+      padding: 48px 0 20px;
+    }
 
-.navbar a{
-margin:0 18px;
-text-decoration:none;
-color:#2f5d62;
-font-weight:bold;
-}
+    .top-image {
+      position: absolute;
+      top: 10px;
+      right: 0;
+      width: 110px;
+      border-radius: 14px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+    }
 
-.navbar a:hover{
-opacity:0.7;
-}
+    h1 {
+      color: #2f5d62;
+      font-size: 2.4rem;
+      margin: 0 0 14px;
+    }
 
-.button{
-display:inline-block;
-background:#2f5d62;
-color:white;
-padding:12px 20px;
-border-radius:8px;
-text-decoration:none;
-margin-top:10px;
-}
+    .intro {
+      max-width: 680px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+    }
 
-.audio-item{
-background:#f3f7f6;
-padding:16px;
-border-radius:10px;
-margin:20px 0;
-}
+    .section {
+      background: white;
+      margin: 26px auto;
+      padding: 30px 28px;
+      border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      text-align: center;
+    }
 
-audio{
-width:100%;
-margin-top:10px;
-}
+    h2 {
+      color: #2f5d62;
+      margin-top: 0;
+      margin-bottom: 14px;
+      font-size: 1.6rem;
+    }
 
-footer{
-text-align:center;
-margin-top:40px;
-color:#6b7676;
-font-size:14px;
-}
+    p {
+      max-width: 720px;
+      margin: 0 auto 14px;
+    }
 
-</style>
+    .details p {
+      margin-bottom: 8px;
+    }
+
+    .button {
+      display: inline-block;
+      background: #2f5d62;
+      color: white;
+      padding: 13px 22px;
+      border-radius: 9px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 14px;
+    }
+
+    .button:hover {
+      opacity: 0.92;
+    }
+
+    .audio-item {
+      background: #f2f6f5;
+      border-radius: 12px;
+      padding: 18px;
+      margin: 18px auto;
+      max-width: 720px;
+      text-align: center;
+    }
+
+    .audio-item h3 {
+      margin: 0 0 8px;
+      color: #2f5d62;
+      font-size: 1.1rem;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    footer {
+      text-align: center;
+      color: #6e7878;
+      font-size: 14px;
+      margin-top: 36px;
+    }
+
+    @media (max-width: 700px) {
+      .hero {
+        padding-top: 24px;
+      }
+
+      .top-image {
+        position: static;
+        display: block;
+        margin: 0 auto 18px;
+        width: 95px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .navbar a {
+        margin: 0 10px;
+        font-size: 14px;
+      }
+
+      .section {
+        padding: 24px 18px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="navbar">
-<a href="#home">Home</a>
-<a href="#workshops">Workshops</a>
-<a href="#audio">Relaxation Audio</a>
-<a href="#contact">Contact</a>
-</div>
+  <div class="navbar">
+    <a href="#home">Home</a>
+    <a href="#workshops">Workshops</a>
+    <a href="#audio">Relaxation Audio</a>
+    <a href="#contact">Contact</a>
+  </div>
 
-<section id="home">
+  <div class="page">
+    <section class="hero" id="home">
+      <img src="me.jpg" alt="Photo of workshop facilitator" class="top-image">
 
-<img src="me.jpg" class="top-image" alt="Photo">
+      <h1>Stress & Anxiety Management Workshops</h1>
+      <p class="intro">
+        Supportive, practical workshops to help you better understand stress and anxiety,
+        learn effective calming techniques, and build healthier ways of coping in everyday life.
+      </p>
+    </section>
 
-<h1>Stress & Anxiety Management Workshops</h1>
+    <section class="section" id="workshops">
+      <h2>About the Workshops</h2>
+      <p>
+        These workshops are designed for people who would like to better understand how
+        stress and anxiety affect the mind and body, and how to respond to them in healthier,
+        more balanced ways.
+      </p>
+      <p>
+        Participants are introduced to practical tools such as breathing exercises,
+        relaxation techniques, grounding methods, and everyday coping strategies that can
+        support emotional wellbeing and resilience.
+      </p>
+    </section>
 
-<p style="text-align:center;">
-Supportive, practical workshops to help you understand stress and anxiety,
-learn calming techniques, and develop healthier coping strategies.
-</p>
+    <section class="section details">
+      <h2>Upcoming Workshop</h2>
+      <p><strong>Date:</strong> Add your date here</p>
+      <p><strong>Time:</strong> Add your time here</p>
+      <p><strong>Location:</strong> Add your location or online link here</p>
+      <p><strong>Format:</strong> In person / Online</p>
 
-</section>
+      <a class="button" href="https://forms.gle/PUT-YOUR-GOOGLE-FORM-LINK-HERE" target="_blank" rel="noopener">
+        Sign Up
+      </a>
+    </section>
 
-<div class="section" id="workshops">
+    <section class="section" id="audio">
+      <h2>Relaxation Audio Library</h2>
+      <p>
+        A selection of guided practices to support relaxation, grounding, and emotional balance.
+      </p>
 
-<h2>About the Workshops</h2>
+      <div class="audio-item">
+        <h3>Breathing Exercise</h3>
+        <p>A short guided breathing practice to help calm the body and settle the mind.</p>
+        <audio controls>
+          <source src="breathing.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
 
-<p>
-These workshops are designed for people who want to better understand how
-stress and anxiety affect the mind and body, and how to respond in healthier ways.
-</p>
+      <div class="audio-item">
+        <h3>Progressive Muscle Relaxation</h3>
+        <p>A guided practice to release tension from the body and encourage deep relaxation.</p>
+        <audio controls>
+          <source src="muscle-relaxation.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
 
-<p>
-Participants will learn practical tools including breathing exercises,
-relaxation techniques, grounding practices, and everyday coping strategies.
-</p>
+      <div class="audio-item">
+        <h3>Grounding Exercise</h3>
+        <p>A brief grounding practice for moments of stress, overwhelm, or anxious thoughts.</p>
+        <audio controls>
+          <source src="grounding.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    </section>
 
-<h2>Upcoming Workshop</h2>
+    <section class="section" id="contact">
+      <h2>Contact</h2>
+      <p>Email: your@email.com</p>
+    </section>
 
-<p><strong>Date:</strong> Add your date here</p>
-<p><strong>Time:</strong> Add your time here</p>
-<p><strong>Location:</strong> Add location or online link</p>
-<p><strong>Format:</strong> In person / Online</p>
-
-<a class="button" href="https://forms.gle/PUT-YOUR-GOOGLE-FORM-LINK-HERE">Sign Up</a>
-
-</div>
-
-<div class="section" id="audio">
-
-<h2>Relaxation Audio Library</h2>
-
-<p>
-You can listen to guided relaxation exercises below.
-</p>
-
-<div class="audio-item">
-
-<h3>Breathing Exercise</h3>
-
-<audio controls>
-<source src="breathing.mp3" type="audio/mpeg">
-</audio>
-
-</div>
-
-<div class="audio-item">
-
-<h3>Progressive Muscle Relaxation</h3>
-
-<audio controls>
-<source src="muscle-relaxation.mp3" type="audio/mpeg">
-</audio>
-
-</div>
-
-<div class="audio-item">
-
-<h3>Grounding Exercise</h3>
-
-<audio controls>
-<source src="grounding.mp3" type="audio/mpeg">
-</audio>
-
-</div>
-
-</div>
-
-<div class="section" id="contact">
-
-<h2>Contact</h2>
-
-<p>Email: your@email.com</p>
-
-</div>
-
-<footer>
-
-© 2026 MindEase
-
-</footer>
+    <footer>
+      © 2026 MindEase
+    </footer>
+  </div>
 
 </body>
 </html>

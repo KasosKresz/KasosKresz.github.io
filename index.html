@@ -3,51 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Stress & Anxiety Management Workshops</title>
+  <title>MindEase | Stress & Anxiety Management Workshops</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 900px;
+      max-width: 950px;
       margin: 0 auto;
       padding: 30px 20px 60px;
       line-height: 1.7;
       color: #2f3a3a;
       background: #f7f9f8;
-      text-align: center;
+    }
+
+    h1, h2, h3 {
+      color: #2f5d62;
     }
 
     h1 {
-      color: #2f5d62;
-      font-size: 2.4rem;
-      margin-bottom: 10px;
-    }
-
-    h2 {
-      color: #2f5d62;
       margin-top: 0;
+      text-align: center;
+      font-size: 2.3rem;
     }
 
-    p {
+    .intro {
+      text-align: center;
       max-width: 760px;
-      margin: 0 auto 16px;
+      margin: 0 auto 30px;
+    }
+
+    .top-image {
+      float: right;
+      width: 140px;
+      border-radius: 12px;
+      margin: 0 0 20px 20px;
     }
 
     .section {
       background: white;
-      padding: 32px 24px;
-      margin: 28px 0;
+      padding: 28px 24px;
+      margin: 24px 0;
       border-radius: 14px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.06);
     }
 
-img src="hero.jpg" alt="Calm and relaxing workshop image" style="width:25%; display:block; margin:20px auto;
+    .section p {
+      margin-bottom: 14px;
     }
 
     .button {
       display: inline-block;
       background: #2f5d62;
       color: white;
-      padding: 14px 24px;
+      padding: 12px 22px;
       text-decoration: none;
       border-radius: 8px;
       margin-top: 12px;
@@ -58,64 +65,92 @@ img src="hero.jpg" alt="Calm and relaxing workshop image" style="width:25%; disp
       opacity: 0.92;
     }
 
-    audio {
-      width: 100%;
-      max-width: 700px;
-      margin-top: 15px;
+    .audio-item {
+      margin: 24px 0;
+      padding: 18px;
+      background: #f3f7f6;
+      border-radius: 10px;
     }
 
-    .details p {
+    .audio-item h3 {
+      margin-top: 0;
       margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .contact, .details {
+      text-align: center;
     }
 
     footer {
       margin-top: 40px;
       color: #6b7676;
       font-size: 14px;
+      text-align: center;
+      clear: both;
+    }
+
+    @media (max-width: 700px) {
+      .top-image {
+        float: none;
+        display: block;
+        margin: 0 auto 20px;
+        width: 120px;
+      }
+
+      h1, .intro, .details, .contact {
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
 
-  <h1>Stress & Anxiety Management Workshops</h1>
-  <p>
-    Practical, supportive workshops to help you better understand stress and anxiety,
-    build emotional resilience, and learn simple techniques for everyday wellbeing.
-  </p>
+  <img src="me.jpg" alt="Photo of workshop facilitator" class="top-image">
 
-  <img src="hero.jpg" alt="Calm and relaxing workshop image" class="hero-image">
+  <h1>Stress & Anxiety Management Workshops</h1>
+
+  <p class="intro">
+    Supportive, practical workshops to help you better understand stress and anxiety,
+    learn effective calming techniques, and build healthier ways of coping in everyday life.
+  </p>
 
   <div class="section">
     <h2>About the Workshops</h2>
     <p>
-      These workshops are designed for people who would like to better understand how
-      stress and anxiety affect the mind and body, and how to respond to them in a healthier way.
+      These workshops are designed for people who would like to better understand how stress
+      and anxiety affect the mind and body, and how to respond to them in a healthier and more balanced way.
     </p>
     <p>
-      The sessions focus on practical, evidence-informed methods that participants can use
-      in daily life to feel more grounded, more aware, and better able to cope with difficult moments.
+      The sessions focus on simple, practical, evidence-informed techniques that can help participants
+      feel more grounded, calmer, and better able to cope with challenging situations.
     </p>
   </div>
 
   <div class="section">
     <h2>What You Will Learn</h2>
     <p>
-      During the workshops, participants will be introduced to key ideas about stress and anxiety,
-      including physical symptoms, emotional signs, thought patterns, and behavioural responses.
+      The workshops introduce key ideas about stress and anxiety, including common physical symptoms,
+      emotional reactions, thought patterns, and behavioural responses.
     </p>
     <p>
-      We will also explore helpful tools such as breathing exercises, relaxation methods,
-      mindfulness-based practices, and practical coping strategies that can support long-term wellbeing.
+      Participants will also learn useful tools such as breathing exercises, relaxation methods,
+      grounding techniques, mindfulness-based practices, and healthier coping strategies for daily life.
     </p>
   </div>
 
   <div class="section">
     <h2>Workshop Topics</h2>
     <p>Understanding stress and anxiety</p>
-    <p>Recognising common physical, emotional, and cognitive signs</p>
-    <p>Breathing and relaxation exercises</p>
-    <p>Mindfulness and grounding techniques</p>
-    <p>Developing healthier coping strategies</p>
+    <p>Recognising physical, emotional, and mental signs</p>
+    <p>Relaxation and breathing techniques</p>
+    <p>Mindfulness and grounding exercises</p>
+    <p>Building healthier coping strategies</p>
   </div>
 
   <div class="section details">
@@ -131,25 +166,55 @@ img src="hero.jpg" alt="Calm and relaxing workshop image" style="width:25%; disp
   </div>
 
   <div class="section">
-    <h2>Guided Meditation</h2>
+    <h2>Relaxation Audio Library</h2>
     <p>
-      You can listen to a short guided meditation below. This practice is intended to support
-      relaxation, body awareness, and a calmer state of mind.
+      Below you can listen to a selection of guided practices for relaxation, grounding, and emotional balance.
     </p>
 
-    <audio controls>
-      <source src="meditation.mp3" type="audio/mpeg">
-      Your browser does not support the audio element.
-    </audio>
+    <div class="audio-item">
+      <h3>Breathing Exercise</h3>
+      <p>A short guided breathing exercise to help calm the body and settle the mind.</p>
+      <audio controls>
+        <source src="breathing-exercise.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+
+    <div class="audio-item">
+      <h3>Progressive Muscle Relaxation</h3>
+      <p>A guided practice to release tension from the body and encourage deep relaxation.</p>
+      <audio controls>
+        <source src="progressive-muscle-relaxation.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+
+    <div class="audio-item">
+      <h3>Grounding Practice</h3>
+      <p>A short grounding exercise for moments of stress, overwhelm, or anxious thoughts.</p>
+      <audio controls>
+        <source src="grounding-practice.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+
+    <div class="audio-item">
+      <h3>Guided Meditation</h3>
+      <p>A calming guided meditation to support relaxation and present-moment awareness.</p>
+      <audio controls>
+        <source src="guided-meditation.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
   </div>
 
-  <div class="section">
+  <div class="section contact">
     <h2>Contact</h2>
     <p>Email: your@email.com</p>
   </div>
 
   <footer>
-    © 2026 Stress & Anxiety Management Workshops
+    © 2026 MindEase | Stress & Anxiety Management Workshops
   </footer>
 
 </body>

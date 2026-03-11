@@ -33,7 +33,7 @@
         await signInWithEmailAndPassword(auth, email, password);
         message.textContent = "Login successful";
       } catch (error) {
-        message.textContent = error.message;
+        window.location.href = "/index.html";
       }
     });
   </script>

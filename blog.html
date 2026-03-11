@@ -4,8 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Blog | MindEase</title>
-  <meta name="description" content="Read articles from MindEase on stress, anxiety, relaxation, emotional wellbeing, and practical psychological support.">
+  <meta name="description" content="Read articles from MindEase on stress, anxiety, relaxation, and emotional wellbeing.">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -15,29 +19,37 @@
     }
 
     .navbar {
-      text-align: center;
-      background: white;
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.97);
       border-bottom: 1px solid #e4ebea;
+      text-align: center;
       padding: 16px 10px;
     }
 
     .navbar a {
-      margin: 0 14px;
+      display: inline-block;
+      margin: 0 12px;
       text-decoration: none;
       color: #2f5d62;
       font-weight: bold;
+      font-size: 15px;
+    }
+
+    .navbar a:hover {
+      opacity: 0.75;
     }
 
     .page {
-      max-width: 900px;
+      max-width: 960px;
       margin: 0 auto;
-      padding: 30px 20px 60px;
+      padding: 24px 20px 60px;
     }
 
     .section {
       background: white;
-      margin: 24px 0;
-      padding: 28px 24px;
+      margin: 0 auto 24px;
+      padding: 30px 26px;
       border-radius: 18px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.06);
     }
@@ -45,23 +57,49 @@
     h1, h2 {
       color: #2f5d62;
       text-align: center;
-    }
-
-    .post {
-      border-top: 1px solid #e8eeee;
-      padding-top: 18px;
-      margin-top: 18px;
-    }
-
-    .post:first-of-type {
-      border-top: none;
-      padding-top: 0;
       margin-top: 0;
     }
 
+    .intro {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .post {
+      background: #f2f6f5;
+      border-radius: 14px;
+      padding: 20px;
+      margin: 18px 0;
+    }
+
     .post h3 {
+      margin-top: 0;
       margin-bottom: 8px;
+    }
+
+    .post h3 a {
       color: #2f5d62;
+      text-decoration: none;
+    }
+
+    .post h3 a:hover {
+      text-decoration: underline;
+    }
+
+    .read-more {
+      display: inline-block;
+      margin-top: 10px;
+      color: #2f5d62;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    footer {
+      text-align: center;
+      color: #6e7878;
+      font-size: 14px;
+      margin-top: 36px;
     }
   </style>
 </head>
@@ -71,41 +109,31 @@
     <a href="index.html">Home</a>
     <a href="blog.html">Blog</a>
     <a href="audio.html">Relaxation Audio</a>
+    <a href="materials.html">Supporting Materials</a>
   </div>
 
   <div class="page">
-    <div class="section">
+    <section class="section">
       <h1>MindEase Blog</h1>
-      <p style="text-align:center;">
-        Articles and reflections on stress, anxiety, relaxation, and emotional wellbeing.
+      <p class="intro">
+        Articles on stress, anxiety, relaxation, and emotional wellbeing.
       </p>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="section">
       <div class="post">
-        <h3>Understanding Stress</h3>
+        <h3><a href="breathing-for-anxiety.html">Breathing Techniques for Anxiety</a></h3>
         <p>
-          Stress is a natural response, but when it becomes chronic it can affect both mind and body.
-          Learning to notice the early signs can help people respond more effectively.
+          Slow, steady breathing can help calm the nervous system and reduce the physical intensity of anxiety.
+          This article explains why it works and how to begin.
         </p>
+        <a class="read-more" href="breathing-for-anxiety.html">Read article</a>
       </div>
+    </section>
 
-      <div class="post">
-        <h3>How Breathing Can Help Anxiety</h3>
-        <p>
-          Slow and steady breathing can reduce physiological arousal and help calm the nervous system
-          during anxious moments.
-        </p>
-      </div>
-
-      <div class="post">
-        <h3>Why Relaxation Practice Matters</h3>
-        <p>
-          Relaxation is not only helpful during acute stress. Practised regularly, it can improve
-          emotional balance and build resilience over time.
-        </p>
-      </div>
-    </div>
+    <footer>
+      © 2026 MindEase
+    </footer>
   </div>
 
 </body>

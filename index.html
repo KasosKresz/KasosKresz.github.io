@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MindEase | Stress, Anxiety, and Wellbeing Support</title>
-  <meta name="description" content="MindEase offers stress and anxiety support through guided relaxation audio, workshops, educational content, and practical wellbeing resources.">
+  <meta name="description" content="MindEase offers evidence-informed support for stress, anxiety, and emotional wellbeing through workshops, individual consultation, relaxation audio, blog articles, and supporting materials.">
+  <meta name="theme-color" content="#2f5d62">
+
   <style>
     * {
       box-sizing: border-box;
@@ -34,7 +36,7 @@
 
     .navbar a {
       display: inline-block;
-      margin: 0 14px;
+      margin: 0 12px;
       text-decoration: none;
       color: #2f5d62;
       font-weight: bold;
@@ -46,7 +48,7 @@
     }
 
     .page {
-      max-width: 960px;
+      max-width: 980px;
       margin: 0 auto;
       padding: 24px 20px 60px;
     }
@@ -54,7 +56,7 @@
     .hero {
       background: white;
       border-radius: 18px;
-      padding: 40px 28px;
+      padding: 42px 28px;
       margin: 0 auto 24px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.06);
       text-align: center;
@@ -66,10 +68,17 @@
       margin: 0 0 12px;
     }
 
-    .hero p {
-      max-width: 720px;
+    .hero .tagline {
+      font-size: 1.15rem;
+      font-weight: 600;
+      max-width: 760px;
       margin: 0 auto 14px;
-      font-size: 1.08rem;
+      color: #2f5d62;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0 auto;
     }
 
     .section {
@@ -85,7 +94,7 @@
       color: #2f5d62;
       margin-top: 0;
       margin-bottom: 14px;
-      font-size: 1.6rem;
+      font-size: 1.65rem;
     }
 
     .section p {
@@ -97,7 +106,7 @@
       display: flex;
       align-items: center;
       gap: 28px;
-      max-width: 800px;
+      max-width: 820px;
       margin: 0 auto;
       text-align: left;
     }
@@ -119,8 +128,8 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 18px;
-      max-width: 820px;
-      margin: 20px auto 0;
+      max-width: 840px;
+      margin: 18px auto 0;
     }
 
     .card {
@@ -132,7 +141,14 @@
 
     .card h3 {
       margin-top: 0;
+      margin-bottom: 10px;
       color: #2f5d62;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      max-width: none;
     }
 
     .button {
@@ -143,11 +159,17 @@
       border-radius: 9px;
       text-decoration: none;
       font-weight: bold;
-      margin-top: 14px;
+      margin-top: 10px;
     }
 
     .button:hover {
       opacity: 0.92;
+    }
+
+    .small-link {
+      margin-top: 10px;
+      display: block;
+      font-size: 0.95rem;
     }
 
     footer {
@@ -172,6 +194,10 @@
         grid-template-columns: 1fr;
       }
 
+      .card {
+        text-align: center;
+      }
+
       .hero h1 {
         font-size: 2rem;
       }
@@ -185,10 +211,6 @@
       .section {
         padding: 22px 18px;
       }
-
-      .card {
-        text-align: center;
-      }
     }
   </style>
 </head>
@@ -199,8 +221,8 @@
     <a href="#about">About</a>
     <a href="#sessions">Sessions</a>
     <a href="blog.html">Blog</a>
-    <a href="materials.html">Supporting Materials</a>
     <a href="audio.html">Relaxation Audio</a>
+    <a href="materials.html">Supporting Materials</a>
     <a href="#contact">Contact</a>
   </div>
 
@@ -208,16 +230,13 @@
 
     <section class="hero">
       <h1>MindEase</h1>
-
-      <p style="font-size:1.15rem; font-weight:500;">
+      <p class="tagline">
         Evidence-informed tools for managing stress, anxiety, and emotional wellbeing.
       </p>
-
       <p>
-        MindEase is a space dedicated to understanding and supporting emotional wellbeing
-        through guided relaxation, educational resources, workshops, and individual consultation.
-        The aim is to combine psychological science with practical tools that can be used
-        in everyday life.
+        MindEase offers practical support through workshops, individual consultation,
+        guided relaxation resources, educational content, and supporting materials designed
+        to help people build healthier ways of responding to stress and anxiety in everyday life.
       </p>
     </section>
 
@@ -239,13 +258,13 @@
 
           <p>
             Krisztian’s background includes psychology, behavioural science, emotional regulation,
-            psychophysiology, guided relaxation, mindfulness-based methods, and cognitive-behavioural approaches.
+            guided relaxation, mindfulness-based approaches, psychophysiology, and cognitive-behavioural methods.
           </p>
 
           <p>
-            The aim of MindEase is to combine scientific knowledge with practical tools that people
-            can actually use — whether through guided audio practices, educational materials,
-            workshops, or individual support.
+            The aim of MindEase is to bring together scientific understanding and practical tools
+            that people can actually use — through workshops, individual consultation, guided audio,
+            blog content, and supporting materials.
           </p>
         </div>
       </div>
@@ -255,21 +274,17 @@
       <h2>Sessions & Workshops</h2>
 
       <div class="cards">
-
         <div class="card">
           <h3>Stress & Anxiety Workshops</h3>
           <p>
-            Online workshops focused on understanding stress and anxiety,
-            learning practical coping strategies, relaxation techniques,
-            grounding exercises, and guided practices.
+            Online workshops focused on understanding stress and anxiety, learning practical coping
+            strategies, relaxation techniques, grounding exercises, and guided practices.
           </p>
-
-          <p><strong>Next workshop:</strong><br>
-          21 March 2026 – 10 AM (ET)</p>
-
-          <a class="button"
-             href="https://docs.google.com/forms/d/e/1FAIpQLSf5UUCFjOha-TPXf_qf2S33j9jHVq5zk0C2bJ3XW2przHoI_Q/viewform?usp=sharing&ouid=107778545710584818433"
-             target="_blank" rel="noopener">
+          <p>
+            <strong>Next workshop:</strong><br>
+            21 March 2026 – 10 AM ET
+          </p>
+          <a class="button" href="https://forms.gle/PUT-YOUR-GOOGLE-FORM-LINK-HERE" target="_blank" rel="noopener">
             Sign Up for Workshop
           </a>
         </div>
@@ -277,42 +292,52 @@
         <div class="card">
           <h3>Individual Consultation</h3>
           <p>
-            Individual sessions focused on stress and anxiety management,
-            emotional regulation, relaxation techniques, and practical
-            coping tools for everyday challenges.
+            Individual sessions focused on stress and anxiety management, emotional regulation,
+            relaxation techniques, and practical coping tools for everyday challenges.
           </p>
-
-          <a class="button"
-             href="mailto:consultation@mindease.ca?subject=Consultation Request">
+          <a class="button" href="mailto:consultation@mindease.ca?subject=Consultation Request">
             Request a Session
+          </a>
+          <a class="small-link" href="mailto:consultation@mindease.ca">
+            consultation@mindease.ca
           </a>
         </div>
 
         <div class="card">
           <h3>Relaxation Audio</h3>
           <p>
-            A growing library of guided relaxation practices including
-            breathing exercises, grounding techniques, and meditation.
+            A growing library of guided practices including breathing exercises, grounding,
+            relaxation, and meditation.
           </p>
-
           <a class="button" href="audio.html">
             Listen to Audio
           </a>
         </div>
 
         <div class="card">
-          <h3>Supporting Materials</h3>
+          <h3>Blog & Supporting Materials</h3>
           <p>
-            Educational articles and practical resources about stress,
-            anxiety, relaxation, and psychological wellbeing.
+            Read articles and access practical resources on stress, anxiety, relaxation,
+            and emotional wellbeing.
           </p>
-
-          <a class="button" href="materials.html">
-            View Materials
+          <a class="button" href="blog.html">
+            Visit the Blog
           </a>
         </div>
-
       </div>
+    </section>
+
+    <section class="section">
+      <h2>Explore MindEase</h2>
+      <p>
+        MindEase is designed as a growing space for stress and anxiety support. In addition to
+        workshops and individual consultation, the site includes guided relaxation audio,
+        educational blog content, and supporting materials that can be used independently.
+      </p>
+      <p>
+        Whether you are looking for practical tools, guided exercises, or a deeper understanding
+        of stress and anxiety, MindEase aims to offer resources that are accessible, supportive, and grounded in psychology.
+      </p>
     </section>
 
     <section class="section" id="contact">

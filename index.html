@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MindEase | Stress & Anxiety Management Workshops</title>
+  <title>MindEase | Stress, Anxiety, and Wellbeing Support</title>
+  <meta name="description" content="MindEase offers stress and anxiety support through guided relaxation audio, workshops, educational content, and practical wellbeing resources.">
   <style>
     * {
       box-sizing: border-box;
@@ -53,7 +54,7 @@
     .hero {
       background: white;
       border-radius: 18px;
-      padding: 34px 28px;
+      padding: 40px 28px;
       margin: 0 auto 24px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.06);
       text-align: center;
@@ -61,14 +62,14 @@
 
     .hero h1 {
       color: #2f5d62;
-      font-size: 2.3rem;
+      font-size: 2.5rem;
       margin: 0 0 12px;
     }
 
     .hero p {
-      max-width: 700px;
+      max-width: 720px;
       margin: 0 auto;
-      font-size: 1.05rem;
+      font-size: 1.08rem;
     }
 
     .section {
@@ -88,7 +89,7 @@
     }
 
     .section p {
-      max-width: 720px;
+      max-width: 760px;
       margin: 0 auto 14px;
     }
 
@@ -96,16 +97,16 @@
       display: flex;
       align-items: center;
       gap: 28px;
-      max-width: 760px;
+      max-width: 800px;
       margin: 0 auto;
       text-align: left;
     }
 
     .about-photo {
-      width: 220px;
-      height: 220px;
+      width: 170px;
+      height: 170px;
       object-fit: cover;
-      border-radius: 50%;
+      border-radius: 16px;
       box-shadow: 0 3px 10px rgba(0,0,0,0.10);
       flex-shrink: 0;
     }
@@ -114,8 +115,24 @@
       margin-bottom: 12px;
     }
 
-    .details p {
-      margin-bottom: 8px;
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      max-width: 820px;
+      margin: 20px auto 0;
+    }
+
+    .card {
+      background: #f2f6f5;
+      border-radius: 14px;
+      padding: 20px;
+      text-align: left;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #2f5d62;
     }
 
     .button {
@@ -133,31 +150,6 @@
       opacity: 0.92;
     }
 
-    .audio-item {
-      background: #f2f6f5;
-      border-radius: 12px;
-      padding: 18px;
-      margin: 18px auto;
-      max-width: 720px;
-      text-align: left;
-    }
-
-    .audio-item h3 {
-      margin: 0 0 8px;
-      color: #2f5d62;
-      font-size: 1.1rem;
-    }
-
-    .audio-item p {
-      margin: 0 0 10px;
-      max-width: none;
-    }
-
-    audio {
-      width: 100%;
-      margin-top: 8px;
-    }
-
     footer {
       text-align: center;
       color: #6e7878;
@@ -171,9 +163,13 @@
         text-align: center;
       }
 
-     .about-photo {
-      width: 220px;
-        height: 220px;
+      .about-photo {
+        width: 130px;
+        height: 130px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
       }
 
       .hero h1 {
@@ -190,7 +186,7 @@
         padding: 22px 18px;
       }
 
-      .audio-item {
+      .card {
         text-align: center;
       }
     }
@@ -199,160 +195,109 @@
 <body>
 
   <div class="navbar">
-<a href="#home">Home</a>
-<a href="#about">About</a>
-<a href="#counselling">Individual Consultations</a>
-<a href="#workshops">Workshops</a>
-<a href="#audio">Relaxation Audio</a>
-<a href="#contact">Contact</a>
+    <a href="index.html">Home</a>
+    <a href="#about">About</a>
+    <a href="#offerings">Offerings</a>
+    <a href="blog.html">Blog</a>
+    <a href="audio.html">Relaxation Audio</a>
+    <a href="#contact">Contact</a>
   </div>
 
   <div class="page">
 
-    <section class="hero" id="home">
+    <section class="hero">
       <h1>MindEase</h1>
       <p>
-        Stress and anxiety management workshops offering practical tools for emotional balance,
-        relaxation, and everyday wellbeing.
+        MindEase is a space dedicated to stress, anxiety, and emotional wellbeing,
+        offering practical support through guided relaxation, educational resources,
+        workshops, and individual consultation.
       </p>
     </section>
 
     <section class="section" id="about">
-      <h2>About Me</h2>
+      <h2>About MindEase</h2>
 
       <div class="about-container">
         <img src="me.jpg" alt="Dr Krisztian Kasos" class="about-photo">
 
         <div class="about-text">
           <p>
-            <strong>Krisztian Kasos, PhD</strong> is a psychologist and researcher specializing in
-            stress and anxiety regulation, emotional processes, and behavioural science.
+            <strong>MindEase was founded by Krisztian Kasos, PhD</strong>, psychologist and researcher.
           </p>
 
           <p>
-            I hold a PhD in Psychology and have worked as a
-            researcher and assistant professor, studying emotional regulation, anxiety,
-            and psychophysiological responses to stress.
+            MindEase was created to offer accessible, practical, and evidence-informed support
+            for people experiencing stress, anxiety, and emotional overload in everyday life.
           </p>
 
           <p>
-            My work includes stress and anxiety management, guided meditation, relaxation techniques,
-            mindfulness-based approaches, biofeedback, and cognitive-behavioural methods.
+            Krisztian’s background includes psychology, behavioural science, emotional regulation,
+            psychophysiology, guided relaxation, mindfulness-based methods, and cognitive-behavioural approaches.
           </p>
 
           <p>
-            Through workshops and guided practices, I aim to help people better understand stress,
-            develop practical coping tools, and build healthier ways of responding to challenging situations.
+            The aim of MindEase is to combine scientific knowledge with practical tools that people
+            can actually use — whether through guided audio practices, educational materials,
+            workshops, or individual support.
           </p>
         </div>
       </div>
     </section>
-<section class="section" id="counselling">
 
-<h2>Individual Consultation</h2>
+    <section class="section" id="offerings">
+      <h2>What MindEase Offers</h2>
 
-<p>
-In addition to workshops, I offer individual consultation sessions focused on stress and anxiety
-management. These sessions provide a supportive space to explore personal challenges and learn
-practical strategies for managing stress more effectively.
-</p>
+      <div class="cards">
+        <div class="card">
+          <h3>Workshops</h3>
+          <p>
+            Online workshops focused on stress and anxiety management, practical coping tools,
+            emotional regulation, relaxation techniques, and guided exercises.
+          </p>
+        </div>
 
-<p>
-Sessions focus on developing practical tools that can be used in everyday life, including
-relaxation techniques, breathing exercises, grounding methods, and cognitive-behavioural
-approaches to managing anxious thoughts and emotional responses.
-</p>
+        <div class="card">
+          <h3>Individual Consultation</h3>
+          <p>
+            Individual sessions focused on stress and anxiety support, practical coping strategies,
+            guided relaxation, and everyday emotional wellbeing.
+          </p>
+        </div>
 
-<p>
-Sessions may be helpful for people experiencing:
-</p>
+        <div class="card">
+          <h3>Relaxation Audio</h3>
+          <p>
+            A growing library of guided practices including breathing exercises, grounding,
+            relaxation, and meditation.
+          </p>
+          <a class="button" href="audio.html">Listen to Audio</a>
+        </div>
 
-<p>
-• Ongoing stress or burnout<br>
-• Anxiety or persistent worry<br>
-• Difficulty relaxing or switching off<br>
-• High pressure at work or study<br>
-• The need for practical coping strategies
-</p>
-
-<p><strong>Format:</strong> Online sessions</p>
-
-<a class="button" href="mailto:consultation@mindease.ca">
-Request a Session
-</a>
-
-</section>
-    <section class="section" id="workshops">
-      <h2>Workshops</h2>
-      <p>
-        These workshops are designed for people who would like to better understand how stress
-        and anxiety affect the mind and body, and how to respond to them in healthier, more balanced ways.
-      </p>
-      <p>
-        Participants are introduced to practical tools such as breathing exercises,
-        relaxation techniques, grounding methods, guided meditation, and cognitive-behavioural strategies
-        that can support emotional wellbeing and resilience.
-      </p>
+        <div class="card">
+          <h3>Blog & Resources</h3>
+          <p>
+            Articles and supporting materials on stress, anxiety, relaxation, and psychological wellbeing.
+          </p>
+          <a class="button" href="blog.html">Read the Blog</a>
+        </div>
+      </div>
     </section>
 
-    <section class="section details">
+    <section class="section">
       <h2>Upcoming Workshop</h2>
-      <p><strong>Date:</strong> 21/03/2026 </p>
-      <p><strong>Time:</strong> 10 AM ET </p>
-      <p><strong>Location:</strong> LINK TBA </p>
+      <p><strong>Date:</strong> 21/03/2026</p>
+      <p><strong>Time:</strong> 10 AM ET</p>
+      <p><strong>Location:</strong> Link TBA</p>
       <p><strong>Format:</strong> Online</p>
 
-      <a class="button" href="https://docs.google.com/forms/d/e/1FAIpQLSf5UUCFjOha-TPXf_qf2S33j9jHVq5zk0C2bJ3XW2przHoI_Q/viewform?usp=publish-editor" target="_blank" rel="noopener">
+      <a class="button" href="https://forms.gle/PUT-YOUR-GOOGLE-FORM-LINK-HERE" target="_blank" rel="noopener">
         Sign Up
       </a>
     </section>
 
-    <section class="section" id="audio">
-      <h2>Relaxation Audio Library</h2>
-      <p>
-        A selection of guided practices to support relaxation, grounding, and emotional balance.
-      </p>
-
-      <div class="audio-item">
-        <h3>Breathing Exercise</h3>
-        <p>A short guided breathing practice to help calm the body and settle the mind.</p>
-        <audio controls>
-          <source src="breathing.mp3" type="audio/mpeg">
-          Your browser does not support the audio element.
-        </audio>
-      </div>
-
-      <div class="audio-item">
-        <h3>Progressive Muscle Relaxation</h3>
-        <p>A guided practice to release tension from the body and encourage deep relaxation.</p>
-        <audio controls>
-          <source src="muscle-relaxation.mp3" type="audio/mpeg">
-          Your browser does not support the audio element.
-        </audio>
-      </div>
-
-      <div class="audio-item">
-        <h3>Grounding Exercise</h3>
-        <p>A brief grounding practice for moments of stress, overwhelm, or anxious thoughts.</p>
-        <audio controls>
-          <source src="grounding.mp3" type="audio/mpeg">
-          Your browser does not support the audio element.
-        </audio>
-      </div>
-
-      <div class="audio-item">
-        <h3>Guided Meditation</h3>
-        <p>A calming guided meditation to support relaxation and present-moment awareness.</p>
-        <audio controls>
-          <source src="guided-meditation.mp3" type="audio/mpeg">
-          Your browser does not support the audio element.
-        </audio>
-      </div>
-    </section>
-
     <section class="section" id="contact">
       <h2>Contact</h2>
-      <p>Email: information@mindease.ca </p>
+      <p>Email: information@mindease.ca</p>
     </section>
 
     <footer>

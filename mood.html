@@ -9,13 +9,21 @@
 <h1>Mood Check-in</h1>
 
 <form id="moodForm">
-  <label>Mood:</label>
-  <select id="mood">
+  <label for="mood">Mood:</label>
+  <select id="mood" required>
     <option value="happy">Happy</option>
     <option value="calm">Calm</option>
     <option value="stressed">Stressed</option>
     <option value="sad">Sad</option>
+    <option value="anxious">Anxious</option>
   </select>
+
+  <br><br>
+
+  <label for="intensity">Intensity (1 to 10):</label>
+  <input type="number" id="intensity" min="1" max="10" required>
+
+  <br><br>
 
   <button type="submit">Save mood</button>
 </form>
@@ -44,15 +52,18 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const mood = document.getElementById("mood").value;
+  const intensity = Number(document.getElementById("intensity").value);
 
   try {
     await addDoc(collection(db, "mood_entries"), {
       mood: mood,
+      intensity: intensity,
       user: currentUser.uid,
       time: new Date()
     });
 
     message.textContent = "Mood saved";
+    form.reset();
   } catch (error) {
     message.textContent = error.message;
   }

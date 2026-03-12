@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mood Check | MindEase</title>
   <style>
+    .home-button {
+  display: inline-block;
+  margin-bottom: 20px;
+  text-decoration: none;
+  background: #2f5d62;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.home-button:hover {
+  opacity: 0.9;
+}
     * {
       box-sizing: border-box;
       margin: 0;
@@ -99,6 +113,7 @@
 <body>
   <div class="card">
     <h1>Mood Check-in</h1>
+    <a href="/index.html" class="home-button">← Home</a>
     <p class="subtitle">Move any sliders that match how you feel</p>
 
     <form id="moodForm">

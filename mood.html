@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mood Check</title>
+</head>
+<body>
+
+<h1>Mood Check-in</h1>
+
+<form id="moodForm">
+  <label>Mood:</label>
+  <select id="mood">
+    <option value="happy">Happy</option>
+    <option value="calm">Calm</option>
+    <option value="stressed">Stressed</option>
+    <option value="sad">Sad</option>
+  </select>
+
+  <button type="submit">Save mood</button>
+</form>
+
+<p id="message"></p>
+
+<script type="module">
+import { db, auth } from "./firebase-config.js";
+import { addDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+  } else {
+    window.location.href = "/login.html";
+  }
+});
+
+const form = document.getElementById("moodForm");
+const message = document.getElementById("message");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const mood = document.getElementById("mood").value;
+
+  try {
+    await addDoc(collection(db, "mood_entries"), {
+      mood: mood,
+      user: currentUser.uid,
+      time: new Date()
+    });
+
+    message.textContent = "Mood saved";
+  } catch (error) {
+    message.textContent = error.message;
+  }
+});
+</script>
+
+</body>
+</html>

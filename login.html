@@ -30,11 +30,11 @@
       const password = document.getElementById("password").value;
 
       try {
-        await signInWithEmailAndPassword(auth, email, password);
-        message.textContent = "Login successful";
-      } catch (error) {
-        window.location.href = "/index.html";
-      }
+  await signInWithEmailAndPassword(auth, email, password);
+  window.location.href = "/index.html";
+} catch (error) {
+  message.textContent = error.message;
+}
     });
   </script>
 </body>

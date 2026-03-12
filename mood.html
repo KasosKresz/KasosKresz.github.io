@@ -2,72 +2,171 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Mood Check</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mood Check | MindEase</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+font-family:Arial,sans-serif;
+}
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#dbeafe,#e0f2fe,#f0fdf4);
+padding:20px;
+}
+
+.card{
+width:100%;
+max-width:420px;
+background:white;
+padding:40px 30px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.12);
+text-align:center;
+}
+
+h1{
+font-size:30px;
+margin-bottom:20px;
+color:#1e3a8a;
+}
+
+form{
+display:flex;
+flex-direction:column;
+gap:18px;
+}
+
+select,input[type=range]{
+width:100%;
+padding:12px;
+font-size:16px;
+border-radius:12px;
+border:1px solid #cbd5e1;
+}
+
+button{
+padding:14px;
+font-size:16px;
+border:none;
+border-radius:12px;
+background:#3b82f6;
+color:white;
+cursor:pointer;
+transition:0.2s;
+}
+
+button:hover{
+background:#2563eb;
+}
+
+.intensity-value{
+font-weight:bold;
+color:#1e3a8a;
+margin-top:5px;
+}
+
+#message{
+margin-top:10px;
+min-height:20px;
+color:#059669;
+}
+
+</style>
 </head>
+
 <body>
+
+<div class="card">
 
 <h1>Mood Check-in</h1>
 
 <form id="moodForm">
-  <label for="mood">Mood:</label>
-  <select id="mood" required>
-    <option value="happy">Happy</option>
-    <option value="calm">Calm</option>
-    <option value="stressed">Stressed</option>
-    <option value="sad">Sad</option>
-    <option value="anxious">Anxious</option>
-  </select>
 
-  <br><br>
+<label>Mood</label>
 
-  <label for="intensity">Intensity (1 to 10):</label>
-  <input type="number" id="intensity" min="1" max="10" required>
+<select id="mood" required>
+<option value="happy">Happy</option>
+<option value="calm">Calm</option>
+<option value="anxious">Anxious</option>
+<option value="stressed">Stressed</option>
+<option value="sad">Sad</option>
+</select>
 
-  <br><br>
+<label>Intensity</label>
 
-  <button type="submit">Save mood</button>
+<input type="range" id="intensity" min="1" max="10" value="5">
+
+<div class="intensity-value">
+Level: <span id="intensityValue">5</span>
+</div>
+
+<button type="submit">Save Mood</button>
+
 </form>
 
 <p id="message"></p>
 
+</div>
+
 <script type="module">
+
 import { db, auth } from "./firebase-config.js";
 import { addDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-let currentUser = null;
+let currentUser=null;
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    currentUser = user;
-  } else {
-    window.location.href = "/login.html";
-  }
+onAuthStateChanged(auth,(user)=>{
+if(user){
+currentUser=user;
+}else{
+window.location.href="/login.html";
+}
 });
 
-const form = document.getElementById("moodForm");
-const message = document.getElementById("message");
+const form=document.getElementById("moodForm");
+const message=document.getElementById("message");
+const slider=document.getElementById("intensity");
+const value=document.getElementById("intensityValue");
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const mood = document.getElementById("mood").value;
-  const intensity = Number(document.getElementById("intensity").value);
-
-  try {
-    await addDoc(collection(db, "mood_entries"), {
-      mood: mood,
-      intensity: intensity,
-      user: currentUser.uid,
-      time: new Date()
-    });
-
-    message.textContent = "Mood saved";
-    form.reset();
-  } catch (error) {
-    message.textContent = error.message;
-  }
+slider.addEventListener("input",()=>{
+value.textContent=slider.value;
 });
+
+form.addEventListener("submit",async(e)=>{
+e.preventDefault();
+
+const mood=document.getElementById("mood").value;
+const intensity=Number(slider.value);
+
+try{
+
+await addDoc(collection(db,"mood_entries"),{
+mood:mood,
+intensity:intensity,
+user:currentUser.uid,
+time:new Date()
+});
+
+message.textContent="Mood saved";
+
+}catch(error){
+
+message.textContent=error.message;
+
+}
+
+});
+
 </script>
 
 </body>

@@ -260,11 +260,7 @@
     const publicationsList = document.getElementById("publicationsList");
 
     if (publications.length === 0) {
-      publicationsList.innerHTML = `
-        <div class="empty-state">
-          Selected publications will appear here.
-        </div>
-      `;
+      publicationsList.innerHTML = "";
     } else {
       publicationsList.innerHTML = publications.map((publication) => `
         <article class="pub-card">

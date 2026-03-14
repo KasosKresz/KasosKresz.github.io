@@ -216,6 +216,14 @@
       border-color: #2f5d62;
     }
 
+    .inline-tools {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: -4px;
+      margin-bottom: 2px;
+    }
+
     .setup-link {
       display: inline-block;
       margin-top: 6px;
@@ -246,7 +254,7 @@
           Your journal is encrypted in your browser before it is saved. Enter your journal passphrase to unlock it.
         </p>
         <div class="warning">
-          If you forget your journal passphrase, the entries cannot be recovered. MindEase does not store this passphrase for you.
+          Important: this journal passphrase is separate from your login password. If you lose it, your journal entries cannot be recovered. MindEase does not store this passphrase for you, so please save it somewhere safe when you create it.
         </div>
         <div class="mode-switch hidden" id="modeSwitch">
           <button type="button" class="mode-button" id="createModeButton">Create New Passphrase</button>
@@ -255,6 +263,11 @@
         <form id="unlockForm">
           <input id="passphrase" type="password" placeholder="Enter your journal passphrase" required />
           <input id="confirmPassphrase" class="hidden" type="password" placeholder="Type the passphrase again to confirm" />
+          <div class="inline-tools">
+            <button type="button" class="secondary" id="togglePassphraseButton">Show Passphrase</button>
+            <button type="button" class="secondary hidden" id="copyPassphraseButton">Copy Passphrase</button>
+            <button type="button" class="secondary hidden" id="downloadReminderButton">Download Reminder</button>
+          </div>
           <div class="actions">
             <button type="submit" id="unlockSubmitButton">Enter Journal</button>
           </div>
@@ -323,6 +336,9 @@
     const enterModeButton = document.getElementById("enterModeButton");
     const toggleSetupLink = document.getElementById("toggleSetupLink");
     const unlockSubmitButton = document.getElementById("unlockSubmitButton");
+    const togglePassphraseButton = document.getElementById("togglePassphraseButton");
+    const copyPassphraseButton = document.getElementById("copyPassphraseButton");
+    const downloadReminderButton = document.getElementById("downloadReminderButton");
 
     const journalForm = document.getElementById("journalForm");
     const entryTitle = document.getElementById("entryTitle");
@@ -362,6 +378,8 @@
         : "Enter your journal passphrase";
       confirmPassphraseInput.classList.toggle("hidden", !isCreateMode);
       confirmPassphraseInput.required = isCreateMode;
+      copyPassphraseButton.classList.toggle("hidden", !isCreateMode);
+      downloadReminderButton.classList.toggle("hidden", !isCreateMode);
       unlockSubmitButton.textContent = isCreateMode ? "Create Journal Passphrase" : "Enter Journal";
       toggleSetupLink.textContent = isCreateMode
         ? "Already have a passphrase? Enter it here"
@@ -370,6 +388,58 @@
         confirmPassphraseInput.value = "";
       }
       setUnlockMessage("");
+    }
+
+    function updatePassphraseVisibility() {
+      const shouldShow = passphraseInput.type === "password";
+      const newType = shouldShow ? "text" : "password";
+      passphraseInput.type = newType;
+      if (!confirmPassphraseInput.classList.contains("hidden")) {
+        confirmPassphraseInput.type = newType;
+      }
+      togglePassphraseButton.textContent = shouldShow ? "Hide Passphrase" : "Show Passphrase";
+    }
+
+    async function copyPassphraseToClipboard() {
+      if (!passphraseInput.value.trim()) {
+        setUnlockMessage("Type your new passphrase first, then copy it.");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(passphraseInput.value);
+        setUnlockMessage("Passphrase copied. Please store it somewhere safe.");
+      } catch (error) {
+        setUnlockMessage("Copy did not work here. Please save the passphrase manually.");
+      }
+    }
+
+    function downloadReminderFile() {
+      if (!passphraseInput.value.trim()) {
+        setUnlockMessage("Type your new passphrase first, then download the reminder.");
+        return;
+      }
+
+      const content = [
+        "MindEase Journal Passphrase Reminder",
+        "",
+        "This passphrase is separate from your login password.",
+        "If you lose it, your encrypted journal entries cannot be recovered.",
+        "",
+        "Passphrase:",
+        passphraseInput.value
+      ].join("\n");
+
+      const blob = new Blob([content], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "mindease-journal-passphrase.txt";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      setUnlockMessage("Reminder file downloaded. Please store it somewhere safe.");
     }
 
     function formatDate(value) {
@@ -618,6 +688,18 @@
 
     toggleSetupLink.addEventListener("click", () => {
       setUnlockMode(unlockMode === "create" ? "enter" : "create");
+    });
+
+    togglePassphraseButton.addEventListener("click", () => {
+      updatePassphraseVisibility();
+    });
+
+    copyPassphraseButton.addEventListener("click", async () => {
+      await copyPassphraseToClipboard();
+    });
+
+    downloadReminderButton.addEventListener("click", () => {
+      downloadReminderFile();
     });
 
     journalForm.addEventListener("submit", async (event) => {

@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Private Journal | MindEase</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #eef7f4, #f7fbfa, #edf4fb);
+      color: #2f3a3a;
+      padding: 20px;
+    }
+
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .topbar a {
+      text-decoration: none;
+      color: #2f5d62;
+      font-weight: bold;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 20px;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      padding: 26px;
+    }
+
+    .unlock-wrap {
+      min-height: calc(100vh - 80px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .unlock-card {
+      max-width: 520px;
+      width: 100%;
+    }
+
+    h1, h2 {
+      color: #2f5d62;
+      margin-bottom: 12px;
+    }
+
+    p {
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    input, textarea {
+      width: 100%;
+      border: 1px solid #d6e1df;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 220px;
+      resize: vertical;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #6fa1a7;
+      box-shadow: 0 0 0 3px rgba(47, 93, 98, 0.14);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      background: #2f5d62;
+      color: white;
+      font-weight: bold;
+    }
+
+    button.secondary {
+      background: #6e7878;
+    }
+
+    button.danger {
+      background: #b64c4c;
+    }
+
+    .helper {
+      color: #607070;
+      font-size: 14px;
+    }
+
+    .warning {
+      background: #f8f2df;
+      border: 1px solid #ead7a0;
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: #6a5420;
+      margin-bottom: 14px;
+    }
+
+    .message {
+      min-height: 20px;
+      margin-top: 6px;
+      color: #b64c4c;
+      font-size: 14px;
+    }
+
+    .message.success {
+      color: #1f8a5b;
+    }
+
+    .entry-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .entry-card {
+      background: #f2f6f5;
+      border-radius: 14px;
+      padding: 16px;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .entry-card.active {
+      border-color: #2f5d62;
+      background: #edf4f3;
+    }
+
+    .entry-card h3 {
+      color: #2f5d62;
+      margin-bottom: 6px;
+      font-size: 17px;
+    }
+
+    .entry-meta {
+      font-size: 13px;
+      color: #6b7878;
+      margin-bottom: 8px;
+    }
+
+    .entry-preview {
+      font-size: 14px;
+      color: #415050;
+    }
+
+    .empty {
+      background: #f2f6f5;
+      border-radius: 14px;
+      padding: 18px;
+      color: #607070;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .mode-switch {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .mode-button {
+      border: 1px solid #cdd9d7;
+      background: #eef4f3;
+      color: #2f5d62;
+    }
+
+    .mode-button.active {
+      background: #2f5d62;
+      color: white;
+      border-color: #2f5d62;
+    }
+
+    .setup-link {
+      display: inline-block;
+      margin-top: 6px;
+      color: #2f5d62;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    @media (max-width: 860px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <a href="/materials.html">&larr; Back to Resources</a>
+      <a href="/index.html">Home</a>
+    </div>
+
+    <div class="unlock-wrap" id="unlockPanel">
+      <section class="panel unlock-card">
+        <h1>Enter Journal</h1>
+        <p>
+          Your journal is encrypted in your browser before it is saved. Enter your journal passphrase to unlock it.
+        </p>
+        <div class="warning">
+          If you forget your journal passphrase, the entries cannot be recovered. MindEase does not store this passphrase for you.
+        </div>
+        <div class="mode-switch hidden" id="modeSwitch">
+          <button type="button" class="mode-button" id="createModeButton">Create New Passphrase</button>
+          <button type="button" class="mode-button active" id="enterModeButton">Enter Existing Passphrase</button>
+        </div>
+        <form id="unlockForm">
+          <input id="passphrase" type="password" placeholder="Enter your journal passphrase" required />
+          <input id="confirmPassphrase" class="hidden" type="password" placeholder="Type the passphrase again to confirm" />
+          <div class="actions">
+            <button type="submit" id="unlockSubmitButton">Enter Journal</button>
+          </div>
+          <p id="unlockMessage" class="message"></p>
+        </form>
+        <a id="toggleSetupLink" class="setup-link">First time here? Create a journal passphrase</a>
+      </section>
+    </div>
+
+    <div class="shell hidden" id="journalShell">
+      <section class="panel">
+        <h1>Private Journal</h1>
+        <p>
+          This space is meant for personal reflection. Your entries are encrypted with your passphrase before they are stored.
+        </p>
+        <p class="helper">
+          You can use this for written exposure, emotional processing, tracking stress, or simply making sense of a difficult day.
+        </p>
+        <p class="helper" id="journalPrivacyNote">
+          Locked with client-side encryption.
+        </p>
+
+        <form id="journalForm">
+          <input id="entryTitle" type="text" placeholder="Entry title" />
+          <textarea id="entryBody" placeholder="Write here..."></textarea>
+          <div class="actions">
+            <button type="submit">Save Entry</button>
+            <button type="button" class="secondary" id="newButton">New Entry</button>
+            <button type="button" class="secondary" id="lockButton">Lock Journal</button>
+            <button type="button" class="danger" id="deleteButton" style="display:none;">Delete Entry</button>
+          </div>
+          <p id="message" class="message"></p>
+        </form>
+      </section>
+
+      <aside class="panel">
+        <h2>Your Entries</h2>
+        <p class="helper">Only entries that can be unlocked with your passphrase will be shown here in readable form.</p>
+        <div id="entryList" class="entry-list"></div>
+      </aside>
+    </div>
+  </div>
+
+  <script type="module">
+    import { db, auth } from "./firebase-config.js";
+    import {
+      addDoc,
+      collection,
+      deleteDoc,
+      doc,
+      getDocs,
+      query,
+      updateDoc,
+      where
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const unlockPanel = document.getElementById("unlockPanel");
+    const journalShell = document.getElementById("journalShell");
+    const unlockForm = document.getElementById("unlockForm");
+    const passphraseInput = document.getElementById("passphrase");
+    const confirmPassphraseInput = document.getElementById("confirmPassphrase");
+    const unlockMessage = document.getElementById("unlockMessage");
+    const modeSwitch = document.getElementById("modeSwitch");
+    const createModeButton = document.getElementById("createModeButton");
+    const enterModeButton = document.getElementById("enterModeButton");
+    const toggleSetupLink = document.getElementById("toggleSetupLink");
+    const unlockSubmitButton = document.getElementById("unlockSubmitButton");
+
+    const journalForm = document.getElementById("journalForm");
+    const entryTitle = document.getElementById("entryTitle");
+    const entryBody = document.getElementById("entryBody");
+    const entryList = document.getElementById("entryList");
+    const message = document.getElementById("message");
+    const newButton = document.getElementById("newButton");
+    const lockButton = document.getElementById("lockButton");
+    const deleteButton = document.getElementById("deleteButton");
+
+    let currentUser = null;
+    let passphrase = "";
+    let entries = [];
+    let selectedEntryId = null;
+    let unlockMode = "create";
+
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
+
+    function setMessage(text, success = false) {
+      message.textContent = text;
+      message.className = success ? "message success" : "message";
+    }
+
+    function setUnlockMessage(text) {
+      unlockMessage.textContent = text;
+    }
+
+    function setUnlockMode(mode) {
+      unlockMode = mode;
+      const isCreateMode = mode === "create";
+      createModeButton.classList.toggle("active", isCreateMode);
+      enterModeButton.classList.toggle("active", !isCreateMode);
+      modeSwitch.classList.toggle("hidden", false);
+      passphraseInput.placeholder = isCreateMode
+        ? "Create your journal passphrase"
+        : "Enter your journal passphrase";
+      confirmPassphraseInput.classList.toggle("hidden", !isCreateMode);
+      confirmPassphraseInput.required = isCreateMode;
+      unlockSubmitButton.textContent = isCreateMode ? "Create Journal Passphrase" : "Enter Journal";
+      toggleSetupLink.textContent = isCreateMode
+        ? "Already have a passphrase? Enter it here"
+        : "First time here? Create a journal passphrase";
+      if (!isCreateMode) {
+        confirmPassphraseInput.value = "";
+      }
+      setUnlockMessage("");
+    }
+
+    function formatDate(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "";
+      return date.toLocaleString();
+    }
+
+    function toBase64(bytes) {
+      let binary = "";
+      bytes.forEach((byte) => {
+        binary += String.fromCharCode(byte);
+      });
+      return btoa(binary);
+    }
+
+    function fromBase64(value) {
+      const binary = atob(value);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return bytes;
+    }
+
+    async function deriveKey(passphraseValue, saltBytes) {
+      const keyMaterial = await crypto.subtle.importKey(
+        "raw",
+        encoder.encode(passphraseValue),
+        "PBKDF2",
+        false,
+        ["deriveKey"]
+      );
+
+      return crypto.subtle.deriveKey(
+        {
+          name: "PBKDF2",
+          salt: saltBytes,
+          iterations: 250000,
+          hash: "SHA-256"
+        },
+        keyMaterial,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["encrypt", "decrypt"]
+      );
+    }
+
+    async function encryptEntry(data, passphraseValue) {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const key = await deriveKey(passphraseValue, salt);
+      const payload = encoder.encode(JSON.stringify(data));
+      const encrypted = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, payload);
+
+      return {
+        encrypted: true,
+        salt: toBase64(salt),
+        iv: toBase64(iv),
+        ciphertext: toBase64(new Uint8Array(encrypted))
+      };
+    }
+
+    async function decryptEntry(entry, passphraseValue) {
+      if (!entry.encrypted) {
+        return {
+          title: entry.title || "",
+          body: entry.body || "",
+          legacy: true
+        };
+      }
+
+      const salt = fromBase64(entry.salt);
+      const iv = fromBase64(entry.iv);
+      const ciphertext = fromBase64(entry.ciphertext);
+      const key = await deriveKey(passphraseValue, salt);
+      const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ciphertext);
+      return JSON.parse(decoder.decode(decrypted));
+    }
+
+    function sortEntries(items) {
+      return items.sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
+    }
+
+    function resetForm() {
+      selectedEntryId = null;
+      entryTitle.value = "";
+      entryBody.value = "";
+      deleteButton.style.display = "none";
+      renderEntries();
+    }
+
+    function lockJournal() {
+      passphrase = "";
+      entries = [];
+      selectedEntryId = null;
+      passphraseInput.value = "";
+      entryTitle.value = "";
+      entryBody.value = "";
+      entryList.innerHTML = "";
+      setUnlockMode("create");
+      setMessage("");
+      setUnlockMessage("");
+      journalShell.classList.add("hidden");
+      unlockPanel.classList.remove("hidden");
+    }
+
+    function escapeHtml(value) {
+      return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function renderEntries() {
+      if (entries.length === 0) {
+        entryList.innerHTML = '<div class="empty">No journal entries yet. Start writing and your encrypted entries will appear here.</div>';
+        return;
+      }
+
+      entryList.innerHTML = entries.map((entry) => {
+        const previewSource = entry.decrypted?.body || "";
+        const preview = previewSource.length > 120 ? previewSource.slice(0, 120) + "..." : previewSource;
+        const title = entry.decrypted?.title?.trim() ? entry.decrypted.title : "Untitled entry";
+        const activeClass = entry.id === selectedEntryId ? "entry-card active" : "entry-card";
+        const legacyNote = entry.decrypted?.legacy ? "Legacy unencrypted entry" : "Encrypted entry";
+        return `
+          <div class="${activeClass}" data-id="${entry.id}">
+            <h3>${escapeHtml(title)}</h3>
+            <div class="entry-meta">${formatDate(entry.updatedAt || entry.createdAt)} | ${legacyNote}</div>
+            <div class="entry-preview">${escapeHtml(preview)}</div>
+          </div>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".entry-card").forEach((card) => {
+        card.addEventListener("click", () => {
+          const entry = entries.find((item) => item.id === card.dataset.id);
+          if (!entry) return;
+          selectedEntryId = entry.id;
+          entryTitle.value = entry.decrypted?.title || "";
+          entryBody.value = entry.decrypted?.body || "";
+          deleteButton.style.display = "inline-block";
+          renderEntries();
+        });
+      });
+    }
+
+    async function loadEntries() {
+      const journalQuery = query(
+        collection(db, "journal_entries"),
+        where("user", "==", currentUser.uid)
+      );
+
+      const snapshot = await getDocs(journalQuery);
+      const rawEntries = snapshot.docs.map((item) => ({
+        id: item.id,
+        ...item.data()
+      }));
+
+      const decryptedEntries = [];
+      for (const entry of rawEntries) {
+        try {
+          const decrypted = await decryptEntry(entry, passphrase);
+          decryptedEntries.push({ ...entry, decrypted });
+        } catch (error) {
+          throw new Error("The passphrase does not match these journal entries.");
+        }
+      }
+
+      entries = sortEntries(decryptedEntries);
+      renderEntries();
+    }
+
+    async function getRawEntries() {
+      const journalQuery = query(
+        collection(db, "journal_entries"),
+        where("user", "==", currentUser.uid)
+      );
+
+      const snapshot = await getDocs(journalQuery);
+      return snapshot.docs.map((item) => ({
+        id: item.id,
+        ...item.data()
+      }));
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/login.html";
+        return;
+      }
+
+      currentUser = user;
+    });
+
+    unlockForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!currentUser) {
+        setUnlockMessage("Please wait for sign-in to finish.");
+        return;
+      }
+
+      if (!passphraseInput.value.trim()) {
+        setUnlockMessage("Please enter a passphrase.");
+        return;
+      }
+
+      if (unlockMode === "create" && passphraseInput.value !== confirmPassphraseInput.value) {
+        setUnlockMessage("The two passphrase entries do not match.");
+        return;
+      }
+
+      passphrase = passphraseInput.value;
+
+      try {
+        const existingEntries = await getRawEntries();
+
+        if (unlockMode === "enter" && existingEntries.length === 0) {
+          passphrase = "";
+          setUnlockMessage("No journal entries were found for this account yet. Use 'Create New Passphrase' to start your journal.");
+          return;
+        }
+
+        if (unlockMode === "create" && existingEntries.length > 0) {
+          passphrase = "";
+          setUnlockMessage("This account already has journal entries. Use 'Enter Existing Passphrase' to unlock them.");
+          return;
+        }
+
+        await loadEntries();
+        unlockPanel.classList.add("hidden");
+        journalShell.classList.remove("hidden");
+        setUnlockMessage("");
+      } catch (error) {
+        passphrase = "";
+        setUnlockMessage(error.message || "Unable to unlock journal.");
+      }
+    });
+
+    createModeButton.addEventListener("click", () => {
+      setUnlockMode("create");
+    });
+
+    enterModeButton.addEventListener("click", () => {
+      setUnlockMode("enter");
+    });
+
+    toggleSetupLink.addEventListener("click", () => {
+      setUnlockMode(unlockMode === "create" ? "enter" : "create");
+    });
+
+    journalForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const title = entryTitle.value.trim();
+      const body = entryBody.value.trim();
+
+      if (!body) {
+        setMessage("Please write something before saving.");
+        return;
+      }
+
+      const now = new Date().toISOString();
+
+      try {
+        const encryptedPayload = await encryptEntry({ title, body }, passphrase);
+
+        if (selectedEntryId) {
+          await updateDoc(doc(db, "journal_entries", selectedEntryId), {
+            ...encryptedPayload,
+            updatedAt: now
+          });
+          setMessage("Encrypted entry updated.", true);
+        } else {
+          await addDoc(collection(db, "journal_entries"), {
+            ...encryptedPayload,
+            user: currentUser.uid,
+            createdAt: now,
+            updatedAt: now
+          });
+          setMessage("Encrypted entry saved.", true);
+        }
+
+        await loadEntries();
+        resetForm();
+      } catch (error) {
+        setMessage(error.message || "Something went wrong while saving.");
+      }
+    });
+
+    newButton.addEventListener("click", () => {
+      resetForm();
+      setMessage("");
+    });
+
+    lockButton.addEventListener("click", () => {
+      lockJournal();
+    });
+
+    deleteButton.addEventListener("click", async () => {
+      if (!selectedEntryId) return;
+
+      try {
+        await deleteDoc(doc(db, "journal_entries", selectedEntryId));
+        entries = entries.filter((entry) => entry.id !== selectedEntryId);
+        resetForm();
+        setMessage("Entry deleted.", true);
+      } catch (error) {
+        setMessage(error.message || "Something went wrong while deleting.");
+      }
+    });
+
+    setUnlockMode("enter");
+  </script>
+</body>
+</html>

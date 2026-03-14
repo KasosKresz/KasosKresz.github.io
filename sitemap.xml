@@ -8,6 +8,11 @@
 </url>
 
 <url>
+<loc>https://mindease.ca/about.html</loc>
+<priority>0.90</priority>
+</url>
+
+<url>
 <loc>https://mindease.ca/audio.html</loc>
 <priority>0.80</priority>
 </url>

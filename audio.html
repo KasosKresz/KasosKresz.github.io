@@ -4,8 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Relaxation Audio | MindEase</title>
-  <meta name="description" content="Relaxation audio from MindEase including breathing exercises, grounding practices, guided meditation, and other stress and anxiety support resources.">
+  <meta name="description" content="Relaxation audio from MindEase including breathing exercises, grounding practices, guided meditation, and topic-based support resources.">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -29,7 +33,7 @@
     }
 
     .page {
-      max-width: 900px;
+      max-width: 960px;
       margin: 0 auto;
       padding: 30px 20px 60px;
     }
@@ -45,13 +49,26 @@
     h1, h2 {
       color: #2f5d62;
       text-align: center;
+      margin-top: 0;
+    }
+
+    .section-intro {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 8px;
+    }
+
+    .audio-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 20px;
     }
 
     .audio-item {
       background: #f2f6f5;
       border-radius: 12px;
       padding: 18px;
-      margin: 18px auto;
     }
 
     .audio-item h3 {
@@ -63,65 +80,175 @@
       width: 100%;
       margin-top: 8px;
     }
+
+    .topic-card {
+      background: #f2f6f5;
+      border-radius: 14px;
+      padding: 20px;
+      max-width: 760px;
+      margin: 20px auto 0;
+    }
+
+    .topic-card h3 {
+      color: #2f5d62;
+      margin-top: 0;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 10px;
+      background: #2f5d62;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 9px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .button:hover {
+      opacity: 0.92;
+    }
+
+    @media (max-width: 760px) {
+      .audio-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="navbar">
     <a href="index.html">Home</a>
+    <a href="about.html">About</a>
     <a href="blog.html">Blog</a>
     <a href="audio.html">Relaxation Audio</a>
+    <a href="materials.html">Resources</a>
+    <a href="journal.html">Journal</a>
   </div>
 
   <div class="page">
     <div class="section">
       <h1>Relaxation Audio</h1>
-      <p style="text-align:center;">
+      <p class="section-intro">
         Guided practices to support calm, grounding, relaxation, and emotional balance.
       </p>
     </div>
 
     <div class="section">
-      <div class="audio-item">
-        <h3>Breathing Exercise</h3>
-        <p>A short guided breathing practice to calm the body and settle the mind.</p>
-        <audio controls>
-          <source src="breathing.mp3" type="audio/mpeg">
-        </audio>
+      <h2>General Relaxation</h2>
+      <p class="section-intro">
+        Short guided practices for settling the body, calming the mind, and creating a sense of steadiness.
+      </p>
+
+      <div class="audio-grid">
+        <div class="audio-item">
+          <h3>Breathing Exercise</h3>
+          <p>A short guided breathing practice to calm the body and settle the mind.</p>
+          <audio controls>
+            <source src="breathing.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+
+        <div class="audio-item">
+          <h3>Progressive Muscle Relaxation</h3>
+          <p>A guided relaxation for releasing physical tension.</p>
+          <audio controls>
+            <source src="muscle-relaxation.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+
+        <div class="audio-item">
+          <h3>Grounding Exercise</h3>
+          <p>A grounding practice for moments of stress, overwhelm, or anxious thoughts.</p>
+          <audio controls>
+            <source src="grounding.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+
+        <div class="audio-item">
+          <h3>Guided Meditation</h3>
+          <p>A calming guided meditation for present-moment awareness and relaxation.</p>
+          <audio controls>
+            <source src="guided-meditation.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Topic-Based Support</h2>
+      <p class="section-intro">
+        Some struggles need more than one standalone exercise. These guided series focus on patterns that can fuel stress and anxiety over time.
+      </p>
+
+      <div class="topic-card">
+        <h3>Perfectionism</h3>
+        <p>
+          Perfectionism can keep people under constant pressure. When it feels like mistakes are not allowed
+          or that you always have to get things exactly right, everyday life can start to feel tense, heavy,
+          and exhausting. Over time, that pressure can feed anxiety.
+        </p>
+        <p>
+          This audio series is designed to help loosen that pressure, build self-compassion, and make more room
+          for flexibility, progress, and calm.
+        </p>
+        <a class="button" href="perfectionism-audio.html">Explore the Perfectionism Series</a>
       </div>
 
-      <div class="audio-item">
-        <h3>Progressive Muscle Relaxation</h3>
-        <p>A guided relaxation for releasing physical tension.</p>
-        <audio controls>
-          <source src="muscle-relaxation.mp3" type="audio/mpeg">
-        </audio>
-      </div>
-
-      <div class="audio-item">
-        <h3>Grounding Exercise</h3>
-        <p>A grounding practice for moments of stress, overwhelm, or anxious thoughts.</p>
-        <audio controls>
-          <source src="grounding.mp3" type="audio/mpeg">
-        </audio>
-      </div>
-
-      <div class="audio-item">
+      <div class="topic-card">
         <h3>Guided Meditation</h3>
-        <p>A calming guided meditation for present-moment awareness and relaxation.</p>
-        <audio controls>
-          <source src="guided-meditation.mp3" type="audio/mpeg">
-        </audio>
+        <p>
+          This section includes guided meditations, mindfulness-based practices, calming visualizations,
+          and safe place exercises designed to help settle the mind and body.
+        </p>
+        <p>
+          Some tracks focus on present-moment awareness, while others use imagery and reflection to support
+          relaxation, emotional grounding, and inner calm.
+        </p>
+        <a class="button" href="guided-meditation-audio.html">Explore Guided Meditation Audio</a>
       </div>
-      
-       <div class="audio-item">
-        <h3>Accepting Change</h3>
-        <p>A guided meditation for embracing change.</p>
-        <audio controls>
-          <source src="Accepting Change.mp3" type="audio/mpeg">
-        </audio>
+
+      <div class="topic-card">
+        <h3>Sleep</h3>
+        <p>
+          Good sleep is one of the foundations of emotional balance. This section includes guided audio
+          for winding down, preparing for rest, and supporting a calmer night.
+        </p>
+        <p>
+          These tracks can be used as part of an evening routine when stress, tension, or racing thoughts
+          make it harder to settle into sleep.
+        </p>
+        <a class="button" href="sleep-audio.html">Explore Sleep Audio</a>
       </div>
-      
+
+      <div class="topic-card">
+        <h3>Positive Psychology</h3>
+        <p>
+          Positive psychology looks at what helps people feel stronger, more balanced, and more connected,
+          not only what reduces distress. Two important parts of that are gratitude and confidence.
+        </p>
+        <p>
+          Gratitude can gently shift attention toward what is supportive and meaningful in life, while
+          self-confidence can help people feel more steady, capable, and resilient in the face of stress.
+        </p>
+        <a class="button" href="positive-psychology-audio.html">Explore Positive Psychology Audio</a>
+      </div>
+
+      <div class="topic-card">
+        <h3>Acceptance & Self-Compassion</h3>
+        <p>
+          Acceptance is not about giving up. It is about making more space for reality as it is, instead
+          of fighting ourselves at every step. That shift can reduce inner pressure and support calmer,
+          more flexible coping.
+        </p>
+        <p>
+          This series focuses on accepting change, building self-acceptance, and responding to life with
+          more kindness and steadiness.
+        </p>
+        <a class="button" href="acceptance-audio.html">Explore Acceptance Audio</a>
+      </div>
     </div>
   </div>
 

@@ -166,6 +166,19 @@
     const form = document.getElementById("signupForm");
     const message = document.getElementById("message");
 
+    function getSignupMessage(error) {
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          return "That email already has an account. Please log in instead.";
+        case "auth/invalid-email":
+          return "Please enter a valid email address.";
+        case "auth/weak-password":
+          return "Please choose a stronger password.";
+        default:
+          return "We could not create your account right now. Please try again.";
+      }
+    }
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -180,6 +193,7 @@
       }
 
       try {
+        message.textContent = "";
         await setPersistence(
           auth,
           rememberMe ? browserLocalPersistence : browserSessionPersistence
@@ -192,7 +206,7 @@
 
         window.location.href = "/index.html";
       } catch (error) {
-        message.textContent = error.message;
+        message.textContent = getSignupMessage(error);
       }
     });
   </script>

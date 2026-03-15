@@ -148,7 +148,7 @@
     <p id="message"></p>
 
     <p class="bottom-link">
-      Don’t have an account? <a href="/signup.html">Sign up</a>
+      Don't have an account? <a href="/signup.html">Sign up</a>
     </p>
   </div>
 
@@ -164,6 +164,21 @@
     const form = document.getElementById("loginForm");
     const message = document.getElementById("message");
 
+    function getLoginMessage(error) {
+      switch (error.code) {
+        case "auth/invalid-credential":
+        case "auth/wrong-password":
+        case "auth/user-not-found":
+          return "That email and password do not match our records.";
+        case "auth/invalid-email":
+          return "Please enter a valid email address.";
+        case "auth/too-many-requests":
+          return "Too many attempts. Please try again in a moment.";
+        default:
+          return "We could not log you in right now. Please try again.";
+      }
+    }
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -172,6 +187,7 @@
       const rememberMe = document.getElementById("rememberMe").checked;
 
       try {
+        message.textContent = "";
         await setPersistence(
           auth,
           rememberMe ? browserLocalPersistence : browserSessionPersistence
@@ -180,7 +196,7 @@
         await signInWithEmailAndPassword(auth, email, password);
         window.location.href = "/index.html";
       } catch (error) {
-        message.textContent = error.message;
+        message.textContent = getLoginMessage(error);
       }
     });
   </script>

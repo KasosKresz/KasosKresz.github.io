@@ -62,14 +62,6 @@
       opacity: 0.75;
     }
 
-    .nav-user {
-      display: inline-block;
-      margin: 0 12px;
-      color: #5f7170;
-      font-weight: bold;
-      font-size: 15px;
-    }
-
     .page {
       max-width: 980px;
       margin: 0 auto;
@@ -316,7 +308,6 @@
     <a href="materials.html">Resources</a>
     <a href="/journal.html">Journal</a>
     <a href="#contact">Contact</a>
-    <span class="nav-user" id="navUser" hidden></span>
     <a href="/login.html" id="loginLink">Login</a>
     <a href="/signup.html" id="signupLink">Sign up</a>
     <a href="#" id="signOutLink" hidden>Sign out</a>
@@ -470,7 +461,6 @@
     const welcomeBanner = document.getElementById("welcomeBanner");
     const welcomeTitle = document.getElementById("welcomeTitle");
     const welcomeText = document.getElementById("welcomeText");
-    const navUser = document.getElementById("navUser");
     const loginLink = document.getElementById("loginLink");
     const signupLink = document.getElementById("signupLink");
     const signOutLink = document.getElementById("signOutLink");
@@ -493,14 +483,11 @@
         welcomeTitle.textContent = `Welcome back, ${name}.`;
         welcomeText.textContent = "Your journal, mood tracker, and guided tools are ready for you.";
         welcomeBanner.hidden = false;
-        navUser.textContent = `Hi, ${name}`;
-        navUser.hidden = false;
         loginLink.hidden = true;
         signupLink.hidden = true;
         signOutLink.hidden = false;
       } else {
         welcomeBanner.hidden = true;
-        navUser.hidden = true;
         loginLink.hidden = false;
         signupLink.hidden = false;
         signOutLink.hidden = true;

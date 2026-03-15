@@ -66,11 +66,15 @@
       height: 44px;
       border-radius: 50%;
       box-shadow: 0 6px 18px rgba(47, 93, 98, 0.12);
+      transform-origin: center;
+      animation: headerLogoSweep 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
     }
 
     .brand-text {
       font-size: 1.05rem;
       letter-spacing: 0.02em;
+      opacity: 0;
+      animation: brandTextReveal 0.5s ease 0.85s forwards;
     }
 
     .nav-links {
@@ -298,6 +302,32 @@
       }
     }
 
+    @keyframes headerLogoSweep {
+      0% {
+        transform: translateX(58vw) rotate(-10deg) scale(0.76);
+      }
+      62% {
+        transform: translateX(-10px) rotate(3deg) scale(1.05);
+      }
+      80% {
+        transform: translateX(4px) rotate(-1deg) scale(0.98);
+      }
+      100% {
+        transform: translateX(0) rotate(0deg) scale(1);
+      }
+    }
+
+    @keyframes brandTextReveal {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .card {
       background: #f2f6f5;
       border-radius: 14px;
@@ -400,6 +430,10 @@
         font-size: 14px;
       }
 
+      .brand-mark {
+        animation-duration: 1.2s;
+      }
+
       .menu-panel {
         left: 50%;
         right: auto;
@@ -416,6 +450,14 @@
       .hero,
       .section {
         padding: 22px 18px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .brand-mark,
+      .brand-text,
+      .hero-logo-badge {
+        animation: none;
       }
     }
   </style>

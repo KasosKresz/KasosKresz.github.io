@@ -186,7 +186,8 @@
       border-radius: 24px;
       background: rgba(255, 255, 255, 0.88);
       box-shadow: 0 16px 34px rgba(47, 93, 98, 0.14);
-      animation: gentleFloat 7s ease-in-out infinite;
+      transform-origin: center;
+      animation: logoBreath 9s ease-in-out infinite;
     }
 
     .hero-logo-badge img {
@@ -299,6 +300,21 @@
       }
       50% {
         transform: translateY(-6px);
+      }
+    }
+
+    @keyframes logoBreath {
+      0% {
+        transform: scale(0.98);
+        box-shadow: 0 14px 30px rgba(47, 93, 98, 0.12);
+      }
+      44.44% {
+        transform: scale(1.06);
+        box-shadow: 0 20px 40px rgba(47, 93, 98, 0.16);
+      }
+      100% {
+        transform: scale(0.98);
+        box-shadow: 0 14px 30px rgba(47, 93, 98, 0.12);
       }
     }
 

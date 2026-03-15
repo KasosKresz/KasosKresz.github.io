@@ -20,17 +20,56 @@ line-height:1.7;
 }
 
 .navbar{
-text-align:center;
-background:white;
+position:sticky;
+top:0;
+z-index:1000;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:18px;
+padding:14px 18px;
+background:rgba(255,255,255,0.97);
 border-bottom:1px solid #e4ebea;
-padding:16px 10px;
 }
 
-.navbar a{
-margin:0 14px;
+.navbar-brand{
+display:inline-flex;
+align-items:center;
+gap:12px;
 text-decoration:none;
 color:#2f5d62;
 font-weight:bold;
+}
+
+.brand-mark{
+width:44px;
+height:44px;
+border-radius:50%;
+box-shadow:0 6px 18px rgba(47, 93, 98, 0.12);
+}
+
+.brand-text{
+font-size:1.05rem;
+letter-spacing:0.02em;
+}
+
+.nav-links{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:16px;
+flex-wrap:wrap;
+margin-left:auto;
+}
+
+.nav-links a{
+text-decoration:none;
+color:#2f5d62;
+font-weight:bold;
+}
+
+.nav-links a:hover{
+opacity:0.75;
 }
 
 .page{
@@ -87,18 +126,44 @@ text-decoration:none;
 font-weight:bold;
 }
 
+@media (max-width:760px){
+.navbar{
+justify-content:center;
+}
+
+.navbar-brand{
+width:100%;
+justify-content:center;
+}
+
+.nav-links{
+width:100%;
+margin-left:0;
+gap:10px;
+}
+
+.nav-links a{
+font-size:14px;
+}
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="navbar">
-<a href="index.html">Home</a>
+<a href="index.html" class="navbar-brand">
+<img src="mindease_logo.svg" alt="MindEase logo" class="brand-mark">
+<span class="brand-text">MindEase</span>
+</a>
+<div class="nav-links">
 <a href="about.html">About</a>
 <a href="blog.html">Blog</a>
 <a href="audio.html">Relaxation Audio</a>
 <a href="materials.html">Resources</a>
 <a href="journal.html">Journal</a>
+</div>
 </div>
 
 <div class="page">

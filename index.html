@@ -43,23 +43,97 @@
       position: sticky;
       top: 0;
       z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 18px;
       background: rgba(255, 255, 255, 0.97);
       border-bottom: 1px solid #e4ebea;
-      text-align: center;
-      padding: 16px 10px;
     }
 
-    .navbar a {
-      display: inline-block;
-      margin: 0 12px;
+    .navbar-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #2f5d62;
+      font-weight: bold;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      box-shadow: 0 6px 18px rgba(47, 93, 98, 0.12);
+    }
+
+    .brand-text {
+      font-size: 1.05rem;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .nav-links a,
+    .account-trigger,
+    .menu-panel a {
       text-decoration: none;
       color: #2f5d62;
       font-weight: bold;
       font-size: 15px;
     }
 
-    .navbar a:hover {
+    .nav-links a:hover,
+    .account-trigger:hover,
+    .menu-panel a:hover {
       opacity: 0.75;
+    }
+
+    .account-menu {
+      position: relative;
+    }
+
+    .account-trigger {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: #edf4f3;
+    }
+
+    .account-trigger::-webkit-details-marker {
+      display: none;
+    }
+
+    .menu-panel {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 10px);
+      min-width: 190px;
+      padding: 12px;
+      border-radius: 16px;
+      background: white;
+      box-shadow: 0 16px 36px rgba(47, 93, 98, 0.16);
+      border: 1px solid #dce8e6;
+    }
+
+    .menu-panel a {
+      display: block;
+      padding: 10px 12px;
+      border-radius: 10px;
+    }
+
+    .menu-panel a:hover {
+      background: #f2f6f5;
+      opacity: 1;
     }
 
     .page {
@@ -69,6 +143,8 @@
     }
 
     .hero {
+      position: relative;
+      overflow: hidden;
       background: white;
       border-radius: 18px;
       padding: 42px 28px;
@@ -94,6 +170,25 @@
     .hero p {
       max-width: 760px;
       margin: 0 auto;
+    }
+
+    .hero-logo-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 90px;
+      height: 90px;
+      padding: 10px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 16px 34px rgba(47, 93, 98, 0.14);
+      animation: gentleFloat 7s ease-in-out infinite;
+    }
+
+    .hero-logo-badge img {
+      display: block;
+      width: 100%;
+      height: 100%;
     }
 
     .welcome-banner {
@@ -285,9 +380,37 @@
         font-size: 2rem;
       }
 
-      .navbar a {
-        margin: 0 8px;
+      .navbar {
+        justify-content: center;
+      }
+
+      .navbar-brand {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .nav-links {
+        width: 100%;
+        margin-left: 0;
+        gap: 10px;
+      }
+
+      .nav-links a,
+      .account-trigger {
         font-size: 14px;
+      }
+
+      .menu-panel {
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+      }
+
+      .hero-logo-badge {
+        top: 14px;
+        right: 14px;
+        width: 72px;
+        height: 72px;
       }
 
       .hero,
@@ -300,23 +423,36 @@
 <body>
 
   <div class="navbar">
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="#sessions">Sessions</a>
-    <a href="blog.html">Blog</a>
-    <a href="audio.html">Relaxation Audio</a>
-    <a href="materials.html">Resources</a>
-    <a href="/journal.html">Journal</a>
-    <a href="#contact">Contact</a>
-    <a href="/login.html" id="loginLink">Login</a>
-    <a href="/signup.html" id="signupLink">Sign up</a>
-    <a href="#" id="signOutLink" hidden>Sign out</a>
-    <a href="/mood.html">Mood Check</a>
+    <a href="index.html" class="navbar-brand">
+      <img src="mindease_logo.svg" alt="MindEase logo" class="brand-mark">
+      <span class="brand-text">MindEase</span>
+    </a>
+    <div class="nav-links">
+      <a href="about.html">About</a>
+      <a href="#sessions">Sessions</a>
+      <a href="blog.html">Blog</a>
+      <a href="audio.html">Relaxation Audio</a>
+      <a href="materials.html">Resources</a>
+      <a href="#contact">Contact</a>
+      <details class="account-menu" id="accountMenu">
+        <summary class="account-trigger">Account</summary>
+        <div class="menu-panel">
+          <a href="/login.html" id="loginLink">Login</a>
+          <a href="/signup.html" id="signupLink">Sign up</a>
+          <a href="/journal.html" id="journalLink" hidden>Journal</a>
+          <a href="/mood.html" id="moodLink" hidden>Mood Check</a>
+          <a href="#" id="signOutLink" hidden>Sign out</a>
+        </div>
+      </details>
+    </div>
   </div>
 
   <div class="page">
 
     <section class="hero">
+      <div class="hero-logo-badge" aria-hidden="true">
+        <img src="mindease_logo.svg" alt="">
+      </div>
       <h1>MindEase</h1>
       <p class="tagline">
         Evidence-informed tools for managing stress, anxiety, and emotional wellbeing.
@@ -461,8 +597,11 @@
     const welcomeBanner = document.getElementById("welcomeBanner");
     const welcomeTitle = document.getElementById("welcomeTitle");
     const welcomeText = document.getElementById("welcomeText");
+    const accountMenu = document.getElementById("accountMenu");
     const loginLink = document.getElementById("loginLink");
     const signupLink = document.getElementById("signupLink");
+    const journalLink = document.getElementById("journalLink");
+    const moodLink = document.getElementById("moodLink");
     const signOutLink = document.getElementById("signOutLink");
 
     function getFriendlyName(user) {
@@ -485,17 +624,28 @@
         welcomeBanner.hidden = false;
         loginLink.hidden = true;
         signupLink.hidden = true;
+        journalLink.hidden = false;
+        moodLink.hidden = false;
         signOutLink.hidden = false;
       } else {
         welcomeBanner.hidden = true;
         loginLink.hidden = false;
         signupLink.hidden = false;
+        journalLink.hidden = true;
+        moodLink.hidden = true;
         signOutLink.hidden = true;
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (accountMenu.open && !accountMenu.contains(event.target)) {
+        accountMenu.open = false;
       }
     });
 
     signOutLink.addEventListener("click", async (event) => {
       event.preventDefault();
+      accountMenu.open = false;
       await signOut(auth);
       window.location.href = "/index.html";
     });

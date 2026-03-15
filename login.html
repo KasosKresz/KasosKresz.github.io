@@ -75,6 +75,22 @@
       box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
     }
 
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      color: #475569;
+      font-size: 14px;
+    }
+
+    .checkbox-row input {
+      width: auto;
+      padding: 0;
+      margin: 0;
+      box-shadow: none;
+    }
+
     button {
       padding: 14px;
       font-size: 16px;
@@ -122,6 +138,10 @@
     <form id="loginForm">
       <input type="email" id="email" placeholder="Email" required />
       <input type="password" id="password" placeholder="Password" required />
+      <label class="checkbox-row" for="rememberMe">
+        <input type="checkbox" id="rememberMe" checked />
+        Stay signed in on this device
+      </label>
       <button type="submit">Log in</button>
     </form>
 
@@ -134,7 +154,12 @@
 
   <script type="module">
     import { auth } from "./firebase-config.js";
-    import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      browserLocalPersistence,
+      browserSessionPersistence,
+      setPersistence,
+      signInWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const form = document.getElementById("loginForm");
     const message = document.getElementById("message");
@@ -144,8 +169,14 @@
 
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
+      const rememberMe = document.getElementById("rememberMe").checked;
 
       try {
+        await setPersistence(
+          auth,
+          rememberMe ? browserLocalPersistence : browserSessionPersistence
+        );
+
         await signInWithEmailAndPassword(auth, email, password);
         window.location.href = "/index.html";
       } catch (error) {

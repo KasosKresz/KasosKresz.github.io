@@ -62,6 +62,14 @@
       opacity: 0.75;
     }
 
+    .nav-user {
+      display: inline-block;
+      margin: 0 12px;
+      color: #5f7170;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
     .page {
       max-width: 980px;
       margin: 0 auto;
@@ -94,6 +102,32 @@
     .hero p {
       max-width: 760px;
       margin: 0 auto;
+    }
+
+    .welcome-banner {
+      max-width: 760px;
+      margin: 18px auto 0;
+      padding: 16px 18px;
+      border-radius: 16px;
+      background: #edf4f3;
+      color: #2f5d62;
+    }
+
+    .welcome-banner strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.02rem;
+    }
+
+    .welcome-banner p {
+      margin: 0 0 10px;
+    }
+
+    .welcome-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .section {
@@ -282,8 +316,10 @@
     <a href="materials.html">Resources</a>
     <a href="/journal.html">Journal</a>
     <a href="#contact">Contact</a>
-    <a href="/login.html">Login</a>
-    <a href="/signup.html">Sign up</a>
+    <span class="nav-user" id="navUser" hidden></span>
+    <a href="/login.html" id="loginLink">Login</a>
+    <a href="/signup.html" id="signupLink">Sign up</a>
+    <a href="#" id="signOutLink" hidden>Sign out</a>
     <a href="/mood.html">Mood Check</a>
   </div>
 
@@ -299,6 +335,14 @@
         guided relaxation resources, educational content, and practical resources designed
         to help people build healthier ways of responding to stress and anxiety in everyday life.
       </p>
+      <div class="welcome-banner" id="welcomeBanner" hidden>
+        <strong id="welcomeTitle">Welcome back.</strong>
+        <p id="welcomeText">Your tools are ready when you are.</p>
+        <div class="welcome-actions">
+          <a class="button" href="/journal.html">Open Journal</a>
+          <a class="button" href="/mood.html">Open Mood Tracker</a>
+        </div>
+      </div>
     </section>
 
     <section class="section">
@@ -419,6 +463,55 @@
 
   </div>
 
-  <script type="module" src="firebase-config.js"></script>
+  <script type="module">
+    import { auth } from "./firebase-config.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const welcomeBanner = document.getElementById("welcomeBanner");
+    const welcomeTitle = document.getElementById("welcomeTitle");
+    const welcomeText = document.getElementById("welcomeText");
+    const navUser = document.getElementById("navUser");
+    const loginLink = document.getElementById("loginLink");
+    const signupLink = document.getElementById("signupLink");
+    const signOutLink = document.getElementById("signOutLink");
+
+    function getFriendlyName(user) {
+      if (user.displayName && user.displayName.trim()) {
+        return user.displayName.trim();
+      }
+
+      if (user.email && user.email.includes("@")) {
+        return user.email.split("@")[0];
+      }
+
+      return "friend";
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const name = getFriendlyName(user);
+        welcomeTitle.textContent = `Welcome back, ${name}.`;
+        welcomeText.textContent = "Your journal, mood tracker, and guided tools are ready for you.";
+        welcomeBanner.hidden = false;
+        navUser.textContent = `Hi, ${name}`;
+        navUser.hidden = false;
+        loginLink.hidden = true;
+        signupLink.hidden = true;
+        signOutLink.hidden = false;
+      } else {
+        welcomeBanner.hidden = true;
+        navUser.hidden = true;
+        loginLink.hidden = false;
+        signupLink.hidden = false;
+        signOutLink.hidden = true;
+      }
+    });
+
+    signOutLink.addEventListener("click", async (event) => {
+      event.preventDefault();
+      await signOut(auth);
+      window.location.href = "/index.html";
+    });
+  </script>
 </body>
 </html>

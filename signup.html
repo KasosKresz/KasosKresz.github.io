@@ -75,6 +75,22 @@
       box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
     }
 
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      color: #475569;
+      font-size: 14px;
+    }
+
+    .checkbox-row input {
+      width: auto;
+      padding: 0;
+      margin: 0;
+      box-shadow: none;
+    }
+
     button {
       padding: 14px;
       font-size: 16px;
@@ -120,8 +136,13 @@
     <p class="subtitle">Start your calm journey with MindEase</p>
 
     <form id="signupForm">
+      <input type="text" id="username" placeholder="Username" maxlength="30" required />
       <input type="email" id="email" placeholder="Email" required />
       <input type="password" id="password" placeholder="Password" required />
+      <label class="checkbox-row" for="rememberMe">
+        <input type="checkbox" id="rememberMe" checked />
+        Stay signed in on this device
+      </label>
       <button type="submit">Sign up</button>
     </form>
 
@@ -134,7 +155,13 @@
 
   <script type="module">
     import { auth } from "./firebase-config.js";
-    import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      browserLocalPersistence,
+      browserSessionPersistence,
+      createUserWithEmailAndPassword,
+      setPersistence,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const form = document.getElementById("signupForm");
     const message = document.getElementById("message");
@@ -142,11 +169,27 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      const username = document.getElementById("username").value.trim();
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
+      const rememberMe = document.getElementById("rememberMe").checked;
+
+      if (!username) {
+        message.textContent = "Please choose a username.";
+        return;
+      }
 
       try {
-        await createUserWithEmailAndPassword(auth, email, password);
+        await setPersistence(
+          auth,
+          rememberMe ? browserLocalPersistence : browserSessionPersistence
+        );
+
+        const credential = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(credential.user, {
+          displayName: username
+        });
+
         window.location.href = "/index.html";
       } catch (error) {
         message.textContent = error.message;

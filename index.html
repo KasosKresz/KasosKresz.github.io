@@ -485,6 +485,7 @@
       <a href="blog.html">Blog</a>
       <a href="audio.html">Relaxation Audio</a>
       <a href="materials.html">Resources</a>
+      <a href="/mood.html">Mood Check</a>
       <a href="#contact">Contact</a>
       <details class="account-menu" id="accountMenu">
         <summary class="account-trigger">Account</summary>
@@ -492,7 +493,6 @@
           <a href="/login.html" id="loginLink">Login</a>
           <a href="/signup.html" id="signupLink">Sign up</a>
           <a href="/journal.html" id="journalLink" hidden>Journal</a>
-          <a href="/mood.html" id="moodLink" hidden>Mood Check</a>
           <a href="#" id="signOutLink" hidden>Sign out</a>
         </div>
       </details>
@@ -653,7 +653,6 @@
     const loginLink = document.getElementById("loginLink");
     const signupLink = document.getElementById("signupLink");
     const journalLink = document.getElementById("journalLink");
-    const moodLink = document.getElementById("moodLink");
     const signOutLink = document.getElementById("signOutLink");
     function getFriendlyName(user) {
       if (user.displayName && user.displayName.trim()) {
@@ -676,14 +675,12 @@
         loginLink.hidden = true;
         signupLink.hidden = true;
         journalLink.hidden = false;
-        moodLink.hidden = false;
         signOutLink.hidden = false;
       } else {
         welcomeBanner.hidden = true;
         loginLink.hidden = false;
         signupLink.hidden = false;
         journalLink.hidden = true;
-        moodLink.hidden = true;
         signOutLink.hidden = true;
       }
     });

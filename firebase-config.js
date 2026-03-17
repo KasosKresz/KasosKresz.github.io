@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -14,6 +14,22 @@ const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig);
-export const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export let analytics = null;
+
+const consent = typeof window !== "undefined"
+  ? window.localStorage.getItem("mindease_cookie_consent")
+  : null;
+
+if (consent === "granted") {
+  isSupported()
+    .then((supported) => {
+      if (supported) {
+        analytics = getAnalytics(app);
+      }
+    })
+    .catch(() => {
+      analytics = null;
+    });
+}

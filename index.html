@@ -141,6 +141,21 @@
       border-radius: 10px;
     }
 
+    .account-points {
+      margin: 0 0 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f2f6f5;
+      color: #2f5d62;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .account-points strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
     .menu-panel a:hover {
       background: #f2f6f5;
       opacity: 1;
@@ -560,6 +575,10 @@
       <details class="nav-menu" id="accountMenu">
         <summary class="nav-trigger">Account</summary>
         <div class="menu-panel">
+          <div class="account-points" id="accountPoints" hidden>
+            <strong>MindEase Points</strong>
+            <span id="accountPointsText">0 - MindEase Explorer</span>
+          </div>
           <a href="/login.html" id="loginLink">Login</a>
           <a href="/signup.html" id="signupLink">Sign up</a>
           <a href="#" id="signOutLink" hidden>Sign out</a>
@@ -586,6 +605,7 @@
       <div class="welcome-banner" id="welcomeBanner" hidden>
         <strong id="welcomeTitle">Welcome back.</strong>
         <p id="welcomeText">Your tools are ready when you are.</p>
+        <p id="welcomePoints" hidden>MindEase Points: 0 - MindEase Explorer</p>
         <div class="welcome-actions">
           <a class="button" href="/journal.html">Open Journal</a>
           <a class="button" href="/mood.html">Open Mood Tracker</a>
@@ -723,14 +743,18 @@
   </div>
 
   <script type="module">
-    import { auth } from "./firebase-config.js";
+    import { auth, db } from "./firebase-config.js";
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getOverallLevel, loadRewardData } from "./rewards-core.js";
 
     const welcomeBanner = document.getElementById("welcomeBanner");
     const welcomeTitle = document.getElementById("welcomeTitle");
     const welcomeText = document.getElementById("welcomeText");
+    const welcomePoints = document.getElementById("welcomePoints");
     const accountMenu = document.getElementById("accountMenu");
     const navMenus = document.querySelectorAll(".nav-menu");
+    const accountPoints = document.getElementById("accountPoints");
+    const accountPointsText = document.getElementById("accountPointsText");
     const loginLink = document.getElementById("loginLink");
     const signupLink = document.getElementById("signupLink");
     const signOutLink = document.getElementById("signOutLink");
@@ -746,17 +770,33 @@
       return "friend";
     }
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
         const name = getFriendlyName(user);
+        let pointsText = "MindEase Points unavailable right now.";
+
+        try {
+          const rewardData = await loadRewardData(db, user.uid);
+          const overallLevel = getOverallLevel(rewardData.mindeasePoints);
+          pointsText = `${rewardData.mindeasePoints} - ${overallLevel.label}`;
+        } catch (error) {
+          pointsText = "MindEase Points unavailable right now.";
+        }
+
         welcomeTitle.textContent = `Welcome back, ${name}.`;
         welcomeText.textContent = "Your journal, mood tracker, and guided tools are ready for you.";
+        welcomePoints.textContent = `MindEase Points: ${pointsText}`;
+        welcomePoints.hidden = false;
         welcomeBanner.hidden = false;
+        accountPointsText.textContent = pointsText;
+        accountPoints.hidden = false;
         loginLink.hidden = true;
         signupLink.hidden = true;
         signOutLink.hidden = false;
       } else {
         welcomeBanner.hidden = true;
+        welcomePoints.hidden = true;
+        accountPoints.hidden = true;
         loginLink.hidden = false;
         signupLink.hidden = false;
         signOutLink.hidden = true;

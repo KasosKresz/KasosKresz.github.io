@@ -1,26 +1,14 @@
-﻿import { auth, db } from "./firebase-config.js";
-import { doc, getDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const REWARD_POINTS = 10;
-const REWARDS_DOC = "user_rewards";
-
-const LEVELS = {
-  relax: [
-    { threshold: 0, label: "Calm Starter" },
-    { threshold: 50, label: "Steady Relaxer" },
-    { threshold: 150, label: "Deep Breather" },
-    { threshold: 300, label: "Stillness Guide" },
-    { threshold: 500, label: "Calm Master" }
-  ],
-  knowledge: [
-    { threshold: 0, label: "Curious Student" },
-    { threshold: 50, label: "Insight Seeker" },
-    { threshold: 150, label: "Thoughtful Teacher" },
-    { threshold: 300, label: "Mind Mentor" },
-    { threshold: 500, label: "Wisdom Master" }
-  ]
-};
+import {
+  awardReward,
+  getCategoryLevel,
+  getNextCategoryLevel,
+  getOverallLevel,
+  getNextOverallLevel,
+  loadRewardData,
+  normalizeRewardData
+} from "./rewards-core.js";
 
 const KNOWLEDGE_PAGES = {
   "understanding-anxiety.html": "Understanding Anxiety",
@@ -44,14 +32,7 @@ const showKnowledgeSummary = currentPage === "blog.html" || currentPage === "mat
 const showRelaxSummary = currentPage === "audio.html" || hasAudioRewards;
 
 let currentUser = null;
-let rewardData = {
-  user: null,
-  relaxPoints: 0,
-  knowledgePoints: 0,
-  relaxItems: [],
-  knowledgeItems: []
-};
-
+let rewardData = normalizeRewardData({}, null);
 let rewardPanel = null;
 let toast = null;
 let knowledgeAwardedThisVisit = false;
@@ -81,7 +62,7 @@ function ensureStyles() {
     }
 
     .rewards-panel p {
-      margin: 0;
+      margin: 0 0 10px;
       line-height: 1.6;
     }
 
@@ -114,23 +95,6 @@ function ensureStyles() {
   document.head.appendChild(style);
 }
 
-function getLevel(type, points) {
-  const levels = LEVELS[type];
-  let current = levels[0];
-
-  levels.forEach((level) => {
-    if (points >= level.threshold) {
-      current = level;
-    }
-  });
-
-  return current;
-}
-
-function getNextLevel(type, points) {
-  return LEVELS[type].find((level) => level.threshold > points) || null;
-}
-
 function createRewardItemId(sourceValue) {
   return decodeURIComponent(sourceValue.split("/").pop().split(".")[0])
     .toLowerCase()
@@ -138,65 +102,33 @@ function createRewardItemId(sourceValue) {
     .replace(/^-|-$/g, "");
 }
 
-function getRewardDocRef(uid) {
-  return doc(db, REWARDS_DOC, uid);
-}
+function getPlayedSeconds(audio) {
+  const played = audio.played;
+  let total = 0;
 
-function normalizeRewardData(data, uid) {
-  return {
-    user: uid,
-    relaxPoints: Number(data.relaxPoints || 0),
-    knowledgePoints: Number(data.knowledgePoints || 0),
-    relaxItems: Array.isArray(data.relaxItems) ? data.relaxItems : [],
-    knowledgeItems: Array.isArray(data.knowledgeItems) ? data.knowledgeItems : []
-  };
-}
-
-async function loadRewardData(uid) {
-  const snapshot = await getDoc(getRewardDocRef(uid));
-  rewardData = snapshot.exists()
-    ? normalizeRewardData(snapshot.data(), uid)
-    : normalizeRewardData({}, uid);
-  return rewardData;
-}
-
-async function awardPoints(type, itemId) {
-  if (!currentUser) {
-    return { awarded: false, reason: "signed_out" };
+  for (let index = 0; index < played.length; index += 1) {
+    total += played.end(index) - played.start(index);
   }
 
-  try {
-    const result = await runTransaction(db, async (transaction) => {
-      const ref = getRewardDocRef(currentUser.uid);
-      const snapshot = await transaction.get(ref);
-      const data = snapshot.exists()
-        ? normalizeRewardData(snapshot.data(), currentUser.uid)
-        : normalizeRewardData({}, currentUser.uid);
-
-      const itemsField = type === "relax" ? "relaxItems" : "knowledgeItems";
-      const pointsField = type === "relax" ? "relaxPoints" : "knowledgePoints";
-
-      if (data[itemsField].includes(itemId)) {
-        return { awarded: false, data };
-      }
-
-      const updatedData = {
-        ...data,
-        [itemsField]: [...data[itemsField], itemId],
-        [pointsField]: data[pointsField] + REWARD_POINTS,
-        updatedAt: new Date().toISOString()
-      };
-
-      transaction.set(ref, updatedData, { merge: true });
-      return { awarded: true, data: updatedData };
-    });
-
-    rewardData = result.data;
-    return result;
-  } catch (error) {
-    console.warn("Rewards unavailable.", error);
-    return { awarded: false, reason: "error" };
+  if (Number.isFinite(audio.duration) && audio.duration > 0) {
+    return Math.min(total, audio.duration);
   }
+
+  return total;
+}
+
+function getRequiredAudioSeconds(audio) {
+  if (!Number.isFinite(audio.duration) || audio.duration <= 0) {
+    return 0;
+  }
+
+  const byPercent = audio.duration * 0.8;
+  const byMinimum = Math.min(30, audio.duration);
+  return Math.min(audio.duration, Math.max(byPercent, byMinimum));
+}
+
+function getMindEaseGain(previousPoints, nextPoints) {
+  return Math.max(0, (Number(nextPoints) || 0) - (Number(previousPoints) || 0));
 }
 
 function showToast(message) {
@@ -244,7 +176,7 @@ function renderSummaryPanel() {
 
   if (!currentUser) {
     rewardPanel.innerHTML = `
-      <h3>MindEase Points</h3>
+      <h3>MindEase Journey</h3>
       <p>Sign in to collect Relax Points from completed audio and Knowledge Points from full articles and guides.</p>
     `;
     return;
@@ -252,40 +184,48 @@ function renderSummaryPanel() {
 
   if (!rewardsAvailable) {
     rewardPanel.innerHTML = `
-      <h3>MindEase Points</h3>
+      <h3>MindEase Journey</h3>
       <p>Points are unavailable right now.</p>
     `;
     return;
   }
 
-  const sections = [];
+  const overallLevel = getOverallLevel(rewardData.mindeasePoints);
+  const nextOverallLevel = getNextOverallLevel(rewardData.mindeasePoints);
+  const overallText = nextOverallLevel
+    ? `${nextOverallLevel.threshold - rewardData.mindeasePoints} more points to reach ${nextOverallLevel.label}.`
+    : "Top MindEase level reached.";
+
+  const sections = [
+    `<p><strong>MindEase Points:</strong> ${rewardData.mindeasePoints} - ${overallLevel.label}<br>${overallText}</p>`
+  ];
 
   if (showRelaxSummary) {
-    const relaxLevel = getLevel("relax", rewardData.relaxPoints);
-    const relaxNext = getNextLevel("relax", rewardData.relaxPoints);
-    const relaxNextText = relaxNext
-      ? `${relaxNext.threshold - rewardData.relaxPoints} more points to reach ${relaxNext.label}.`
+    const level = getCategoryLevel("relax", rewardData.relaxPoints);
+    const next = getNextCategoryLevel("relax", rewardData.relaxPoints);
+    const nextText = next
+      ? `${next.threshold - rewardData.relaxPoints} more points to reach ${next.label}.`
       : "Top relax level reached.";
 
-    sections.push(`
-      <p><strong>Relax Points:</strong> ${rewardData.relaxPoints} - ${relaxLevel.label}<br>${relaxNextText}</p>
-    `);
+    sections.push(
+      `<p><strong>Relax Points:</strong> ${rewardData.relaxPoints} - ${level.label}<br>${nextText}</p>`
+    );
   }
 
   if (showKnowledgeSummary) {
-    const knowledgeLevel = getLevel("knowledge", rewardData.knowledgePoints);
-    const knowledgeNext = getNextLevel("knowledge", rewardData.knowledgePoints);
-    const knowledgeNextText = knowledgeNext
-      ? `${knowledgeNext.threshold - rewardData.knowledgePoints} more points to reach ${knowledgeNext.label}.`
+    const level = getCategoryLevel("knowledge", rewardData.knowledgePoints);
+    const next = getNextCategoryLevel("knowledge", rewardData.knowledgePoints);
+    const nextText = next
+      ? `${next.threshold - rewardData.knowledgePoints} more points to reach ${next.label}.`
       : "Top knowledge level reached.";
 
-    sections.push(`
-      <p><strong>Knowledge Points:</strong> ${rewardData.knowledgePoints} - ${knowledgeLevel.label}<br>${knowledgeNextText}</p>
-    `);
+    sections.push(
+      `<p><strong>Knowledge Points:</strong> ${rewardData.knowledgePoints} - ${level.label}<br>${nextText}</p>`
+    );
   }
 
   rewardPanel.innerHTML = `
-    <h3>MindEase Points</h3>
+    <h3>MindEase Journey</h3>
     ${sections.join("")}
   `;
 }
@@ -334,14 +274,40 @@ function setupAudioRewards() {
     audio.dataset.rewardBound = "true";
 
     audio.addEventListener("ended", async () => {
-      const result = await awardPoints("relax", itemId);
-      renderSummaryPanel();
-      markEarnedAudioItems();
+      const requiredSeconds = getRequiredAudioSeconds(audio);
+      const playedSeconds = getPlayedSeconds(audio);
+
+      if (requiredSeconds && playedSeconds + 0.5 < requiredSeconds) {
+        showToast("Listen through most of the audio to collect Relax Points.");
+        return;
+      }
 
       if (!currentUser) {
+        renderSummaryPanel();
         showToast("Sign in to collect Relax Points.");
-      } else if (result.awarded) {
-        showToast("+10 Relax Points");
+        return;
+      }
+
+      try {
+        const previousMindEasePoints = rewardData.mindeasePoints;
+        const result = await awardReward(db, currentUser.uid, "relax", itemId);
+        rewardData = result.data;
+        renderSummaryPanel();
+        markEarnedAudioItems();
+
+        if (result.awarded) {
+          const mindEaseGain = getMindEaseGain(previousMindEasePoints, result.data.mindeasePoints);
+          showToast(
+            mindEaseGain
+              ? `+10 Relax Points and +${mindEaseGain} MindEase Points`
+              : "+10 Relax Points"
+          );
+        } else {
+          showToast("Relax Points already collected for this audio.");
+        }
+      } catch (error) {
+        rewardsAvailable = false;
+        renderSummaryPanel();
       }
     });
   });
@@ -369,13 +335,32 @@ function setupKnowledgeRewards() {
     }
 
     knowledgeAwardedThisVisit = true;
-    const result = await awardPoints("knowledge", itemId);
-    renderSummaryPanel();
 
     if (!currentUser) {
+      renderSummaryPanel();
       showToast("Sign in to collect Knowledge Points.");
-    } else if (result.awarded) {
-      showToast("+10 Knowledge Points");
+      return;
+    }
+
+    try {
+      const previousMindEasePoints = rewardData.mindeasePoints;
+      const result = await awardReward(db, currentUser.uid, "knowledge", itemId);
+      rewardData = result.data;
+      renderSummaryPanel();
+
+      if (result.awarded) {
+        const mindEaseGain = getMindEaseGain(previousMindEasePoints, result.data.mindeasePoints);
+        showToast(
+          mindEaseGain
+            ? `+10 Knowledge Points and +${mindEaseGain} MindEase Points`
+            : "+10 Knowledge Points"
+        );
+      } else {
+        showToast("Knowledge Points already collected for this article.");
+      }
+    } catch (error) {
+      rewardsAvailable = false;
+      renderSummaryPanel();
     }
   }
 
@@ -391,9 +376,8 @@ onAuthStateChanged(auth, async (user) => {
 
   if (user) {
     try {
-      await loadRewardData(user.uid);
+      rewardData = await loadRewardData(db, user.uid);
     } catch (error) {
-      console.warn("Rewards unavailable.", error);
       rewardData = normalizeRewardData({}, user.uid);
       rewardsAvailable = false;
     }
@@ -408,4 +392,3 @@ onAuthStateChanged(auth, async (user) => {
 renderSummaryPanel();
 setupAudioRewards();
 setupKnowledgeRewards();
-

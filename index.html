@@ -85,7 +85,7 @@
     }
 
     .nav-links a,
-    .account-trigger,
+    .nav-trigger,
     .menu-panel a {
       text-decoration: none;
       color: #2f5d62;
@@ -94,16 +94,16 @@
     }
 
     .nav-links a:hover,
-    .account-trigger:hover,
+    .nav-trigger:hover,
     .menu-panel a:hover {
       opacity: 0.75;
     }
 
-    .account-menu {
+    .nav-menu {
       position: relative;
     }
 
-    .account-trigger {
+    .nav-trigger {
       list-style: none;
       cursor: pointer;
       padding: 10px 14px;
@@ -111,7 +111,7 @@
       background: #edf4f3;
     }
 
-    .account-trigger::-webkit-details-marker {
+    .nav-trigger::-webkit-details-marker {
       display: none;
     }
 
@@ -433,7 +433,7 @@
       }
 
       .nav-links a,
-      .account-trigger {
+      .nav-trigger {
         font-size: 14px;
       }
 
@@ -481,18 +481,29 @@
     </a>
     <div class="nav-links">
       <a href="about.html">About</a>
-      <a href="#sessions">Sessions</a>
       <a href="blog.html">Blog</a>
-      <a href="audio.html">Relaxation Audio</a>
-      <a href="materials.html">Resources</a>
-      <a href="/mood.html">Mood Check</a>
-      <a href="#contact">Contact</a>
-      <details class="account-menu" id="accountMenu">
-        <summary class="account-trigger">Account</summary>
+      <details class="nav-menu">
+        <summary class="nav-trigger">Resources</summary>
+        <div class="menu-panel">
+          <a href="/journal.html">Journaling</a>
+          <a href="coloring/color-for-calm.html">Color for Calm</a>
+          <a href="audio.html">Relaxation Audio</a>
+        </div>
+      </details>
+      <details class="nav-menu">
+        <summary class="nav-trigger">Sessions</summary>
+        <div class="menu-panel">
+          <a href="#workshops-card">Workshops</a>
+          <a href="#consultation-card">Consultation</a>
+        </div>
+      </details>
+      <details class="nav-menu" id="accountMenu">
+        <summary class="nav-trigger">Account</summary>
         <div class="menu-panel">
           <a href="/login.html" id="loginLink">Login</a>
           <a href="/signup.html" id="signupLink">Sign up</a>
           <a href="/journal.html" id="journalLink" hidden>Journal</a>
+          <a href="/mood.html" id="moodLink" hidden>Mood Check</a>
           <a href="#" id="signOutLink" hidden>Sign out</a>
         </div>
       </details>
@@ -562,7 +573,7 @@
       <h2>Sessions & Workshops</h2>
 
       <div class="cards">
-        <div class="card">
+        <div class="card" id="workshops-card">
           <div class="card-content">
             <h3>Stress & Anxiety Workshops</h3>
             <p>
@@ -581,7 +592,7 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card" id="consultation-card">
           <div class="card-content">
             <h3>Individual Consultation</h3>
             <p>
@@ -653,9 +664,11 @@
     const welcomeTitle = document.getElementById("welcomeTitle");
     const welcomeText = document.getElementById("welcomeText");
     const accountMenu = document.getElementById("accountMenu");
+    const navMenus = document.querySelectorAll(".nav-menu");
     const loginLink = document.getElementById("loginLink");
     const signupLink = document.getElementById("signupLink");
     const journalLink = document.getElementById("journalLink");
+    const moodLink = document.getElementById("moodLink");
     const signOutLink = document.getElementById("signOutLink");
     function getFriendlyName(user) {
       if (user.displayName && user.displayName.trim()) {
@@ -678,20 +691,24 @@
         loginLink.hidden = true;
         signupLink.hidden = true;
         journalLink.hidden = false;
+        moodLink.hidden = false;
         signOutLink.hidden = false;
       } else {
         welcomeBanner.hidden = true;
         loginLink.hidden = false;
         signupLink.hidden = false;
         journalLink.hidden = true;
+        moodLink.hidden = true;
         signOutLink.hidden = true;
       }
     });
 
     document.addEventListener("click", (event) => {
-      if (accountMenu.open && !accountMenu.contains(event.target)) {
-        accountMenu.open = false;
-      }
+      navMenus.forEach((menu) => {
+        if (menu.open && !menu.contains(event.target)) {
+          menu.open = false;
+        }
+      });
     });
 
     signOutLink.addEventListener("click", async (event) => {

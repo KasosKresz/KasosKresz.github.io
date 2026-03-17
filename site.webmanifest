@@ -1,0 +1,46 @@
+{
+  "name": "MindEase",
+  "short_name": "MindEase",
+  "description": "Support for stress, anxiety, and emotional wellbeing with guided tools, resources, and private tracking.",
+  "start_url": "/index.html?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f8f7",
+  "theme_color": "#2f5d62",
+  "icons": [
+    {
+      "src": "/icons/mindease-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/mindease-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Log in",
+      "short_name": "Login",
+      "url": "/login.html"
+    },
+    {
+      "name": "Journal",
+      "short_name": "Journal",
+      "url": "/journal.html"
+    },
+    {
+      "name": "Mood Check",
+      "short_name": "Mood",
+      "url": "/mood.html"
+    },
+    {
+      "name": "Priority Matrix",
+      "short_name": "Matrix",
+      "url": "/priority-matrix.html"
+    }
+  ]
+}

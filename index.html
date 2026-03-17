@@ -430,6 +430,7 @@
         width: 100%;
         margin-left: 0;
         gap: 10px;
+        align-items: flex-start;
       }
 
       .nav-links a,
@@ -437,14 +438,39 @@
         font-size: 14px;
       }
 
+      .nav-menu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
       .brand-mark {
         animation-duration: 1.2s;
       }
 
       .menu-panel {
-        left: 50%;
+        position: static;
+        left: auto;
         right: auto;
-        transform: translateX(-50%);
+        transform: none;
+        min-width: 0;
+        width: 100%;
+        margin-top: 8px;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        background: transparent;
+        box-shadow: none;
+        border: none;
+      }
+
+      .menu-panel a {
+        display: inline-flex;
+        width: auto;
+        padding: 8px 12px;
+        background: #f2f6f5;
       }
 
       .hero-logo-badge {
@@ -482,12 +508,14 @@
     <div class="nav-links">
       <a href="about.html">About</a>
       <a href="blog.html">Blog</a>
+      <a href="/journal.html">Journal</a>
+      <a href="/mood.html">Mood Check</a>
       <details class="nav-menu">
         <summary class="nav-trigger">Resources</summary>
         <div class="menu-panel">
-          <a href="/journal.html">Journaling</a>
           <a href="coloring/color-for-calm.html">Color for Calm</a>
           <a href="audio.html">Relaxation Audio</a>
+          <a href="materials.html">Resources Page</a>
         </div>
       </details>
       <details class="nav-menu">
@@ -502,8 +530,6 @@
         <div class="menu-panel">
           <a href="/login.html" id="loginLink">Login</a>
           <a href="/signup.html" id="signupLink">Sign up</a>
-          <a href="/journal.html" id="journalLink" hidden>Journal</a>
-          <a href="/mood.html" id="moodLink" hidden>Mood Check</a>
           <a href="#" id="signOutLink" hidden>Sign out</a>
         </div>
       </details>
@@ -667,8 +693,6 @@
     const navMenus = document.querySelectorAll(".nav-menu");
     const loginLink = document.getElementById("loginLink");
     const signupLink = document.getElementById("signupLink");
-    const journalLink = document.getElementById("journalLink");
-    const moodLink = document.getElementById("moodLink");
     const signOutLink = document.getElementById("signOutLink");
     function getFriendlyName(user) {
       if (user.displayName && user.displayName.trim()) {
@@ -690,15 +714,11 @@
         welcomeBanner.hidden = false;
         loginLink.hidden = true;
         signupLink.hidden = true;
-        journalLink.hidden = false;
-        moodLink.hidden = false;
         signOutLink.hidden = false;
       } else {
         welcomeBanner.hidden = true;
         loginLink.hidden = false;
         signupLink.hidden = false;
-        journalLink.hidden = true;
-        moodLink.hidden = true;
         signOutLink.hidden = true;
       }
     });

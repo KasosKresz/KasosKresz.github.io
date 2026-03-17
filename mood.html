@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mood Tracker | Track Stress and Emotions Online</title>
-  <meta name="description" content="Track stress, anxiety, calm, and other emotions with the MindEase mood tracker after signing in.">
+  <meta name="description" content="Track stress, anxiety, calm, and other emotions with the MindEase mood tracker after signing in." />
   <meta name="theme-color" content="#2f5d62">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -16,20 +16,6 @@
   <script src="/pwa-register.js" defer></script>
   <script src="/cookie-consent.js" defer></script>
   <style>
-    .home-button {
-  display: inline-block;
-  margin-bottom: 20px;
-  text-decoration: none;
-  background: #2f5d62;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.home-button:hover {
-  opacity: 0.9;
-}
     * {
       box-sizing: border-box;
       margin: 0;
@@ -41,18 +27,33 @@
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       background: linear-gradient(135deg, #dbeafe, #e0f2fe, #f0fdf4);
-      padding: 20px;
+      padding: 24px 20px 40px;
     }
 
     .card {
       width: 100%;
-      max-width: 560px;
+      max-width: 760px;
       background: white;
       padding: 36px 28px;
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .home-button {
+      display: inline-block;
+      margin: 0 0 20px;
+      text-decoration: none;
+      background: #2f5d62;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .home-button:hover {
+      opacity: 0.9;
     }
 
     h1 {
@@ -119,6 +120,161 @@
     .success {
       color: #059669 !important;
     }
+
+    .progress-panel {
+      margin-top: 28px;
+      border: 1px solid #dbe3ea;
+      border-radius: 18px;
+      background: #f8fafc;
+      overflow: hidden;
+    }
+
+    .progress-panel summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 18px 20px;
+      font-weight: bold;
+      color: #1e3a8a;
+      background: #eef4ff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .progress-panel summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .progress-panel summary::after {
+      content: "+";
+      font-size: 22px;
+      line-height: 1;
+      color: #3b82f6;
+    }
+
+    .progress-panel[open] summary::after {
+      content: "-";
+    }
+
+    .progress-content {
+      padding: 20px;
+    }
+
+    .progress-intro {
+      color: #475569;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .progress-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .progress-toolbar label {
+      font-weight: bold;
+      color: #334155;
+    }
+
+    .progress-toolbar select {
+      border: 1px solid #cdd7e3;
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: white;
+      color: #1f2937;
+      font-size: 15px;
+    }
+
+    .progress-meta {
+      color: #475569;
+      margin-bottom: 18px;
+      min-height: 22px;
+    }
+
+    .progress-layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 320px) 1fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .chart-wrap {
+      background: white;
+      border-radius: 18px;
+      padding: 14px;
+      border: 1px solid #dbe3ea;
+      display: flex;
+      justify-content: center;
+    }
+
+    .chart-wrap canvas {
+      width: 100%;
+      max-width: 280px;
+      height: auto;
+      display: block;
+    }
+
+    .progress-legend {
+      display: grid;
+      gap: 10px;
+    }
+
+    .legend-item {
+      background: white;
+      border: 1px solid #dbe3ea;
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .legend-item strong {
+      color: #1f2937;
+      font-size: 0.98rem;
+    }
+
+    .legend-item span {
+      color: #475569;
+      font-size: 0.92rem;
+    }
+
+    .legend-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex: 0 0 auto;
+    }
+
+    .legend-empty {
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 720px) {
+      .card {
+        padding: 28px 20px;
+      }
+
+      .progress-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-wrap {
+        padding: 12px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -171,14 +327,312 @@
       <button type="submit">Save Mood</button>
       <p id="message"></p>
     </form>
+
+    <details class="progress-panel" id="progressPanel">
+      <summary>Track My Progress</summary>
+      <div class="progress-content">
+        <p class="progress-intro">
+          Open this section when you want a visual view of how your saved moods have been distributed over time.
+        </p>
+
+        <div class="progress-toolbar">
+          <label for="progressRange">Time range</label>
+          <select id="progressRange">
+            <option value="7">Last 7 days</option>
+            <option value="14">Last 14 days</option>
+            <option value="30">Last month</option>
+            <option value="all">From beginning</option>
+          </select>
+        </div>
+
+        <p class="progress-meta" id="progressMeta">Open this section to load your mood history.</p>
+
+        <div class="progress-layout">
+          <div class="chart-wrap">
+            <canvas id="progressChart" width="280" height="280" aria-label="Mood progress chart"></canvas>
+          </div>
+          <div class="progress-legend" id="progressLegend"></div>
+        </div>
+      </div>
+    </details>
   </div>
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
-    import { addDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { addDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+    const moods = ["happy", "calm", "anxious", "stressed", "sad"];
+    const moodLabels = {
+      happy: "Happy",
+      calm: "Calm",
+      anxious: "Anxious",
+      stressed: "Stressed",
+      sad: "Sad"
+    };
+    const moodColors = {
+      happy: "#f6c453",
+      calm: "#5eb7a5",
+      anxious: "#ef8a74",
+      stressed: "#c770c8",
+      sad: "#6f8bd9"
+    };
+
+    const form = document.getElementById("moodForm");
+    const message = document.getElementById("message");
+    const progressPanel = document.getElementById("progressPanel");
+    const progressRange = document.getElementById("progressRange");
+    const progressMeta = document.getElementById("progressMeta");
+    const progressLegend = document.getElementById("progressLegend");
+    const progressChart = document.getElementById("progressChart");
+    const chartContext = progressChart.getContext("2d");
+
     let currentUser = null;
+    let moodEntries = [];
+    let progressLoaded = false;
+    let currentChartTotals = createEmptyTotals();
+    let chartAnimationId = 0;
+
+    function createEmptyTotals() {
+      return moods.reduce((accumulator, mood) => {
+        accumulator[mood] = 0;
+        return accumulator;
+      }, {});
+    }
+
+    function toDateSafe(value) {
+      if (!value) {
+        return null;
+      }
+
+      if (typeof value.toDate === "function") {
+        return value.toDate();
+      }
+
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function normalizeEntryMoods(entry) {
+      const normalized = createEmptyTotals();
+
+      if (entry && entry.moods && typeof entry.moods === "object") {
+        moods.forEach((mood) => {
+          const value = Number(entry.moods[mood]) || 0;
+          if (value > 0) {
+            normalized[mood] = value;
+          }
+        });
+        return normalized;
+      }
+
+      if (entry && entry.mood) {
+        const key = String(entry.mood).toLowerCase();
+        if (Object.prototype.hasOwnProperty.call(normalized, key)) {
+          normalized[key] = Number(entry.intensity) || 0;
+        }
+      }
+
+      return normalized;
+    }
+
+    function getTotalValue(totals) {
+      return moods.reduce((sum, mood) => sum + (Number(totals[mood]) || 0), 0);
+    }
+
+    function getEntriesForRange(rangeValue) {
+      if (rangeValue === "all") {
+        return [...moodEntries];
+      }
+
+      const days = Number(rangeValue);
+      const cutoff = new Date();
+      cutoff.setHours(0, 0, 0, 0);
+      cutoff.setDate(cutoff.getDate() - (days - 1));
+
+      return moodEntries.filter((entry) => {
+        const date = toDateSafe(entry.time);
+        return date && date >= cutoff;
+      });
+    }
+
+    function calculateTotals(entries) {
+      const totals = createEmptyTotals();
+
+      entries.forEach((entry) => {
+        const normalized = normalizeEntryMoods(entry);
+        moods.forEach((mood) => {
+          totals[mood] += normalized[mood];
+        });
+      });
+
+      return totals;
+    }
+
+    function renderLegend(totals, entryCount) {
+      const totalValue = getTotalValue(totals);
+
+      if (!entryCount || !totalValue) {
+        progressLegend.innerHTML = `
+          <div class="legend-empty">
+            No saved mood data is available for this range yet. Save a few check-ins and open this section again.
+          </div>
+        `;
+        return;
+      }
+
+      const visibleMoods = moods.filter((mood) => totals[mood] > 0);
+      progressLegend.innerHTML = visibleMoods.map((mood) => {
+        const percentage = Math.round((totals[mood] / totalValue) * 100);
+        return `
+          <div class="legend-item">
+            <div class="legend-label">
+              <span class="legend-swatch" style="background:${moodColors[mood]}"></span>
+              <strong>${moodLabels[mood]}</strong>
+            </div>
+            <span>${percentage}%</span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function drawPlaceholder() {
+      chartContext.clearRect(0, 0, progressChart.width, progressChart.height);
+      chartContext.beginPath();
+      chartContext.arc(140, 140, 90, 0, Math.PI * 2);
+      chartContext.fillStyle = "#edf2f7";
+      chartContext.fill();
+
+      chartContext.beginPath();
+      chartContext.arc(140, 140, 52, 0, Math.PI * 2);
+      chartContext.fillStyle = "#ffffff";
+      chartContext.fill();
+
+      chartContext.fillStyle = "#64748b";
+      chartContext.font = "bold 16px Arial";
+      chartContext.textAlign = "center";
+      chartContext.fillText("No data yet", 140, 145);
+    }
+
+    function drawChart(totals, entryCount) {
+      chartContext.clearRect(0, 0, progressChart.width, progressChart.height);
+      const totalValue = getTotalValue(totals);
+
+      if (!entryCount || !totalValue) {
+        drawPlaceholder();
+        return;
+      }
+
+      let startAngle = -Math.PI / 2;
+
+      moods.forEach((mood) => {
+        const value = totals[mood];
+        if (value <= 0) {
+          return;
+        }
+
+        const sliceAngle = (value / totalValue) * Math.PI * 2;
+        chartContext.beginPath();
+        chartContext.moveTo(140, 140);
+        chartContext.arc(140, 140, 90, startAngle, startAngle + sliceAngle);
+        chartContext.closePath();
+        chartContext.fillStyle = moodColors[mood];
+        chartContext.fill();
+        startAngle += sliceAngle;
+      });
+
+      chartContext.beginPath();
+      chartContext.arc(140, 140, 52, 0, Math.PI * 2);
+      chartContext.fillStyle = "#ffffff";
+      chartContext.fill();
+
+      chartContext.fillStyle = "#1f2937";
+      chartContext.font = "bold 28px Arial";
+      chartContext.textAlign = "center";
+      chartContext.fillText(String(entryCount), 140, 134);
+
+      chartContext.fillStyle = "#64748b";
+      chartContext.font = "14px Arial";
+      chartContext.fillText(entryCount === 1 ? "check-in" : "check-ins", 140, 156);
+    }
+
+    function animateChart(targetTotals, entryCount) {
+      const startTotals = { ...currentChartTotals };
+      const startTime = performance.now();
+      const duration = 650;
+
+      if (chartAnimationId) {
+        cancelAnimationFrame(chartAnimationId);
+      }
+
+      function frame(now) {
+        const rawProgress = Math.min((now - startTime) / duration, 1);
+        const easedProgress = 1 - Math.pow(1 - rawProgress, 3);
+        const intermediateTotals = createEmptyTotals();
+
+        moods.forEach((mood) => {
+          intermediateTotals[mood] = startTotals[mood] + (targetTotals[mood] - startTotals[mood]) * easedProgress;
+        });
+
+        drawChart(intermediateTotals, entryCount);
+
+        if (rawProgress < 1) {
+          chartAnimationId = requestAnimationFrame(frame);
+          return;
+        }
+
+        currentChartTotals = { ...targetTotals };
+        chartAnimationId = 0;
+      }
+
+      chartAnimationId = requestAnimationFrame(frame);
+    }
+
+    async function loadMoodEntries(forceReload = false) {
+      if (!currentUser) {
+        return;
+      }
+
+      if (progressLoaded && !forceReload) {
+        return;
+      }
+
+      const moodQuery = query(
+        collection(db, "mood_entries"),
+        where("user", "==", currentUser.uid)
+      );
+
+      const snapshot = await getDocs(moodQuery);
+      moodEntries = snapshot.docs
+        .map((entry) => ({
+          id: entry.id,
+          ...entry.data()
+        }))
+        .sort((left, right) => {
+          const leftDate = toDateSafe(left.time);
+          const rightDate = toDateSafe(right.time);
+          return (rightDate ? rightDate.getTime() : 0) - (leftDate ? leftDate.getTime() : 0);
+        });
+
+      progressLoaded = true;
+    }
+
+    function updateProgressView() {
+      const rangeValue = progressRange.value;
+      const entries = getEntriesForRange(rangeValue);
+      const totals = calculateTotals(entries);
+      const totalValue = getTotalValue(totals);
+      const rangeLabel = progressRange.options[progressRange.selectedIndex].text;
+
+      if (!entries.length || !totalValue) {
+        progressMeta.textContent = `No saved mood data is available for ${rangeLabel.toLowerCase()}.`;
+      } else {
+        progressMeta.textContent = `Showing ${entries.length} ${entries.length === 1 ? "check-in" : "check-ins"} for ${rangeLabel.toLowerCase()}.`;
+      }
+
+      renderLegend(totals, entries.length);
+      animateChart(totals, entries.length);
+    }
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -188,21 +642,17 @@
       }
     });
 
-    const moods = ["happy", "calm", "anxious", "stressed", "sad"];
-    const form = document.getElementById("moodForm");
-    const message = document.getElementById("message");
-
     moods.forEach((mood) => {
       const slider = document.getElementById(mood);
-      const value = document.getElementById(mood + "Value");
+      const value = document.getElementById(`${mood}Value`);
 
       slider.addEventListener("input", () => {
         value.textContent = slider.value;
       });
     });
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
       const selectedMoods = {};
 
@@ -231,13 +681,48 @@
 
         moods.forEach((mood) => {
           document.getElementById(mood).value = 0;
-          document.getElementById(mood + "Value").textContent = 0;
+          document.getElementById(`${mood}Value`).textContent = 0;
         });
+
+        if (progressPanel.open) {
+          await loadMoodEntries(true);
+          updateProgressView();
+        } else {
+          progressLoaded = false;
+        }
       } catch (error) {
         message.className = "";
         message.textContent = error.message;
       }
     });
+
+    progressPanel.addEventListener("toggle", async () => {
+      if (!progressPanel.open) {
+        return;
+      }
+
+      progressMeta.textContent = "Loading your mood history...";
+
+      try {
+        await loadMoodEntries();
+        updateProgressView();
+      } catch (error) {
+        progressMeta.textContent = "Your mood history could not be loaded right now.";
+        progressLegend.innerHTML = `<div class="legend-empty">${error.message}</div>`;
+        currentChartTotals = createEmptyTotals();
+        drawPlaceholder();
+      }
+    });
+
+    progressRange.addEventListener("change", () => {
+      if (!progressPanel.open) {
+        return;
+      }
+
+      updateProgressView();
+    });
+
+    drawPlaceholder();
   </script>
 </body>
 </html>

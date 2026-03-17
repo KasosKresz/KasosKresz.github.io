@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Color Player | MindEase</title>
+  <meta name="robots" content="noindex,follow">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f6f8f7;
+      color: #2f3a3a;
+      line-height: 1.6;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.97);
+      border-bottom: 1px solid #e4ebea;
+    }
+
+    .navbar-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #2f5d62;
+      font-weight: bold;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+    }
+
+    .brand-text {
+      font-size: 1.05rem;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #2f5d62;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.75;
+    }
+
+    .page {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel,
+    .canvas-panel {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #2f5d62;
+      margin-top: 0;
+    }
+
+    .subtitle {
+      color: #5f7170;
+      margin-bottom: 18px;
+    }
+
+    .tool-group + .tool-group {
+      margin-top: 22px;
+    }
+
+    .palette {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .swatch {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border: 2px solid transparent;
+      border-radius: 50%;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .swatch.active {
+      border-color: #2f5d62;
+      transform: scale(1.06);
+    }
+
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+    }
+
+    .actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    button,
+    .text-link {
+      display: inline-block;
+      width: 100%;
+      padding: 12px 14px;
+      border: none;
+      border-radius: 10px;
+      background: #2f5d62;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    button:hover,
+    .text-link:hover {
+      opacity: 0.92;
+    }
+
+    button.secondary,
+    .text-link.secondary {
+      background: #edf4f3;
+      color: #2f5d62;
+    }
+
+    button.active {
+      background: #2f5d62;
+      color: white;
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .canvas-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .canvas-wrap {
+      background: #f6f8f7;
+      border-radius: 16px;
+      padding: 14px;
+      overflow: auto;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    .status {
+      color: #5f7170;
+      margin-top: 12px;
+      min-height: 24px;
+    }
+
+    @media (max-width: 960px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .navbar {
+        justify-content: center;
+      }
+
+      .navbar-brand {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .nav-links {
+        width: 100%;
+        margin-left: 0;
+        gap: 10px;
+      }
+
+      .nav-links a {
+        font-size: 14px;
+      }
+
+      .palette {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="../index.html" class="navbar-brand">
+      <img src="../mindease_logo.svg" alt="MindEase logo" class="brand-mark">
+      <span class="brand-text">MindEase</span>
+    </a>
+    <div class="nav-links">
+      <a href="../about.html">About</a>
+      <a href="../blog.html">Blog</a>
+      <a href="../audio.html">Relaxation Audio</a>
+      <a href="../materials.html">Resources</a>
+      <a href="../mood.html">Mood Check</a>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="layout">
+      <aside class="panel">
+        <h1 id="pageTitle">Color for Calm</h1>
+        <p class="subtitle" id="pageDescription">Loading page...</p>
+
+        <div class="tool-group">
+          <h2>Colors</h2>
+          <div class="palette" id="palette"></div>
+        </div>
+
+        <div class="tool-group">
+          <h2>Brush Size</h2>
+          <div class="range-row">
+            <input type="range" id="brushSize" min="4" max="40" value="12">
+            <span id="brushSizeValue">12 px</span>
+          </div>
+        </div>
+
+        <div class="tool-group">
+          <h2>Tools</h2>
+          <div class="actions">
+            <button type="button" id="brushButton" class="secondary active">Use Brush</button>
+            <button type="button" id="fillButton" class="secondary">Use Fill</button>
+            <button type="button" id="eraserButton" class="secondary">Use Eraser</button>
+          </div>
+        </div>
+
+        <div class="tool-group">
+          <h2>Actions</h2>
+          <div class="actions">
+            <button type="button" id="undoButton" class="secondary" disabled>Undo Last Stroke</button>
+            <button type="button" id="resetButton" class="secondary">Reset Page</button>
+            <button type="button" id="downloadButton">Download Image</button>
+            <a href="./color-for-calm.html" class="text-link secondary">Back to Gallery</a>
+          </div>
+        </div>
+
+        <p class="status" id="statusMessage">Loading artwork...</p>
+      </aside>
+
+      <section class="canvas-panel">
+        <div class="canvas-header">
+          <div>
+            <h2>Color Online</h2>
+            <p class="subtitle">Use a mouse, trackpad, or touch to draw directly on the page.</p>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="drawingCanvas"></canvas>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="./coloring-data.js"></script>
+  <script>
+    const paletteColors = [
+      "#6b8f71",
+      "#5c7fa3",
+      "#d88c9a",
+      "#d7a86e",
+      "#8577b2",
+      "#4a7c59",
+      "#3f88c5",
+      "#c96f7a",
+      "#c67f2f",
+      "#ffffff"
+    ];
+
+    const pages = Array.isArray(window.COLORING_PAGES) ? window.COLORING_PAGES : [];
+    const pageId = new URLSearchParams(window.location.search).get("id");
+    const selectedPage = pages.find((page) => page.id === pageId) || pages[0];
+
+    const titleEl = document.getElementById("pageTitle");
+    const descriptionEl = document.getElementById("pageDescription");
+    const statusEl = document.getElementById("statusMessage");
+    const paletteEl = document.getElementById("palette");
+    const brushSizeInput = document.getElementById("brushSize");
+    const brushSizeValue = document.getElementById("brushSizeValue");
+    const brushButton = document.getElementById("brushButton");
+    const fillButton = document.getElementById("fillButton");
+    const eraserButton = document.getElementById("eraserButton");
+    const undoButton = document.getElementById("undoButton");
+    const resetButton = document.getElementById("resetButton");
+    const downloadButton = document.getElementById("downloadButton");
+    const canvas = document.getElementById("drawingCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let currentColor = paletteColors[0];
+    let drawing = false;
+    let modifiedStroke = false;
+    let lastPoint = null;
+    let baseSnapshot = "";
+    let snapshots = [];
+    let activeTool = "brush";
+    const maxSnapshots = 20;
+    const fillTolerance = 24;
+
+    function setStatus(message) {
+      statusEl.textContent = message;
+    }
+
+    function setBrushSizeLabel() {
+      brushSizeValue.textContent = `${brushSizeInput.value} px`;
+    }
+
+    function updateUndoState() {
+      undoButton.disabled = snapshots.length <= 1;
+    }
+
+    function saveSnapshot() {
+      const dataUrl = canvas.toDataURL("image/png");
+      snapshots.push(dataUrl);
+      if (snapshots.length > maxSnapshots) {
+        snapshots.shift();
+      }
+      updateUndoState();
+    }
+
+    function restoreSnapshot(dataUrl) {
+      const snapshot = new Image();
+      snapshot.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(snapshot, 0, 0);
+      };
+      snapshot.src = dataUrl;
+    }
+
+    function getPoint(event) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+
+      return {
+        x: (event.clientX - rect.left) * scaleX,
+        y: (event.clientY - rect.top) * scaleY
+      };
+    }
+
+    function configureContext() {
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.lineWidth = Number(brushSizeInput.value);
+      ctx.strokeStyle = activeTool === "eraser" ? "#ffffff" : currentColor;
+      canvas.style.cursor = activeTool === "fill" ? "cell" : "crosshair";
+    }
+
+    function setActiveSwatch(color) {
+      currentColor = color;
+
+      if (activeTool === "eraser") {
+        activeTool = "brush";
+        updateToolButtons();
+      }
+
+      document.querySelectorAll(".swatch").forEach((swatch) => {
+        swatch.classList.toggle("active", swatch.dataset.color === color);
+      });
+
+      configureContext();
+    }
+
+    function updateToolButtons() {
+      brushButton.classList.toggle("active", activeTool === "brush");
+      fillButton.classList.toggle("active", activeTool === "fill");
+      eraserButton.classList.toggle("active", activeTool === "eraser");
+    }
+
+    function setActiveTool(tool) {
+      activeTool = tool;
+      updateToolButtons();
+      configureContext();
+    }
+
+    function hexToRgb(hex) {
+      const normalized = hex.replace("#", "");
+      const value = parseInt(normalized, 16);
+
+      return {
+        r: (value >> 16) & 255,
+        g: (value >> 8) & 255,
+        b: value & 255
+      };
+    }
+
+    function colorMatches(data, index, target, tolerance) {
+      return (
+        Math.abs(data[index] - target.r) <= tolerance &&
+        Math.abs(data[index + 1] - target.g) <= tolerance &&
+        Math.abs(data[index + 2] - target.b) <= tolerance &&
+        Math.abs(data[index + 3] - target.a) <= tolerance
+      );
+    }
+
+    function setPixel(data, index, color) {
+      data[index] = color.r;
+      data[index + 1] = color.g;
+      data[index + 2] = color.b;
+      data[index + 3] = color.a;
+    }
+
+    function fillArea(startX, startY) {
+      const x = Math.floor(startX);
+      const y = Math.floor(startY);
+
+      if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) {
+        return false;
+      }
+
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+      const startIndex = (y * canvas.width + x) * 4;
+      const target = {
+        r: data[startIndex],
+        g: data[startIndex + 1],
+        b: data[startIndex + 2],
+        a: data[startIndex + 3]
+      };
+      const chosen = activeTool === "eraser" ? "#ffffff" : currentColor;
+      const replacementBase = hexToRgb(chosen);
+      const replacement = {
+        r: replacementBase.r,
+        g: replacementBase.g,
+        b: replacementBase.b,
+        a: 255
+      };
+
+      if (colorMatches(data, startIndex, replacement, 0)) {
+        return false;
+      }
+
+      const stack = [[x, y]];
+      const visited = new Uint8Array(canvas.width * canvas.height);
+      let changed = false;
+
+      while (stack.length) {
+        const [currentX, currentY] = stack.pop();
+
+        if (
+          currentX < 0 ||
+          currentY < 0 ||
+          currentX >= canvas.width ||
+          currentY >= canvas.height
+        ) {
+          continue;
+        }
+
+        const pixelIndex = currentY * canvas.width + currentX;
+        if (visited[pixelIndex]) {
+          continue;
+        }
+        visited[pixelIndex] = 1;
+
+        const dataIndex = pixelIndex * 4;
+        if (!colorMatches(data, dataIndex, target, fillTolerance)) {
+          continue;
+        }
+
+        setPixel(data, dataIndex, replacement);
+        changed = true;
+
+        stack.push([currentX + 1, currentY]);
+        stack.push([currentX - 1, currentY]);
+        stack.push([currentX, currentY + 1]);
+        stack.push([currentX, currentY - 1]);
+      }
+
+      if (!changed) {
+        return false;
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      return true;
+    }
+
+    function buildPalette() {
+      paletteEl.innerHTML = paletteColors.map((color) => {
+        const aria = color === "#ffffff" ? "Choose white" : `Choose ${color}`;
+        return `
+          <button
+            type="button"
+            class="swatch${color === currentColor ? " active" : ""}"
+            data-color="${color}"
+            style="background:${color}"
+            aria-label="${aria}">
+          </button>
+        `;
+      }).join("");
+
+      paletteEl.addEventListener("click", (event) => {
+        const swatch = event.target.closest(".swatch");
+        if (!swatch) {
+          return;
+        }
+
+        setActiveSwatch(swatch.dataset.color);
+      });
+    }
+
+    function startDrawing(event) {
+      event.preventDefault();
+      drawing = true;
+      modifiedStroke = false;
+      lastPoint = getPoint(event);
+      configureContext();
+      ctx.beginPath();
+      ctx.moveTo(lastPoint.x, lastPoint.y);
+      canvas.setPointerCapture(event.pointerId);
+    }
+
+    function handlePointerDown(event) {
+      if (activeTool === "fill") {
+        event.preventDefault();
+        const point = getPoint(event);
+        if (fillArea(point.x, point.y)) {
+          saveSnapshot();
+          setStatus("Area filled.");
+        } else {
+          setStatus("Nothing changed.");
+        }
+        return;
+      }
+
+      startDrawing(event);
+    }
+
+    function continueDrawing(event) {
+      if (!drawing) {
+        return;
+      }
+
+      event.preventDefault();
+      const point = getPoint(event);
+      ctx.lineTo(point.x, point.y);
+      ctx.stroke();
+      lastPoint = point;
+      modifiedStroke = true;
+    }
+
+    function stopDrawing(event) {
+      if (!drawing) {
+        return;
+      }
+
+      drawing = false;
+      if (modifiedStroke) {
+        saveSnapshot();
+      }
+      lastPoint = null;
+
+      if (event && typeof event.pointerId === "number") {
+        canvas.releasePointerCapture(event.pointerId);
+      }
+    }
+
+    function resetCanvas() {
+      if (!baseSnapshot) {
+        return;
+      }
+
+      restoreSnapshot(baseSnapshot);
+      snapshots = [baseSnapshot];
+      updateUndoState();
+      setStatus("Page reset.");
+    }
+
+    function undoLastStroke() {
+      if (snapshots.length <= 1) {
+        return;
+      }
+
+      snapshots.pop();
+      restoreSnapshot(snapshots[snapshots.length - 1]);
+      updateUndoState();
+      setStatus("Last stroke removed.");
+    }
+
+    function downloadImage() {
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = `${selectedPage.id}-coloring.png`;
+      link.click();
+      setStatus("Download started.");
+    }
+
+    function attachCanvasEvents() {
+      canvas.addEventListener("pointerdown", handlePointerDown);
+      canvas.addEventListener("pointermove", continueDrawing);
+      canvas.addEventListener("pointerup", stopDrawing);
+      canvas.addEventListener("pointerleave", stopDrawing);
+      canvas.addEventListener("pointercancel", stopDrawing);
+    }
+
+    if (!selectedPage) {
+      titleEl.textContent = "Color for Calm";
+      descriptionEl.textContent = "This coloring page is not available.";
+      setStatus("Coloring page not found.");
+      downloadButton.disabled = true;
+      resetButton.disabled = true;
+    } else {
+      titleEl.textContent = selectedPage.title;
+      descriptionEl.textContent = selectedPage.description;
+      setBrushSizeLabel();
+      buildPalette();
+      updateToolButtons();
+      configureContext();
+
+      brushSizeInput.addEventListener("input", () => {
+        setBrushSizeLabel();
+        configureContext();
+      });
+
+      brushButton.addEventListener("click", () => {
+        setActiveTool("brush");
+        setStatus("Brush selected.");
+      });
+
+      fillButton.addEventListener("click", () => {
+        setActiveTool("fill");
+        setStatus("Fill selected. Click an area to fill it.");
+      });
+
+      eraserButton.addEventListener("click", () => {
+        setActiveTool("eraser");
+        setStatus("Eraser selected.");
+      });
+
+      undoButton.addEventListener("click", undoLastStroke);
+      resetButton.addEventListener("click", resetCanvas);
+      downloadButton.addEventListener("click", downloadImage);
+      attachCanvasEvents();
+
+      const image = new Image();
+      image.onload = () => {
+        canvas.width = image.naturalWidth;
+        canvas.height = image.naturalHeight;
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0);
+        baseSnapshot = canvas.toDataURL("image/png");
+        snapshots = [baseSnapshot];
+        updateUndoState();
+        setStatus("Ready to color.");
+      };
+
+      image.onerror = () => {
+        setStatus("This coloring page could not be loaded.");
+        downloadButton.disabled = true;
+        resetButton.disabled = true;
+      };
+
+      image.src = selectedPage.file;
+    }
+  </script>
+</body>
+</html>

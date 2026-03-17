@@ -1,7 +1,8 @@
 import {
   doc,
   getDoc,
-  runTransaction
+  runTransaction,
+  setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 export const REWARD_POINTS = 10;
@@ -144,7 +145,22 @@ export function getRewardDocRef(db, uid) {
   return doc(db, REWARDS_COLLECTION, uid);
 }
 
+async function ensureRewardDoc(db, uid) {
+  if (!uid) {
+    return;
+  }
+
+  await setDoc(
+    getRewardDocRef(db, uid),
+    {
+      user: uid
+    },
+    { merge: true }
+  );
+}
+
 export async function loadRewardData(db, uid) {
+  await ensureRewardDoc(db, uid);
   const ref = getRewardDocRef(db, uid);
   const snapshot = await getDoc(ref);
   return normalizeRewardData(snapshot.exists() ? snapshot.data() : {}, uid);
@@ -158,6 +174,7 @@ export async function awardReward(db, uid, type, itemId, points = REWARD_POINTS)
   }
 
   const ref = getRewardDocRef(db, uid);
+  await ensureRewardDoc(db, uid);
 
   return runTransaction(db, async (transaction) => {
     const snapshot = await transaction.get(ref);

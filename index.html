@@ -156,6 +156,18 @@
       margin-bottom: 2px;
     }
 
+    .account-breakdown {
+      display: grid;
+      gap: 6px;
+      margin: 8px 0 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f8fbfa;
+      color: #456060;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
     .menu-panel a:hover {
       background: #f2f6f5;
       opacity: 1;
@@ -579,6 +591,12 @@
             <strong>MindEase Points</strong>
             <span id="accountPointsText">0 - MindEase Explorer</span>
           </div>
+          <div class="account-breakdown" id="accountBreakdown" hidden>
+            <span id="accountRelaxText">Relax: 0</span>
+            <span id="accountKnowledgeText">Reading: 0</span>
+            <span id="accountOrganizeText">Organizing: 0</span>
+            <span id="accountCreativeText">Coloring: 0</span>
+          </div>
           <a href="/login.html" id="loginLink">Login</a>
           <a href="/signup.html" id="signupLink">Sign up</a>
           <a href="#" id="signOutLink" hidden>Sign out</a>
@@ -755,6 +773,11 @@
     const navMenus = document.querySelectorAll(".nav-menu");
     const accountPoints = document.getElementById("accountPoints");
     const accountPointsText = document.getElementById("accountPointsText");
+    const accountBreakdown = document.getElementById("accountBreakdown");
+    const accountRelaxText = document.getElementById("accountRelaxText");
+    const accountKnowledgeText = document.getElementById("accountKnowledgeText");
+    const accountOrganizeText = document.getElementById("accountOrganizeText");
+    const accountCreativeText = document.getElementById("accountCreativeText");
     const loginLink = document.getElementById("loginLink");
     const signupLink = document.getElementById("signupLink");
     const signOutLink = document.getElementById("signOutLink");
@@ -779,8 +802,16 @@
           const rewardData = await loadRewardData(db, user.uid);
           const overallLevel = getOverallLevel(rewardData.mindeasePoints);
           pointsText = `${rewardData.mindeasePoints} - ${overallLevel.label}`;
+          accountRelaxText.textContent = `Relax: ${rewardData.relaxPoints}`;
+          accountKnowledgeText.textContent = `Reading: ${rewardData.knowledgePoints}`;
+          accountOrganizeText.textContent = `Organizing: ${rewardData.organizePoints}`;
+          accountCreativeText.textContent = `Coloring: ${rewardData.creativePoints}`;
         } catch (error) {
           pointsText = "MindEase Points unavailable right now.";
+          accountRelaxText.textContent = "Relax: unavailable";
+          accountKnowledgeText.textContent = "Reading: unavailable";
+          accountOrganizeText.textContent = "Organizing: unavailable";
+          accountCreativeText.textContent = "Coloring: unavailable";
         }
 
         welcomeTitle.textContent = `Welcome back, ${name}.`;
@@ -790,6 +821,7 @@
         welcomeBanner.hidden = false;
         accountPointsText.textContent = pointsText;
         accountPoints.hidden = false;
+        accountBreakdown.hidden = false;
         loginLink.hidden = true;
         signupLink.hidden = true;
         signOutLink.hidden = false;
@@ -797,6 +829,7 @@
         welcomeBanner.hidden = true;
         welcomePoints.hidden = true;
         accountPoints.hidden = true;
+        accountBreakdown.hidden = true;
         loginLink.hidden = false;
         signupLink.hidden = false;
         signOutLink.hidden = true;

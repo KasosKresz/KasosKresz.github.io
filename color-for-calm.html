@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Color for Calm | MindEase</title>
+  <meta name="description" content="Browse calming MindEase coloring pages, open them online, and color directly in the browser.">
+  <link rel="canonical" href="https://mindease.ca/coloring/color-for-calm.html">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f6f8f7;
+      color: #2f3a3a;
+      line-height: 1.7;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.97);
+      border-bottom: 1px solid #e4ebea;
+    }
+
+    .navbar-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #2f5d62;
+      font-weight: bold;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+    }
+
+    .brand-text {
+      font-size: 1.05rem;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #2f5d62;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.75;
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+
+    .hero,
+    .section {
+      background: white;
+      margin: 0 auto 24px;
+      padding: 30px 26px;
+      border-radius: 18px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .hero {
+      text-align: center;
+    }
+
+    .hero h1,
+    .section h2 {
+      color: #2f5d62;
+      margin-top: 0;
+    }
+
+    .hero p,
+    .section p {
+      max-width: 780px;
+      margin: 0 auto 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .card {
+      background: #f2f6f5;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      background: white;
+    }
+
+    .card-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      color: #2f5d62;
+      font-size: 1.05rem;
+    }
+
+    .card p {
+      margin: 0 0 14px;
+      color: #4f5f5f;
+      font-size: 0.96rem;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: auto;
+      background: #2f5d62;
+      color: white;
+      padding: 11px 16px;
+      border-radius: 9px;
+      text-decoration: none;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .button:hover {
+      opacity: 0.92;
+    }
+
+    .status {
+      text-align: center;
+      color: #5f7170;
+    }
+
+    footer {
+      text-align: center;
+      color: #6e7878;
+      font-size: 14px;
+      margin-top: 36px;
+    }
+
+    @media (max-width: 760px) {
+      .navbar {
+        justify-content: center;
+      }
+
+      .navbar-brand {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .nav-links {
+        width: 100%;
+        margin-left: 0;
+        gap: 10px;
+      }
+
+      .nav-links a {
+        font-size: 14px;
+      }
+
+      .hero,
+      .section {
+        padding: 22px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="../index.html" class="navbar-brand">
+      <img src="../mindease_logo.svg" alt="MindEase logo" class="brand-mark">
+      <span class="brand-text">MindEase</span>
+    </a>
+    <div class="nav-links">
+      <a href="../about.html">About</a>
+      <a href="../blog.html">Blog</a>
+      <a href="../audio.html">Relaxation Audio</a>
+      <a href="../materials.html">Resources</a>
+      <a href="../mood.html">Mood Check</a>
+    </div>
+  </div>
+
+  <div class="page">
+    <section class="hero">
+      <h1>Color for Calm</h1>
+      <p>
+        Choose a design, color it directly in your browser, and download it when you are done.
+        This is a quieter, low-pressure way to slow down and stay with one simple activity for a while.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Choose a Page</h2>
+      <p>
+        The gallery includes nature scenes, mandalas, abstract designs, and cafe or seaside themes.
+      </p>
+      <div class="grid" id="galleryGrid"></div>
+      <p class="status" id="galleryStatus">Loading coloring pages...</p>
+    </section>
+
+    <footer>
+      &copy; 2026 MindEase
+    </footer>
+  </div>
+
+  <script src="./coloring-data.js"></script>
+  <script>
+    const grid = document.getElementById("galleryGrid");
+    const status = document.getElementById("galleryStatus");
+    const pages = Array.isArray(window.COLORING_PAGES) ? window.COLORING_PAGES : [];
+
+    if (!pages.length) {
+      status.textContent = "Coloring pages are not available right now.";
+    } else {
+      const cards = pages.map((page) => {
+        return `
+          <article class="card">
+            <img src="${page.file}" alt="${page.title}" loading="lazy">
+            <div class="card-body">
+              <h3>${page.title}</h3>
+              <p>${page.description}</p>
+              <a class="button" href="./color-player.html?id=${encodeURIComponent(page.id)}">Open Page</a>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      grid.innerHTML = cards;
+      status.hidden = true;
+    }
+  </script>
+</body>
+</html>

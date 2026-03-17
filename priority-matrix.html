@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Priority Matrix | MindEase</title>
+  <meta name="description" content="A private interactive priority matrix for organizing tasks by importance and urgency." />
+  <link rel="canonical" href="https://mindease.ca/priority-matrix.html" />
+  <meta name="robots" content="noindex,nofollow" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #eef7f4, #f7fbfa, #edf4fb);
+      color: #2f3a3a;
+      padding: 20px;
+    }
+
+    .page {
+      max-width: 1220px;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .topbar a {
+      text-decoration: none;
+      color: #2f5d62;
+      font-weight: bold;
+    }
+
+    .hero,
+    .panel,
+    .quadrant,
+    .completed-panel {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .hero {
+      padding: 26px;
+      margin-bottom: 20px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .hero h1,
+    .panel h2,
+    .quadrant h2,
+    .completed-panel h2 {
+      color: #2f5d62;
+      margin-bottom: 12px;
+    }
+
+    .hero p,
+    .panel p,
+    .quadrant p,
+    .completed-panel p {
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .scoreboard {
+      background: #f2f6f5;
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .score-points {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #2f5d62;
+      margin-bottom: 6px;
+    }
+
+    .score-level {
+      display: inline-block;
+      background: #e3efed;
+      color: #2f5d62;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .score-next {
+      color: #607070;
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+
+    .score-breakdown {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .mini-stat {
+      background: white;
+      border: 1px solid #dde7e5;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .mini-stat strong {
+      display: block;
+      color: #2f5d62;
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .mini-stat span {
+      color: #607070;
+      font-size: 13px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 24px;
+      position: sticky;
+      top: 92px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid #d6e1df;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 15px;
+      outline: none;
+      background: white;
+      color: #2f3a3a;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #6fa1a7;
+      box-shadow: 0 0 0 3px rgba(47, 93, 98, 0.14);
+    }
+
+    .helper {
+      color: #607070;
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      background: #2f5d62;
+      color: white;
+      font-weight: bold;
+    }
+
+    button.secondary {
+      background: #6e7878;
+    }
+
+    button.danger {
+      background: #b64c4c;
+    }
+
+    .message {
+      min-height: 22px;
+      color: #b64c4c;
+      font-size: 14px;
+    }
+
+    .message.success {
+      color: #1f8a5b;
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .quadrant {
+      padding: 20px;
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .quadrant.important-urgent {
+      border-top: 6px solid #b64c4c;
+    }
+
+    .quadrant.important-not-urgent {
+      border-top: 6px solid #d6a649;
+    }
+
+    .quadrant.urgent-not-important {
+      border-top: 6px solid #5487b7;
+    }
+
+    .quadrant.not-urgent-not-important {
+      border-top: 6px solid #7a8d8c;
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .task-card {
+      background: #f2f6f5;
+      border-radius: 14px;
+      padding: 14px;
+      border: 1px solid #dde7e5;
+      cursor: grab;
+      transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .task-card.is-dragging {
+      opacity: 0.55;
+      transform: scale(0.98);
+      box-shadow: 0 12px 24px rgba(47, 93, 98, 0.14);
+    }
+
+    .task-card h3 {
+      color: #2f5d62;
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .task-card p {
+      margin-bottom: 10px;
+      color: #445353;
+      font-size: 0.95rem;
+    }
+
+    .task-meta {
+      color: #607070;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .task-controls {
+      display: grid;
+      gap: 10px;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .task-actions button {
+      padding: 9px 12px;
+      font-size: 13px;
+    }
+
+    .completed-panel {
+      margin-top: 20px;
+      padding: 24px;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .quadrant.drop-target,
+    .completed-panel.drop-target {
+      box-shadow: 0 0 0 3px rgba(47, 93, 98, 0.18), 0 14px 28px rgba(47, 93, 98, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .empty {
+      background: #f2f6f5;
+      border-radius: 14px;
+      padding: 16px;
+      color: #607070;
+    }
+
+    .page-message {
+      min-height: 22px;
+      margin: 0 0 18px;
+      color: #607070;
+      font-size: 14px;
+    }
+
+    .page-message.error {
+      color: #b64c4c;
+    }
+
+    .page-message.success {
+      color: #1f8a5b;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .layout,
+      .matrix {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <a href="/materials.html">&larr; Back to Resources</a>
+      <a href="/index.html">Home</a>
+    </div>
+
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <h1>Priority Matrix</h1>
+          <p>
+            Organize tasks by what matters most first: important and urgent, important but not urgent,
+            urgent but not important, and low-priority items that can wait or be removed.
+          </p>
+          <p>
+            This is a private, signed-in tool. Your tasks stay attached to your account so you can return,
+            review what is completed, and keep building organizer points over time.
+          </p>
+        </div>
+        <div class="scoreboard">
+          <div class="score-points" id="pointsValue">0 points</div>
+          <div class="score-level" id="levelValue">Beginner Organizer</div>
+          <div class="score-next" id="nextLevelValue">Complete tasks to reach the next level.</div>
+          <p id="completionSummary">No completed tasks yet.</p>
+          <div class="score-breakdown">
+            <div class="mini-stat">
+              <strong id="activeTaskCount">0</strong>
+              <span>Active tasks</span>
+            </div>
+            <div class="mini-stat">
+              <strong id="completedTaskCount">0</strong>
+              <span>Completed tasks</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p class="page-message" id="pageMessage">Loading your matrix...</p>
+
+    <div class="layout">
+      <aside class="panel">
+        <h2 id="formHeading">Add a Task</h2>
+        <p class="helper">
+          Add a task, choose its category, or drag it between sections later if priorities change.
+        </p>
+
+        <form id="taskForm">
+          <input id="taskTitle" type="text" placeholder="Task title" maxlength="120" required />
+          <textarea id="taskNotes" placeholder="Optional notes"></textarea>
+          <select id="taskCategory" required>
+            <option value="importantUrgent">Important + Urgent</option>
+            <option value="importantNotUrgent">Important + Not Urgent</option>
+            <option value="urgentNotImportant">Urgent + Not Important</option>
+            <option value="notUrgentNotImportant">Not Urgent + Not Important</option>
+          </select>
+          <div class="actions">
+            <button type="submit" id="saveTaskButton">Save Task</button>
+            <button type="button" class="secondary" id="cancelEditButton" hidden>Cancel Edit</button>
+          </div>
+          <p id="formMessage" class="message"></p>
+        </form>
+      </aside>
+
+      <main>
+        <div class="matrix">
+          <section class="quadrant important-urgent" data-drop-category="importantUrgent">
+            <h2>Important + Urgent</h2>
+            <p>Do these first. They have real consequences if left alone.</p>
+            <div class="task-list" id="importantUrgentList"></div>
+          </section>
+
+          <section class="quadrant important-not-urgent" data-drop-category="importantNotUrgent">
+            <h2>Important + Not Urgent</h2>
+            <p>Schedule these. They matter for long-term progress but are easy to delay.</p>
+            <div class="task-list" id="importantNotUrgentList"></div>
+          </section>
+
+          <section class="quadrant urgent-not-important" data-drop-category="urgentNotImportant">
+            <h2>Urgent + Not Important</h2>
+            <p>Keep these contained. Delegate, simplify, or handle them quickly.</p>
+            <div class="task-list" id="urgentNotImportantList"></div>
+          </section>
+
+          <section class="quadrant not-urgent-not-important" data-drop-category="notUrgentNotImportant">
+            <h2>Low Priority</h2>
+            <p>Reduce or remove these when possible. They tend to drain focus.</p>
+            <div class="task-list" id="notUrgentNotImportantList"></div>
+          </section>
+        </div>
+
+        <section class="completed-panel" data-drop-completed="true">
+          <h2>Completed</h2>
+          <p>Completed tasks stay here so you can look back on progress and keep your organizer points.</p>
+          <div class="task-list" id="completedList"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script type="module">
+    import { db, auth } from "./firebase-config.js";
+    import {
+      addDoc,
+      collection,
+      deleteDoc,
+      doc,
+      getDocs,
+      query,
+      updateDoc,
+      where
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const categoryConfig = {
+      importantUrgent: {
+        label: "Important + Urgent",
+        listId: "importantUrgentList"
+      },
+      importantNotUrgent: {
+        label: "Important + Not Urgent",
+        listId: "importantNotUrgentList"
+      },
+      urgentNotImportant: {
+        label: "Urgent + Not Important",
+        listId: "urgentNotImportantList"
+      },
+      notUrgentNotImportant: {
+        label: "Low Priority",
+        listId: "notUrgentNotImportantList"
+      }
+    };
+
+    const taskForm = document.getElementById("taskForm");
+    const taskTitle = document.getElementById("taskTitle");
+    const taskNotes = document.getElementById("taskNotes");
+    const taskCategory = document.getElementById("taskCategory");
+    const saveTaskButton = document.getElementById("saveTaskButton");
+    const cancelEditButton = document.getElementById("cancelEditButton");
+    const formHeading = document.getElementById("formHeading");
+    const formMessage = document.getElementById("formMessage");
+    const pointsValue = document.getElementById("pointsValue");
+    const levelValue = document.getElementById("levelValue");
+    const nextLevelValue = document.getElementById("nextLevelValue");
+    const completionSummary = document.getElementById("completionSummary");
+    const completedList = document.getElementById("completedList");
+    const activeTaskCount = document.getElementById("activeTaskCount");
+    const completedTaskCount = document.getElementById("completedTaskCount");
+    const pageMessage = document.getElementById("pageMessage");
+    const quadrantDropZones = Array.from(document.querySelectorAll("[data-drop-category]"));
+    const completedDropZone = document.querySelector("[data-drop-completed]");
+
+    let currentUser = null;
+    let tasks = [];
+    let editingTaskId = null;
+    let isReady = false;
+    let draggingTaskId = null;
+
+    function toDateSafe(value) {
+      if (!value) {
+        return null;
+      }
+
+      if (typeof value.toDate === "function") {
+        return value.toDate();
+      }
+
+      return new Date(value);
+    }
+
+    function formatDate(value) {
+      const date = toDateSafe(value);
+      if (!date || Number.isNaN(date.getTime())) {
+        return "";
+      }
+
+      return date.toLocaleString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      });
+    }
+
+    function getLevel(points) {
+      if (points >= 150) {
+        return "Master Organizer";
+      }
+
+      if (points >= 90) {
+        return "Focused Organizer";
+      }
+
+      if (points >= 40) {
+        return "Steady Organizer";
+      }
+
+      return "Beginner Organizer";
+    }
+
+    function getNextLevel(points) {
+      if (points >= 150) {
+        return null;
+      }
+
+      if (points >= 90) {
+        return { label: "Master Organizer", threshold: 150 };
+      }
+
+      if (points >= 40) {
+        return { label: "Focused Organizer", threshold: 90 };
+      }
+
+      return { label: "Steady Organizer", threshold: 40 };
+    }
+
+    function setFormMessage(text, success = false) {
+      formMessage.textContent = text;
+      formMessage.className = success ? "message success" : "message";
+    }
+
+    function setPageMessage(text, type = "") {
+      pageMessage.textContent = text;
+      pageMessage.className = type ? `page-message ${type}` : "page-message";
+    }
+
+    function setFormEnabled(enabled) {
+      taskForm.querySelectorAll("input, textarea, select, button").forEach((element) => {
+        element.disabled = !enabled;
+      });
+    }
+
+    function clearDropTargets() {
+      quadrantDropZones.forEach((zone) => zone.classList.remove("drop-target"));
+      if (completedDropZone) {
+        completedDropZone.classList.remove("drop-target");
+      }
+    }
+
+    function getTaskById(taskId) {
+      return tasks.find((task) => task.id === taskId) || null;
+    }
+
+    function resetForm() {
+      taskForm.reset();
+      taskCategory.value = "importantUrgent";
+      editingTaskId = null;
+      formHeading.textContent = "Add a Task";
+      saveTaskButton.textContent = "Save Task";
+      cancelEditButton.hidden = true;
+      setFormMessage("");
+    }
+
+    function startEditing(task) {
+      editingTaskId = task.id;
+      formHeading.textContent = "Edit Task";
+      saveTaskButton.textContent = "Update Task";
+      cancelEditButton.hidden = false;
+      taskTitle.value = task.title;
+      taskNotes.value = task.notes || "";
+      taskCategory.value = task.category;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function updateScoreboard() {
+      const activeTasks = tasks.filter((task) => task.status === "active");
+      const completedTasks = tasks.filter((task) => task.status === "completed");
+      const points = completedTasks.length * 10;
+      pointsValue.textContent = `${points} points`;
+      levelValue.textContent = getLevel(points);
+      activeTaskCount.textContent = String(activeTasks.length);
+      completedTaskCount.textContent = String(completedTasks.length);
+
+      const nextLevel = getNextLevel(points);
+      if (!nextLevel) {
+        nextLevelValue.textContent = "Top level reached.";
+      } else {
+        nextLevelValue.textContent = `${nextLevel.threshold - points} more points to reach ${nextLevel.label}.`;
+      }
+
+      if (!completedTasks.length) {
+        completionSummary.textContent = "No completed tasks yet.";
+      } else if (completedTasks.length === 1) {
+        completionSummary.textContent = "1 task completed.";
+      } else {
+        completionSummary.textContent = `${completedTasks.length} tasks completed.`;
+      }
+    }
+
+    function createEmptyState(text) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = text;
+      return empty;
+    }
+
+    function buildMoveSelect(task) {
+      const select = document.createElement("select");
+
+      Object.entries(categoryConfig).forEach(([value, config]) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = config.label;
+        option.selected = task.category === value;
+        select.appendChild(option);
+      });
+
+      select.addEventListener("change", async () => {
+        await updateTask(task.id, {
+          category: select.value,
+          status: "active",
+          completedAt: null
+        });
+      });
+
+      return select;
+    }
+
+    async function moveTaskByDrop(taskId, target) {
+      const task = getTaskById(taskId);
+      if (!task) {
+        return;
+      }
+
+      if (target.type === "completed") {
+        if (task.status === "completed") {
+          return;
+        }
+
+        await updateTask(task.id, {
+          status: "completed",
+          completedAt: new Date()
+        });
+        return;
+      }
+
+      if (task.status === "active" && task.category === target.category) {
+        return;
+      }
+
+      await updateTask(task.id, {
+        category: target.category,
+        status: "active",
+        completedAt: null
+      });
+    }
+
+    function bindDropZone(zone, target) {
+      zone.addEventListener("dragover", (event) => {
+        if (!draggingTaskId) {
+          return;
+        }
+
+        event.preventDefault();
+        zone.classList.add("drop-target");
+      });
+
+      zone.addEventListener("dragleave", () => {
+        zone.classList.remove("drop-target");
+      });
+
+      zone.addEventListener("drop", async (event) => {
+        if (!draggingTaskId) {
+          return;
+        }
+
+        event.preventDefault();
+        const taskId = draggingTaskId;
+        draggingTaskId = null;
+        clearDropTargets();
+        await moveTaskByDrop(taskId, target);
+      });
+    }
+
+    function renderActiveTask(task) {
+      const card = document.createElement("article");
+      card.className = "task-card";
+      card.draggable = true;
+
+      card.addEventListener("dragstart", (event) => {
+        draggingTaskId = task.id;
+        card.classList.add("is-dragging");
+        if (event.dataTransfer) {
+          event.dataTransfer.effectAllowed = "move";
+          event.dataTransfer.setData("text/plain", task.id);
+        }
+      });
+
+      card.addEventListener("dragend", () => {
+        draggingTaskId = null;
+        card.classList.remove("is-dragging");
+        clearDropTargets();
+      });
+
+      const title = document.createElement("h3");
+      title.textContent = task.title;
+      card.appendChild(title);
+
+      if (task.notes) {
+        const notes = document.createElement("p");
+        notes.textContent = task.notes;
+        card.appendChild(notes);
+      }
+
+      const meta = document.createElement("div");
+      meta.className = "task-meta";
+      meta.textContent = `Saved ${formatDate(task.updatedAt || task.createdAt)}`;
+      card.appendChild(meta);
+
+      const controls = document.createElement("div");
+      controls.className = "task-controls";
+      controls.appendChild(buildMoveSelect(task));
+
+      const actions = document.createElement("div");
+      actions.className = "task-actions";
+
+      const editButton = document.createElement("button");
+      editButton.type = "button";
+      editButton.className = "secondary";
+      editButton.textContent = "Edit";
+      editButton.addEventListener("click", () => startEditing(task));
+
+      const completeButton = document.createElement("button");
+      completeButton.type = "button";
+      completeButton.textContent = "Complete";
+      completeButton.addEventListener("click", async () => {
+        await updateTask(task.id, {
+          status: "completed",
+          completedAt: new Date()
+        });
+      });
+
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.className = "danger";
+      deleteButton.textContent = "Delete";
+      deleteButton.addEventListener("click", async () => {
+        await deleteTask(task.id);
+      });
+
+      actions.appendChild(editButton);
+      actions.appendChild(completeButton);
+      actions.appendChild(deleteButton);
+      controls.appendChild(actions);
+      card.appendChild(controls);
+
+      return card;
+    }
+
+    function renderCompletedTask(task) {
+      const card = document.createElement("article");
+      card.className = "task-card";
+      card.draggable = true;
+
+      card.addEventListener("dragstart", (event) => {
+        draggingTaskId = task.id;
+        card.classList.add("is-dragging");
+        if (event.dataTransfer) {
+          event.dataTransfer.effectAllowed = "move";
+          event.dataTransfer.setData("text/plain", task.id);
+        }
+      });
+
+      card.addEventListener("dragend", () => {
+        draggingTaskId = null;
+        card.classList.remove("is-dragging");
+        clearDropTargets();
+      });
+
+      const title = document.createElement("h3");
+      title.textContent = task.title;
+      card.appendChild(title);
+
+      if (task.notes) {
+        const notes = document.createElement("p");
+        notes.textContent = task.notes;
+        card.appendChild(notes);
+      }
+
+      const meta = document.createElement("div");
+      meta.className = "task-meta";
+      meta.textContent = `Completed ${formatDate(task.completedAt)}`;
+      card.appendChild(meta);
+
+      const actions = document.createElement("div");
+      actions.className = "task-actions";
+
+      const restoreButton = document.createElement("button");
+      restoreButton.type = "button";
+      restoreButton.className = "secondary";
+      restoreButton.textContent = "Restore";
+      restoreButton.addEventListener("click", async () => {
+        await updateTask(task.id, {
+          status: "active",
+          completedAt: null
+        });
+      });
+
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.className = "danger";
+      deleteButton.textContent = "Delete";
+      deleteButton.addEventListener("click", async () => {
+        await deleteTask(task.id);
+      });
+
+      actions.appendChild(restoreButton);
+      actions.appendChild(deleteButton);
+      card.appendChild(actions);
+
+      return card;
+    }
+
+    function renderTasks() {
+      Object.values(categoryConfig).forEach((config) => {
+        const list = document.getElementById(config.listId);
+        list.innerHTML = "";
+
+        const activeTasks = tasks
+          .filter((task) => task.status === "active" && task.category === Object.keys(categoryConfig).find((key) => categoryConfig[key].listId === config.listId))
+          .sort((a, b) => toDateSafe(b.updatedAt || b.createdAt) - toDateSafe(a.updatedAt || a.createdAt));
+
+        if (!activeTasks.length) {
+          list.appendChild(createEmptyState("No tasks here right now."));
+        } else {
+          activeTasks.forEach((task) => list.appendChild(renderActiveTask(task)));
+        }
+      });
+
+      completedList.innerHTML = "";
+      const completedTasks = tasks
+        .filter((task) => task.status === "completed")
+        .sort((a, b) => toDateSafe(b.completedAt) - toDateSafe(a.completedAt));
+
+      if (!completedTasks.length) {
+        completedList.appendChild(createEmptyState("Completed tasks will appear here."));
+      } else {
+        completedTasks.forEach((task) => completedList.appendChild(renderCompletedTask(task)));
+      }
+
+      updateScoreboard();
+    }
+
+    async function loadTasks() {
+      try {
+        const taskQuery = query(
+          collection(db, "priority_matrix_items"),
+          where("user", "==", currentUser.uid)
+        );
+
+        const snapshot = await getDocs(taskQuery);
+        tasks = snapshot.docs.map((entry) => ({
+          id: entry.id,
+          ...entry.data()
+        }));
+
+        renderTasks();
+        setPageMessage("Your matrix stays private to your signed-in account.");
+      } catch (error) {
+        tasks = [];
+        renderTasks();
+        setPageMessage("This tool needs Firestore rules for priority_matrix_items before it can save or load tasks.", "error");
+        setFormMessage(error.message);
+      }
+    }
+
+    async function updateTask(taskId, updates) {
+      try {
+        await updateDoc(doc(db, "priority_matrix_items", taskId), {
+          ...updates,
+          updatedAt: new Date()
+        });
+
+        if (editingTaskId === taskId) {
+          resetForm();
+        }
+
+        await loadTasks();
+      } catch (error) {
+        setFormMessage(error.message);
+      }
+    }
+
+    async function deleteTask(taskId) {
+      try {
+        await deleteDoc(doc(db, "priority_matrix_items", taskId));
+
+        if (editingTaskId === taskId) {
+          resetForm();
+        }
+
+        await loadTasks();
+      } catch (error) {
+        setFormMessage(error.message);
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/login.html";
+        return;
+      }
+
+      currentUser = user;
+      isReady = true;
+      setFormEnabled(true);
+      await loadTasks();
+    });
+
+    taskForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!isReady || !currentUser) {
+        setFormMessage("Please wait until your account finishes loading.");
+        return;
+      }
+
+      const title = taskTitle.value.trim();
+      const notes = taskNotes.value.trim();
+      const category = taskCategory.value;
+
+      if (!title) {
+        setFormMessage("Please enter a task title.");
+        return;
+      }
+
+      try {
+        if (editingTaskId) {
+          await updateDoc(doc(db, "priority_matrix_items", editingTaskId), {
+            title,
+            notes,
+            category,
+            updatedAt: new Date()
+          });
+
+          setFormMessage("Task updated.", true);
+        } else {
+          await addDoc(collection(db, "priority_matrix_items"), {
+            title,
+            notes,
+            category,
+            status: "active",
+            user: currentUser.uid,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            completedAt: null
+          });
+
+          setFormMessage("Task added.", true);
+        }
+
+        resetForm();
+        await loadTasks();
+      } catch (error) {
+        setFormMessage(error.message);
+      }
+    });
+
+    setFormEnabled(false);
+    quadrantDropZones.forEach((zone) => {
+      bindDropZone(zone, { type: "category", category: zone.dataset.dropCategory });
+    });
+    if (completedDropZone) {
+      bindDropZone(completedDropZone, { type: "completed" });
+    }
+    cancelEditButton.addEventListener("click", resetForm);
+  </script>
+</body>
+</html>

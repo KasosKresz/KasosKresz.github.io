@@ -538,15 +538,15 @@
     }
 
     function getLevel(points) {
-      if (points >= 150) {
+      if (points >= 500) {
         return "Master Organizer";
       }
 
-      if (points >= 90) {
+      if (points >= 250) {
         return "Focused Organizer";
       }
 
-      if (points >= 40) {
+      if (points >= 100) {
         return "Steady Organizer";
       }
 
@@ -554,19 +554,19 @@
     }
 
     function getNextLevel(points) {
-      if (points >= 150) {
+      if (points >= 500) {
         return null;
       }
 
-      if (points >= 90) {
-        return { label: "Master Organizer", threshold: 150 };
+      if (points >= 250) {
+        return { label: "Master Organizer", threshold: 500 };
       }
 
-      if (points >= 40) {
-        return { label: "Focused Organizer", threshold: 90 };
+      if (points >= 100) {
+        return { label: "Focused Organizer", threshold: 250 };
       }
 
-      return { label: "Steady Organizer", threshold: 40 };
+      return { label: "Steady Organizer", threshold: 100 };
     }
 
     function setFormMessage(text, success = false) {
@@ -630,7 +630,10 @@
       if (!nextLevel) {
         nextLevelValue.textContent = "Top level reached.";
       } else {
-        nextLevelValue.textContent = `${nextLevel.threshold - points} more points to reach ${nextLevel.label}.`;
+        const pointsRemaining = nextLevel.threshold - points;
+        const tasksRemaining = Math.ceil(pointsRemaining / 10);
+        const taskLabel = tasksRemaining === 1 ? "completed task" : "completed tasks";
+        nextLevelValue.textContent = `${pointsRemaining} more points to reach ${nextLevel.label} (${tasksRemaining} ${taskLabel}).`;
       }
 
       if (!completedTasks.length) {

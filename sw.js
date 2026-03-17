@@ -1,4 +1,4 @@
-const CACHE_VERSION = "mindease-v1";
+const CACHE_VERSION = "mindease-v2";
 const OFFLINE_CACHE = `${CACHE_VERSION}-offline`;
 const ASSET_CACHE = `${CACHE_VERSION}-assets`;
 const OFFLINE_URL = "/offline.html";
@@ -31,8 +31,12 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-function isCacheableAsset(requestUrl) {
-  return /\.(?:js|css|png|jpg|jpeg|svg|webp|json|webmanifest)$/i.test(requestUrl.pathname);
+function isDynamicAsset(requestUrl) {
+  return /\.(?:js|css|json|webmanifest)$/i.test(requestUrl.pathname);
+}
+
+function isStaticAsset(requestUrl) {
+  return /\.(?:png|jpg|jpeg|svg|webp)$/i.test(requestUrl.pathname);
 }
 
 self.addEventListener("fetch", (event) => {
@@ -59,7 +63,22 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  if (!isCacheableAsset(url)) {
+  if (!isDynamicAsset(url) && !isStaticAsset(url)) {
+    return;
+  }
+
+  if (isDynamicAsset(url)) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response && response.ok) {
+            const copy = response.clone();
+            caches.open(ASSET_CACHE).then((cache) => cache.put(request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request))
+    );
     return;
   }
 

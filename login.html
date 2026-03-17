@@ -211,7 +211,7 @@
         );
 
         await signInWithEmailAndPassword(auth, email, password);
-        window.location.href = "/index.html";
+        window.location.href = "/dashboard.html";
       } catch (error) {
         message.textContent = getLoginMessage(error);
       }

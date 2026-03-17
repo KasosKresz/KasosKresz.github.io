@@ -15,6 +15,7 @@
   <link rel="icon" type="image/png" href="/icons/mindease-icon-192.png" />
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
   <script src="/pwa-register.js" defer></script>
+  <script src="/cookie-consent.js" defer></script>
   <style>
     * {
       box-sizing: border-box;
@@ -363,6 +364,7 @@
   <div class="page">
     <div class="topbar">
       <a href="/materials.html">&larr; Back to Resources</a>
+      <a href="/dashboard.html">Dashboard</a>
       <a href="/index.html">Home</a>
     </div>
 
@@ -380,9 +382,10 @@
           </p>
         </div>
         <div class="scoreboard">
-          <div class="score-points" id="pointsValue">0 points</div>
-          <div class="score-level" id="levelValue">Beginner Organizer</div>
+          <div class="score-points" id="pointsValue">0 Organize Points</div>
+          <div class="score-level" id="levelValue">Order Starter</div>
           <div class="score-next" id="nextLevelValue">Complete tasks to reach the next level.</div>
+          <p id="overallSummary">MindEase Points: 0 - MindEase Explorer</p>
           <p id="completionSummary">No completed tasks yet.</p>
           <div class="score-breakdown">
             <div class="mini-stat">
@@ -473,6 +476,14 @@
       where
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      awardReward,
+      getCategoryLevel,
+      getNextCategoryLevel,
+      getOverallLevel,
+      loadRewardData,
+      normalizeRewardData
+    } from "./rewards-core.js";
 
     const categoryConfig = {
       importantUrgent: {
@@ -504,6 +515,7 @@
     const pointsValue = document.getElementById("pointsValue");
     const levelValue = document.getElementById("levelValue");
     const nextLevelValue = document.getElementById("nextLevelValue");
+    const overallSummary = document.getElementById("overallSummary");
     const completionSummary = document.getElementById("completionSummary");
     const completedList = document.getElementById("completedList");
     const activeTaskCount = document.getElementById("activeTaskCount");
@@ -517,6 +529,8 @@
     let editingTaskId = null;
     let isReady = false;
     let draggingTaskId = null;
+    let rewardData = normalizeRewardData({}, null);
+    let rewardsAvailable = true;
 
     function toDateSafe(value) {
       if (!value) {
@@ -545,36 +559,20 @@
       });
     }
 
-    function getLevel(points) {
-      if (points >= 500) {
-        return "Master Organizer";
+    async function loadRewards() {
+      if (!currentUser) {
+        rewardData = normalizeRewardData({}, null);
+        rewardsAvailable = false;
+        return;
       }
 
-      if (points >= 250) {
-        return "Focused Organizer";
+      try {
+        rewardData = await loadRewardData(db, currentUser.uid);
+        rewardsAvailable = true;
+      } catch (error) {
+        rewardData = normalizeRewardData({}, currentUser.uid);
+        rewardsAvailable = false;
       }
-
-      if (points >= 100) {
-        return "Steady Organizer";
-      }
-
-      return "Beginner Organizer";
-    }
-
-    function getNextLevel(points) {
-      if (points >= 500) {
-        return null;
-      }
-
-      if (points >= 250) {
-        return { label: "Master Organizer", threshold: 500 };
-      }
-
-      if (points >= 100) {
-        return { label: "Focused Organizer", threshold: 250 };
-      }
-
-      return { label: "Steady Organizer", threshold: 100 };
     }
 
     function setFormMessage(text, success = false) {
@@ -628,20 +626,27 @@
     function updateScoreboard() {
       const activeTasks = tasks.filter((task) => task.status === "active");
       const completedTasks = tasks.filter((task) => task.status === "completed");
-      const points = completedTasks.length * 10;
-      pointsValue.textContent = `${points} points`;
-      levelValue.textContent = getLevel(points);
+      const organizePoints = rewardData.organizePoints || 0;
+      pointsValue.textContent = `${organizePoints} Organize Points`;
+      levelValue.textContent = getCategoryLevel("organize", organizePoints).label;
       activeTaskCount.textContent = String(activeTasks.length);
       completedTaskCount.textContent = String(completedTasks.length);
 
-      const nextLevel = getNextLevel(points);
+      const nextLevel = getNextCategoryLevel("organize", organizePoints);
       if (!nextLevel) {
         nextLevelValue.textContent = "Top level reached.";
       } else {
-        const pointsRemaining = nextLevel.threshold - points;
+        const pointsRemaining = nextLevel.threshold - organizePoints;
         const tasksRemaining = Math.ceil(pointsRemaining / 10);
         const taskLabel = tasksRemaining === 1 ? "completed task" : "completed tasks";
         nextLevelValue.textContent = `${pointsRemaining} more points to reach ${nextLevel.label} (${tasksRemaining} ${taskLabel}).`;
+      }
+
+      if (rewardsAvailable) {
+        const overallLevel = getOverallLevel(rewardData.mindeasePoints);
+        overallSummary.textContent = `MindEase Points: ${rewardData.mindeasePoints} - ${overallLevel.label}`;
+      } else {
+        overallSummary.textContent = "MindEase Points are unavailable right now.";
       }
 
       if (!completedTasks.length) {
@@ -689,14 +694,7 @@
       }
 
       if (target.type === "completed") {
-        if (task.status === "completed") {
-          return;
-        }
-
-        await updateTask(task.id, {
-          status: "completed",
-          completedAt: new Date()
-        });
+        await completeTask(task.id);
         return;
       }
 
@@ -790,10 +788,7 @@
       completeButton.type = "button";
       completeButton.textContent = "Complete";
       completeButton.addEventListener("click", async () => {
-        await updateTask(task.id, {
-          status: "completed",
-          completedAt: new Date()
-        });
+        await completeTask(task.id);
       });
 
       const deleteButton = document.createElement("button");
@@ -961,6 +956,34 @@
       }
     }
 
+    async function completeTask(taskId) {
+      const task = getTaskById(taskId);
+      if (!task || task.status === "completed") {
+        return;
+      }
+
+      await updateTask(taskId, {
+        status: "completed",
+        completedAt: new Date()
+      });
+
+      if (!currentUser) {
+        return;
+      }
+
+      try {
+        const result = await awardReward(db, currentUser.uid, "organize", taskId);
+        rewardData = result.data;
+        updateScoreboard();
+        if (result.awarded) {
+          setPageMessage("Task completed and points updated.", "success");
+        }
+      } catch (error) {
+        rewardsAvailable = false;
+        updateScoreboard();
+      }
+    }
+
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "/login.html";
@@ -970,6 +993,7 @@
       currentUser = user;
       isReady = true;
       setFormEnabled(true);
+      await loadRewards();
       await loadTasks();
     });
 

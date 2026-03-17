@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | MindEase</title>
+  <meta name="description" content="Your signed-in MindEase dashboard for rewards, journal, mood tracking, and private tools." />
+  <meta name="theme-color" content="#2f5d62" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="MindEase" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="icon" type="image/png" href="/icons/mindease-icon-192.png" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <script src="/pwa-register.js" defer></script>
+  <script src="/cookie-consent.js" defer></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #eef7f4, #f7fbfa, #edf4fb);
+      color: #2f3a3a;
+      padding: 20px;
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .topbar-left,
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .topbar a,
+    .topbar button {
+      text-decoration: none;
+      color: #2f5d62;
+      font-weight: bold;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      padding: 0;
+    }
+
+    .shell,
+    .card,
+    .hero,
+    .tool-card,
+    .stat-card,
+    .reward-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .hero {
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #e6f1ef;
+      color: #2f5d62;
+      font-size: 0.82rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #2f5d62;
+      margin-bottom: 12px;
+    }
+
+    p {
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .summary-box {
+      background: #f2f6f5;
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .summary-points {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #2f5d62;
+      margin-bottom: 6px;
+    }
+
+    .summary-level {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #e3efed;
+      color: #2f5d62;
+      font-weight: bold;
+    }
+
+    .summary-next {
+      color: #607070;
+      font-size: 14px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      padding: 24px;
+    }
+
+    .reward-grid,
+    .tool-grid,
+    .stats-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .reward-grid,
+    .stats-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tool-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .reward-card,
+    .stat-card,
+    .tool-card {
+      padding: 18px;
+      background: #f8fbfa;
+      border: 1px solid #dde7e5;
+      border-radius: 16px;
+      box-shadow: none;
+    }
+
+    .reward-value,
+    .stat-value {
+      font-size: 1.45rem;
+      font-weight: bold;
+      color: #2f5d62;
+      margin-bottom: 4px;
+    }
+
+    .reward-level,
+    .stat-note {
+      color: #607070;
+      font-size: 13px;
+    }
+
+    .tool-card h3 {
+      margin-bottom: 8px;
+      font-size: 1.02rem;
+    }
+
+    .tool-card p {
+      color: #526161;
+      font-size: 0.95rem;
+      min-height: 72px;
+    }
+
+    .tool-link {
+      display: inline-block;
+      margin-top: 6px;
+      text-decoration: none;
+      color: white;
+      background: #2f5d62;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .tool-link:hover {
+      opacity: 0.92;
+    }
+
+    .status-note {
+      color: #607070;
+      font-size: 14px;
+      min-height: 20px;
+    }
+
+    .activity-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .activity-item {
+      background: #f8fbfa;
+      border: 1px solid #dde7e5;
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+
+    .activity-item strong {
+      display: block;
+      color: #2f5d62;
+      margin-bottom: 4px;
+    }
+
+    .activity-item span {
+      color: #607070;
+      font-size: 14px;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .section-grid,
+      .tool-grid,
+      .reward-grid,
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <div class="topbar-left">
+        <a href="/index.html">&larr; Home</a>
+        <a href="/about.html">About</a>
+        <a href="/blog.html">Blog</a>
+      </div>
+      <div class="topbar-right">
+        <a href="/audio.html">Audio</a>
+        <a href="/materials.html">Resources</a>
+        <button type="button" id="signOutButton">Sign out</button>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">Private Dashboard</span>
+          <h1 id="welcomeTitle">Welcome back.</h1>
+          <p id="welcomeText">
+            This is your private MindEase space for journaling, mood tracking, rewards, and the tools you use most.
+          </p>
+          <p class="status-note" id="dashboardStatus">Loading your dashboard...</p>
+        </div>
+        <div class="summary-box">
+          <div class="summary-points" id="overallPoints">0 MindEase Points</div>
+          <div class="summary-level" id="overallLevel">MindEase Explorer</div>
+          <p class="summary-next" id="overallNext">Keep using your tools to build progress.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-grid">
+      <section class="card">
+        <h2>MindEase Journey</h2>
+        <div class="reward-grid">
+          <div class="reward-card">
+            <div class="reward-value" id="relaxPoints">0</div>
+            <div>Relax Points</div>
+            <div class="reward-level" id="relaxLevel">Calm Starter</div>
+          </div>
+          <div class="reward-card">
+            <div class="reward-value" id="knowledgePoints">0</div>
+            <div>Reading Points</div>
+            <div class="reward-level" id="knowledgeLevel">Curious Student</div>
+          </div>
+          <div class="reward-card">
+            <div class="reward-value" id="organizePoints">0</div>
+            <div>Organizing Points</div>
+            <div class="reward-level" id="organizeLevel">Order Starter</div>
+          </div>
+          <div class="reward-card">
+            <div class="reward-value" id="creativePoints">0</div>
+            <div>Coloring Points</div>
+            <div class="reward-level" id="creativeLevel">Creative Starter</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Private Progress</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="journalCount">0</div>
+            <div>Journal entries</div>
+            <div class="stat-note" id="journalNote">No entries yet.</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="moodCount">0</div>
+            <div>Mood check-ins</div>
+            <div class="stat-note" id="moodNote">No check-ins yet.</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="priorityActive">0</div>
+            <div>Active tasks</div>
+            <div class="stat-note" id="priorityActiveNote">Priority Matrix</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="priorityCompleted">0</div>
+            <div>Completed tasks</div>
+            <div class="stat-note" id="priorityCompletedNote">Priority Matrix</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card">
+      <h2>Open a Tool</h2>
+      <div class="tool-grid">
+        <div class="tool-card">
+          <h3>Journal</h3>
+          <p>Return to your encrypted journal and continue personal reflection or written exposure work.</p>
+          <a class="tool-link" href="/journal.html">Open Journal</a>
+        </div>
+        <div class="tool-card">
+          <h3>Mood Tracker</h3>
+          <p>Save a new check-in or open the progress chart to review the last 7, 14, or 30 days.</p>
+          <a class="tool-link" href="/mood.html">Open Mood Tracker</a>
+        </div>
+        <div class="tool-card">
+          <h3>Priority Matrix</h3>
+          <p>Sort tasks by urgency and importance, then build organizing points as you complete them.</p>
+          <a class="tool-link" href="/priority-matrix.html">Open Priority Matrix</a>
+        </div>
+        <div class="tool-card">
+          <h3>Color for Calm</h3>
+          <p>Use the browser-based coloring tool when you want a quieter, lower-pressure activity.</p>
+          <a class="tool-link" href="/coloring/color-for-calm.html">Open Coloring</a>
+        </div>
+        <div class="tool-card">
+          <h3>Relaxation Audio</h3>
+          <p>Listen to guided exercises and earn relax points by completing the audio sessions.</p>
+          <a class="tool-link" href="/audio.html">Open Audio</a>
+        </div>
+        <div class="tool-card">
+          <h3>Articles & Resources</h3>
+          <p>Read articles, use the written guides, and keep building knowledge points over time.</p>
+          <a class="tool-link" href="/blog.html">Open Articles</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Recent Activity</h2>
+      <div class="activity-list" id="activityList">
+        <div class="activity-item">
+          <strong>Loading recent activity...</strong>
+          <span>Your latest journal, mood, and task information will appear here.</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script type="module">
+    import { auth, db } from "./firebase-config.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import {
+      getCategoryLevel,
+      getNextOverallLevel,
+      getOverallLevel,
+      loadRewardData,
+      normalizeRewardData
+    } from "./rewards-core.js";
+
+    const welcomeTitle = document.getElementById("welcomeTitle");
+    const dashboardStatus = document.getElementById("dashboardStatus");
+    const overallPoints = document.getElementById("overallPoints");
+    const overallLevel = document.getElementById("overallLevel");
+    const overallNext = document.getElementById("overallNext");
+    const signOutButton = document.getElementById("signOutButton");
+    const activityList = document.getElementById("activityList");
+
+    const rewardElements = {
+      relax: {
+        points: document.getElementById("relaxPoints"),
+        level: document.getElementById("relaxLevel")
+      },
+      knowledge: {
+        points: document.getElementById("knowledgePoints"),
+        level: document.getElementById("knowledgeLevel")
+      },
+      organize: {
+        points: document.getElementById("organizePoints"),
+        level: document.getElementById("organizeLevel")
+      },
+      creative: {
+        points: document.getElementById("creativePoints"),
+        level: document.getElementById("creativeLevel")
+      }
+    };
+
+    const journalCount = document.getElementById("journalCount");
+    const journalNote = document.getElementById("journalNote");
+    const moodCount = document.getElementById("moodCount");
+    const moodNote = document.getElementById("moodNote");
+    const priorityActive = document.getElementById("priorityActive");
+    const priorityActiveNote = document.getElementById("priorityActiveNote");
+    const priorityCompleted = document.getElementById("priorityCompleted");
+    const priorityCompletedNote = document.getElementById("priorityCompletedNote");
+
+    function getFriendlyName(user) {
+      if (user.displayName && user.displayName.trim()) {
+        return user.displayName.trim();
+      }
+
+      if (user.email && user.email.includes("@")) {
+        return user.email.split("@")[0];
+      }
+
+      return "friend";
+    }
+
+    function toDateSafe(value) {
+      if (!value) {
+        return null;
+      }
+
+      if (typeof value.toDate === "function") {
+        return value.toDate();
+      }
+
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function formatDate(value) {
+      const date = toDateSafe(value);
+      return date ? date.toLocaleString() : "Not available";
+    }
+
+    function setRewardSummary(rewardData) {
+      overallPoints.textContent = `${rewardData.mindeasePoints} MindEase Points`;
+      overallLevel.textContent = getOverallLevel(rewardData.mindeasePoints).label;
+
+      const nextOverall = getNextOverallLevel(rewardData.mindeasePoints);
+      overallNext.textContent = nextOverall
+        ? `${nextOverall.threshold - rewardData.mindeasePoints} more points to reach ${nextOverall.label}.`
+        : "Top MindEase level reached.";
+
+      Object.entries(rewardElements).forEach(([type, elements]) => {
+        const pointsKey = `${type}Points`;
+        elements.points.textContent = String(rewardData[pointsKey] || 0);
+        elements.level.textContent = getCategoryLevel(type, rewardData[pointsKey] || 0).label;
+      });
+    }
+
+    async function loadUserCollection(name, uid) {
+      const snapshot = await getDocs(
+        query(collection(db, name), where("user", "==", uid))
+      );
+
+      return snapshot.docs.map((entry) => ({
+        id: entry.id,
+        ...entry.data()
+      }));
+    }
+
+    function setActivityItems(items) {
+      activityList.innerHTML = items.map((item) => `
+        <div class="activity-item">
+          <strong>${item.title}</strong>
+          <span>${item.body}</span>
+        </div>
+      `).join("");
+    }
+
+    async function loadDashboard(user) {
+      welcomeTitle.textContent = `Welcome back, ${getFriendlyName(user)}.`;
+
+      let rewardData = normalizeRewardData({}, user.uid);
+      let rewardsAvailable = true;
+      try {
+        rewardData = await loadRewardData(db, user.uid);
+      } catch (error) {
+        rewardsAvailable = false;
+      }
+      setRewardSummary(rewardData);
+
+      const activityItems = [];
+
+      try {
+        const journalEntries = await loadUserCollection("journal_entries", user.uid);
+        journalCount.textContent = String(journalEntries.length);
+        if (journalEntries.length) {
+          const latestJournal = journalEntries
+            .slice()
+            .sort((left, right) => (toDateSafe(right.updatedAt || right.createdAt)?.getTime() || 0) - (toDateSafe(left.updatedAt || left.createdAt)?.getTime() || 0))[0];
+          journalNote.textContent = `Last updated ${formatDate(latestJournal.updatedAt || latestJournal.createdAt)}`;
+          activityItems.push({
+            title: "Journal",
+            body: `${journalEntries.length} ${journalEntries.length === 1 ? "entry" : "entries"} saved. Last update: ${formatDate(latestJournal.updatedAt || latestJournal.createdAt)}.`
+          });
+        } else {
+          journalNote.textContent = "No entries yet.";
+        }
+      } catch (error) {
+        journalCount.textContent = "-";
+        journalNote.textContent = "Unavailable right now.";
+      }
+
+      try {
+        const moodEntries = await loadUserCollection("mood_entries", user.uid);
+        moodCount.textContent = String(moodEntries.length);
+        if (moodEntries.length) {
+          const latestMood = moodEntries
+            .slice()
+            .sort((left, right) => (toDateSafe(right.time)?.getTime() || 0) - (toDateSafe(left.time)?.getTime() || 0))[0];
+          moodNote.textContent = `Last check-in ${formatDate(latestMood.time)}`;
+          activityItems.push({
+            title: "Mood Tracker",
+            body: `${moodEntries.length} ${moodEntries.length === 1 ? "check-in" : "check-ins"} saved. Last check-in: ${formatDate(latestMood.time)}.`
+          });
+        } else {
+          moodNote.textContent = "No check-ins yet.";
+        }
+      } catch (error) {
+        moodCount.textContent = "-";
+        moodNote.textContent = "Unavailable right now.";
+      }
+
+      try {
+        const matrixItems = await loadUserCollection("priority_matrix_items", user.uid);
+        const activeItems = matrixItems.filter((item) => item.status === "active");
+        const completedItems = matrixItems.filter((item) => item.status === "completed");
+
+        priorityActive.textContent = String(activeItems.length);
+        priorityCompleted.textContent = String(completedItems.length);
+        priorityActiveNote.textContent = activeItems.length ? "Current task load" : "No active tasks";
+        priorityCompletedNote.textContent = completedItems.length ? "Completed so far" : "No completed tasks";
+        activityItems.push({
+          title: "Priority Matrix",
+          body: `${activeItems.length} active ${activeItems.length === 1 ? "task" : "tasks"} and ${completedItems.length} completed ${completedItems.length === 1 ? "task" : "tasks"}.`
+        });
+      } catch (error) {
+        priorityActive.textContent = "-";
+        priorityCompleted.textContent = "-";
+        priorityActiveNote.textContent = "Unavailable right now.";
+        priorityCompletedNote.textContent = "Unavailable right now.";
+      }
+
+      if (!activityItems.length) {
+        setActivityItems([
+          {
+            title: "No private activity yet",
+            body: "Start with a journal entry, mood check-in, audio session, or task in the Priority Matrix."
+          }
+        ]);
+      } else {
+        if (rewardsAvailable) {
+          activityItems.unshift({
+            title: "MindEase Journey",
+            body: `${rewardData.mindeasePoints} points total. Relax ${rewardData.relaxPoints}, Reading ${rewardData.knowledgePoints}, Organizing ${rewardData.organizePoints}, Coloring ${rewardData.creativePoints}.`
+          });
+        }
+        setActivityItems(activityItems);
+      }
+
+      dashboardStatus.textContent = rewardsAvailable
+        ? "Your private tools and progress are ready."
+        : "Dashboard loaded, but rewards are unavailable right now.";
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/login.html";
+        return;
+      }
+
+      await loadDashboard(user);
+    });
+
+    signOutButton.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/index.html";
+    });
+  </script>
+</body>
+</html>

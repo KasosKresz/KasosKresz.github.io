@@ -597,6 +597,7 @@
             <span id="accountOrganizeText">Organizing: 0</span>
             <span id="accountCreativeText">Coloring: 0</span>
           </div>
+          <a href="/dashboard.html" id="dashboardLink" hidden>Dashboard</a>
           <a href="/login.html" id="loginLink">Login</a>
           <a href="/signup.html" id="signupLink">Sign up</a>
           <a href="#" id="signOutLink" hidden>Sign out</a>
@@ -625,6 +626,7 @@
         <p id="welcomeText">Your tools are ready when you are.</p>
         <p id="welcomePoints" hidden>MindEase Points: 0 - MindEase Explorer</p>
         <div class="welcome-actions">
+          <a class="button" href="/dashboard.html">Open Dashboard</a>
           <a class="button" href="/journal.html">Open Journal</a>
           <a class="button" href="/mood.html">Open Mood Tracker</a>
         </div>
@@ -778,6 +780,7 @@
     const accountKnowledgeText = document.getElementById("accountKnowledgeText");
     const accountOrganizeText = document.getElementById("accountOrganizeText");
     const accountCreativeText = document.getElementById("accountCreativeText");
+    const dashboardLink = document.getElementById("dashboardLink");
     const loginLink = document.getElementById("loginLink");
     const signupLink = document.getElementById("signupLink");
     const signOutLink = document.getElementById("signOutLink");
@@ -822,6 +825,7 @@
         accountPointsText.textContent = pointsText;
         accountPoints.hidden = false;
         accountBreakdown.hidden = false;
+        dashboardLink.hidden = false;
         loginLink.hidden = true;
         signupLink.hidden = true;
         signOutLink.hidden = false;
@@ -830,6 +834,7 @@
         welcomePoints.hidden = true;
         accountPoints.hidden = true;
         accountBreakdown.hidden = true;
+        dashboardLink.hidden = true;
         loginLink.hidden = false;
         signupLink.hidden = false;
         signOutLink.hidden = true;

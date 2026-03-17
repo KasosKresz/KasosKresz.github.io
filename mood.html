@@ -41,9 +41,15 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
     }
 
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 0 0 20px;
+    }
+
     .home-button {
       display: inline-block;
-      margin: 0 0 20px;
       text-decoration: none;
       background: #2f5d62;
       color: white;
@@ -280,7 +286,10 @@
 <body>
   <div class="card">
     <h1>Mood Tracker</h1>
-    <a href="/index.html" class="home-button">Back to Home</a>
+    <div class="top-actions">
+      <a href="/dashboard.html" class="home-button">Dashboard</a>
+      <a href="/index.html" class="home-button">Back to Home</a>
+    </div>
     <p class="subtitle">Move any sliders that match how you feel</p>
 
     <form id="moodForm">

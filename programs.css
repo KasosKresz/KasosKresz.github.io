@@ -1,0 +1,432 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f6f8f7;
+  color: #2f3a3a;
+  line-height: 1.7;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.97);
+  border-bottom: 1px solid #e4ebea;
+}
+
+.navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #2f5d62;
+  font-weight: bold;
+}
+
+.brand-mark {
+  width: 44px;
+  height: 44px;
+}
+
+.brand-text {
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #2f5d62;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.nav-links a:hover {
+  opacity: 0.75;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+}
+
+.hero,
+.section,
+.program-card,
+.day-card,
+.summary-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.hero {
+  padding: 30px 28px;
+  margin-bottom: 22px;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #e6f1ef;
+  color: #2f5d62;
+  font-size: 0.82rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.hero h1,
+.section h2 {
+  color: #2f5d62;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.hero p,
+.section p {
+  margin-bottom: 12px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.summary-card {
+  padding: 18px;
+  background: #f2f6f5;
+  border: 1px solid #dde7e5;
+  box-shadow: none;
+}
+
+.summary-card h2 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.progress-pill {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #e3efed;
+  color: #2f5d62;
+  font-weight: bold;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  border-radius: 999px;
+  background: #dfeae8;
+  overflow: hidden;
+  margin: 10px 0 12px;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #2f5d62, #5ea29c);
+  border-radius: inherit;
+  transition: width 0.35s ease;
+}
+
+.summary-note {
+  color: #607070;
+  font-size: 14px;
+}
+
+.section {
+  padding: 28px 24px;
+  margin-bottom: 22px;
+}
+
+.program-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.program-card {
+  padding: 22px;
+}
+
+.program-card h3 {
+  color: #2f5d62;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.program-card .eyebrow {
+  margin-bottom: 12px;
+}
+
+.program-meta {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #2f5d62;
+  font-weight: bold;
+}
+
+.program-card p {
+  color: #526161;
+  margin-bottom: 12px;
+}
+
+.program-card .actions,
+.day-card .actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.button,
+.ghost-button,
+.day-button {
+  display: inline-block;
+  padding: 11px 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.button,
+.day-button {
+  background: #2f5d62;
+  color: white;
+}
+
+.ghost-button {
+  background: #edf4f3;
+  color: #2f5d62;
+}
+
+.button:hover,
+.ghost-button:hover,
+.day-button:hover {
+  opacity: 0.92;
+}
+
+.program-note {
+  color: #607070;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.metric {
+  background: #f8fbfa;
+  border: 1px solid #dde7e5;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.metric strong {
+  display: block;
+  font-size: 1.4rem;
+  color: #2f5d62;
+  margin-bottom: 4px;
+}
+
+.metric span {
+  color: #607070;
+  font-size: 13px;
+}
+
+.hero-actions,
+.section-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.days-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.day-card {
+  padding: 22px;
+}
+
+.day-card.done {
+  border: 2px solid #6aa493;
+  background: #f6fbf9;
+}
+
+.day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.day-label {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #edf4f3;
+  color: #2f5d62;
+  font-size: 0.82rem;
+  font-weight: bold;
+}
+
+.day-focus {
+  color: #607070;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.task-list {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.task-item {
+  background: #f8fbfa;
+  border: 1px solid #dde7e5;
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.task-item strong {
+  display: block;
+  color: #2f5d62;
+  margin-bottom: 4px;
+}
+
+.task-item span {
+  display: block;
+  color: #607070;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.task-links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.reflection-box {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #eef5ff;
+  color: #36506a;
+}
+
+.reflection-box strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.empty-state {
+  padding: 18px;
+  border-radius: 14px;
+  background: #f2f6f5;
+  color: #607070;
+}
+
+footer {
+  text-align: center;
+  color: #6e7878;
+  font-size: 14px;
+  margin-top: 36px;
+}
+
+.footer-note {
+  margin: 0 0 8px;
+  color: #4f5d5d;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.footer-links a {
+  color: #2f5d62;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .hero-grid,
+  .program-grid,
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .navbar {
+    justify-content: center;
+  }
+
+  .navbar-brand {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav-links {
+    width: 100%;
+    margin-left: 0;
+    gap: 10px;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+  }
+
+  .hero,
+  .section,
+  .program-card,
+  .day-card {
+    padding: 22px 18px;
+  }
+}

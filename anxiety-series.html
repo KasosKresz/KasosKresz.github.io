@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anxiety Series | MindEase</title>
+  <meta name="description" content="A 7-day MindEase guided series for anxious days, physical tension, racing thoughts, and emotional overload.">
+  <meta name="theme-color" content="#2f5d62">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="MindEase">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="canonical" href="https://mindease.ca/anxiety-series.html">
+  <link rel="icon" href="/icons/mindease-icon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="/programs.css">
+  <script src="/cookie-consent.js" defer></script>
+  <script src="/pwa-register.js" defer></script>
+  <script src="/programs-data.js" defer></script>
+  <script>
+    window.PROGRAM_ID = "anxiety-series";
+  </script>
+  <script src="/program-page.js" defer></script>
+</head>
+<body>
+  <nav class="navbar">
+    <a class="navbar-brand" href="/index.html">
+      <img class="brand-mark" src="/mindease_logo.svg" alt="MindEase logo">
+      <span class="brand-text">MindEase</span>
+    </a>
+    <div class="nav-links">
+      <a href="/programs.html">Programs</a>
+      <a href="/audio.html">Audio</a>
+      <a href="/blog.html">Blog</a>
+      <a href="/materials.html">Resources</a>
+      <a href="/dashboard.html">Dashboard</a>
+    </div>
+  </nav>
+
+  <main class="page">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow" id="programEyebrow">Guided program</span>
+          <h1 id="programTitle">Loading program...</h1>
+          <p id="programDescription"></p>
+          <p id="programAudience"></p>
+          <p id="programTheme"></p>
+          <div class="hero-actions">
+            <a class="button" href="/programs.html">All Programs</a>
+            <button class="ghost-button" id="resetProgramButton" type="button">Clear Progress</button>
+          </div>
+        </div>
+        <aside class="summary-card">
+          <h2>Your progress</h2>
+          <div class="progress-pill" id="programProgressPill">0 of 0 days complete</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="programProgressFill"></div>
+          </div>
+          <p class="summary-note" id="programProgressNote">Progress is saved on this device.</p>
+        </aside>
+      </div>
+
+      <div class="summary-grid">
+        <div class="metric">
+          <strong id="durationMetric">0</strong>
+          <span>Days in this program</span>
+        </div>
+        <div class="metric">
+          <strong id="completedMetric">0</strong>
+          <span>Days completed</span>
+        </div>
+        <div class="metric">
+          <strong id="remainingMetric">0</strong>
+          <span>Days remaining</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>How to use this series</h2>
+      <p>Work through one day at a time. Each day combines a practical task with a reflection prompt so the program keeps moving forward without feeling overloaded.</p>
+    </section>
+
+    <section class="section">
+      <h2>Daily plan</h2>
+      <div class="days-grid" id="daysGrid">
+        <div class="empty-state">Loading daily plan...</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p class="footer-note">MindEase is for educational and wellness purposes only and is not medical advice.</p>
+    <div class="footer-links">
+      <a href="/disclaimer.html">Disclaimer</a>
+      <a href="/privacy.html">Privacy & Cookies</a>
+    </div>
+    2026 mindease inc.
+  </footer>
+</body>
+</html>

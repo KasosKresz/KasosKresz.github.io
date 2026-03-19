@@ -12,6 +12,7 @@ export const CATEGORY_CONFIG = {
   relax: {
     label: "Relax Points",
     itemsField: "relaxItems",
+    progressField: "relaxProgress",
     pointsField: "relaxPoints",
     levels: [
       { threshold: 0, label: "Calm Starter" },
@@ -24,6 +25,7 @@ export const CATEGORY_CONFIG = {
   knowledge: {
     label: "Knowledge Points",
     itemsField: "knowledgeItems",
+    progressField: "knowledgeProgress",
     pointsField: "knowledgePoints",
     levels: [
       { threshold: 0, label: "Curious Student" },
@@ -36,6 +38,7 @@ export const CATEGORY_CONFIG = {
   organize: {
     label: "Organize Points",
     itemsField: "organizeItems",
+    progressField: "organizeProgress",
     pointsField: "organizePoints",
     levels: [
       { threshold: 0, label: "Order Starter" },
@@ -48,6 +51,7 @@ export const CATEGORY_CONFIG = {
   creative: {
     label: "Creative Points",
     itemsField: "creativeItems",
+    progressField: "creativeProgress",
     pointsField: "creativePoints",
     levels: [
       { threshold: 0, label: "Creative Starter" },
@@ -90,6 +94,46 @@ function getNextLevel(levels, points) {
   return levels.find((level) => points < level.threshold) || null;
 }
 
+function normalizeItemList(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return [...new Set(value.map((item) => String(item || "").trim()).filter(Boolean))];
+}
+
+function normalizeProgressMap(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return {};
+  }
+
+  return Object.fromEntries(
+    Object.entries(value)
+      .map(([itemId, points]) => [String(itemId || "").trim(), Math.max(0, Math.min(REWARD_POINTS, Number(points) || 0))])
+      .filter(([itemId, points]) => itemId && points > 0)
+  );
+}
+
+function buildProgressMap(items, storedProgress) {
+  const progress = { ...storedProgress };
+  items.forEach((itemId) => {
+    progress[itemId] = Math.max(REWARD_POINTS, Number(progress[itemId]) || 0);
+  });
+  return progress;
+}
+
+function buildCompletedItems(items, progress) {
+  const completed = new Set(items);
+
+  Object.entries(progress).forEach(([itemId, points]) => {
+    if ((Number(points) || 0) >= REWARD_POINTS) {
+      completed.add(itemId);
+    }
+  });
+
+  return [...completed];
+}
+
 export function getCategoryLevel(type, points) {
   return getLevel(CATEGORY_CONFIG[type].levels, points);
 }
@@ -124,16 +168,16 @@ export function calculateMindEasePoints(data) {
 
 export function normalizeRewardData(data = {}, uid = null) {
   const normalized = {
-    user: uid || data.user || null,
-    relaxItems: Array.isArray(data.relaxItems) ? data.relaxItems : [],
-    relaxPoints: Number(data.relaxPoints) || 0,
-    knowledgeItems: Array.isArray(data.knowledgeItems) ? data.knowledgeItems : [],
-    knowledgePoints: Number(data.knowledgePoints) || 0,
-    organizeItems: Array.isArray(data.organizeItems) ? data.organizeItems : [],
-    organizePoints: Number(data.organizePoints) || 0,
-    creativeItems: Array.isArray(data.creativeItems) ? data.creativeItems : [],
-    creativePoints: Number(data.creativePoints) || 0
+    user: uid || data.user || null
   };
+
+  Object.values(CATEGORY_CONFIG).forEach((config) => {
+    const items = normalizeItemList(data[config.itemsField]);
+    const progress = buildProgressMap(items, normalizeProgressMap(data[config.progressField]));
+    normalized[config.itemsField] = buildCompletedItems(items, progress);
+    normalized[config.progressField] = progress;
+    normalized[config.pointsField] = Number(data[config.pointsField]) || 0;
+  });
 
   normalized.mindeasePoints = calculateMindEasePoints(normalized);
   normalized.mindeaseLevel = getOverallLevel(normalized.mindeasePoints).label;
@@ -143,6 +187,16 @@ export function normalizeRewardData(data = {}, uid = null) {
 
 export function getRewardDocRef(db, uid) {
   return doc(db, REWARDS_COLLECTION, uid);
+}
+
+export function getItemRewardProgress(data, type, itemId) {
+  const config = CATEGORY_CONFIG[type];
+  if (!config || !itemId) {
+    return 0;
+  }
+
+  const progress = data?.[config.progressField];
+  return Math.max(0, Math.min(REWARD_POINTS, Number(progress?.[itemId]) || 0));
 }
 
 async function ensureRewardDoc(db, uid) {
@@ -166,7 +220,7 @@ export async function loadRewardData(db, uid) {
   return normalizeRewardData(snapshot.exists() ? snapshot.data() : {}, uid);
 }
 
-export async function awardReward(db, uid, type, itemId, points = REWARD_POINTS) {
+export async function awardRewardProgress(db, uid, type, itemId, targetPoints, maxPoints = REWARD_POINTS) {
   const config = CATEGORY_CONFIG[type];
 
   if (!config) {
@@ -179,11 +233,18 @@ export async function awardReward(db, uid, type, itemId, points = REWARD_POINTS)
   return runTransaction(db, async (transaction) => {
     const snapshot = await transaction.get(ref);
     const current = normalizeRewardData(snapshot.exists() ? snapshot.data() : {}, uid);
-    const currentItems = Array.isArray(current[config.itemsField]) ? [...current[config.itemsField]] : [];
+    const currentItems = normalizeItemList(current[config.itemsField]);
+    const currentProgressMap = { ...(current[config.progressField] || {}) };
+    const cappedMax = Math.max(1, Number(maxPoints) || REWARD_POINTS);
+    const cappedTarget = Math.max(0, Math.min(cappedMax, Number(targetPoints) || 0));
+    const currentProgress = itemId ? Math.max(0, Math.min(cappedMax, Number(currentProgressMap[itemId]) || 0)) : 0;
+    const pointsAwarded = Math.max(0, cappedTarget - currentProgress);
 
-    if (itemId && currentItems.includes(itemId)) {
+    if (!pointsAwarded) {
       return {
         awarded: false,
+        pointsAwarded: 0,
+        completed: itemId ? currentProgress >= cappedMax : false,
         data: current
       };
     }
@@ -191,9 +252,22 @@ export async function awardReward(db, uid, type, itemId, points = REWARD_POINTS)
     const updated = {
       ...current,
       user: uid,
-      [config.itemsField]: itemId ? [...currentItems, itemId] : currentItems,
-      [config.pointsField]: (Number(current[config.pointsField]) || 0) + points
+      [config.itemsField]: currentItems,
+      [config.progressField]: currentProgressMap,
+      [config.pointsField]: (Number(current[config.pointsField]) || 0) + pointsAwarded
     };
+
+    if (itemId) {
+      const nextProgress = currentProgress + pointsAwarded;
+      updated[config.progressField] = {
+        ...currentProgressMap,
+        [itemId]: nextProgress
+      };
+
+      if (nextProgress >= cappedMax && !currentItems.includes(itemId)) {
+        updated[config.itemsField] = [...currentItems, itemId];
+      }
+    }
 
     updated.mindeasePoints = calculateMindEasePoints(updated);
     updated.mindeaseLevel = getOverallLevel(updated.mindeasePoints).label;
@@ -202,7 +276,13 @@ export async function awardReward(db, uid, type, itemId, points = REWARD_POINTS)
 
     return {
       awarded: true,
+      pointsAwarded,
+      completed: itemId ? getItemRewardProgress(updated, type, itemId) >= cappedMax : false,
       data: updated
     };
   });
+}
+
+export async function awardReward(db, uid, type, itemId, points = REWARD_POINTS) {
+  return awardRewardProgress(db, uid, type, itemId, points, points);
 }

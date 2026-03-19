@@ -2,10 +2,12 @@ import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
   awardReward,
+  awardRewardProgress,
   getCategoryLevel,
   getNextCategoryLevel,
   getOverallLevel,
   getNextOverallLevel,
+  getItemRewardProgress,
   loadRewardData,
   normalizeRewardData
 } from "./rewards-core.js";
@@ -35,8 +37,15 @@ let currentUser = null;
 let rewardData = normalizeRewardData({}, null);
 let rewardPanel = null;
 let toast = null;
-let knowledgeAwardedThisVisit = false;
 let rewardsAvailable = true;
+let knowledgeRewardBusy = false;
+let knowledgeGuestPromptTarget = 0;
+
+const KNOWLEDGE_MILESTONES = [
+  { points: 2, delayMs: 15000, depth: 0.28 },
+  { points: 5, delayMs: 35000, depth: 0.55 },
+  { points: 10, delayMs: 60000, depth: 0.82 }
+];
 
 function ensureStyles() {
   if (document.getElementById("rewards-style")) {
@@ -177,7 +186,7 @@ function renderSummaryPanel() {
   if (!currentUser) {
     rewardPanel.innerHTML = `
       <h3>MindEase Journey</h3>
-      <p>Sign in to collect Relax Points from completed audio and Knowledge Points from full articles and guides.</p>
+      <p>Sign in to collect Relax Points from audio and Knowledge Points as you spend time with articles and guides.</p>
     `;
     return;
   }
@@ -320,31 +329,47 @@ function setupKnowledgeRewards() {
 
   const itemId = currentPage.replace(/\.html$/, "");
   const target = document.querySelector(".article") || document.body;
-  const activationTime = Date.now() + 15000;
+  const startTime = Date.now();
+
+  function getReachedKnowledgeTarget() {
+    const scrollPosition = window.scrollY + window.innerHeight;
+    let targetPoints = 0;
+
+    KNOWLEDGE_MILESTONES.forEach((milestone) => {
+      const threshold = target.offsetTop + target.offsetHeight * milestone.depth;
+      const enoughTime = Date.now() - startTime >= milestone.delayMs;
+      if (enoughTime && scrollPosition >= threshold) {
+        targetPoints = milestone.points;
+      }
+    });
+
+    return targetPoints;
+  }
 
   async function maybeAwardKnowledge() {
-    if (knowledgeAwardedThisVisit) {
+    const targetPoints = getReachedKnowledgeTarget();
+    if (!targetPoints || knowledgeRewardBusy) {
       return;
     }
 
-    const scrollPosition = window.scrollY + window.innerHeight;
-    const threshold = target.offsetTop + target.offsetHeight * 0.82;
-
-    if (Date.now() < activationTime || scrollPosition < threshold) {
+    const currentPoints = getItemRewardProgress(rewardData, "knowledge", itemId);
+    if (currentPoints >= targetPoints) {
       return;
     }
-
-    knowledgeAwardedThisVisit = true;
 
     if (!currentUser) {
       renderSummaryPanel();
-      showToast("Sign in to collect Knowledge Points.");
+      if (targetPoints > knowledgeGuestPromptTarget) {
+        knowledgeGuestPromptTarget = targetPoints;
+        showToast("Sign in to collect Knowledge Points.");
+      }
       return;
     }
 
     try {
+      knowledgeRewardBusy = true;
       const previousMindEasePoints = rewardData.mindeasePoints;
-      const result = await awardReward(db, currentUser.uid, "knowledge", itemId);
+      const result = await awardRewardProgress(db, currentUser.uid, "knowledge", itemId, targetPoints);
       rewardData = result.data;
       renderSummaryPanel();
 
@@ -352,20 +377,21 @@ function setupKnowledgeRewards() {
         const mindEaseGain = getMindEaseGain(previousMindEasePoints, result.data.mindeasePoints);
         showToast(
           mindEaseGain
-            ? `+10 Knowledge Points and +${mindEaseGain} MindEase Points`
-            : "+10 Knowledge Points"
+            ? `+${result.pointsAwarded} Knowledge Points and +${mindEaseGain} MindEase Points`
+            : `+${result.pointsAwarded} Knowledge Points`
         );
-      } else {
-        showToast("Knowledge Points already collected for this article.");
       }
     } catch (error) {
       rewardsAvailable = false;
       renderSummaryPanel();
+    } finally {
+      knowledgeRewardBusy = false;
     }
   }
 
   window.addEventListener("scroll", maybeAwardKnowledge, { passive: true });
   window.addEventListener("load", maybeAwardKnowledge);
+  window.setInterval(maybeAwardKnowledge, 5000);
 }
 
 ensureStyles();

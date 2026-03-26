@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MindEase | Stress, Anxiety & Emotional Wellbeing Support</title>
+  <meta name="description" content="MindEase provides evidence-informed support for stress, anxiety, and emotional wellbeing. Explore relaxation audio, articles, mood tracking, resources, and workshops.">
+  <meta name="theme-color" content="#2f5d62">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="MindEase">
+  <link rel="canonical" href="https://mindease.ca/">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/icons/mindease-icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <script src="/pwa-register.js" defer></script>
+  <script src="/cookie-consent.js" defer></script>
+  <meta property="og:title" content="MindEase | Stress, Anxiety & Emotional Wellbeing Support">
+  <meta property="og:description" content="MindEase provides evidence-informed support for stress, anxiety, and emotional wellbeing. Explore relaxation audio, articles, mood tracking, resources, and workshops.">
+  <meta property="og:url" content="https://mindease.ca/">
+  <meta property="og:type" content="website">
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "MindEase",
+      "url": "https://mindease.ca",
+      "description": "Support for stress, anxiety, and emotional wellbeing through articles, audio, resources, and workshops."
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f6f8f7;
+      color: #2f3a3a;
+      line-height: 1.7;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.97);
+      border-bottom: 1px solid #e4ebea;
+    }
+
+    .navbar-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #2f5d62;
+      font-weight: bold;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      transform-origin: center;
+      animation: headerLogoSweep 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+    }
+
+    .brand-text {
+      font-size: 1.05rem;
+      letter-spacing: 0.02em;
+      opacity: 0;
+      animation: brandTextReveal 0.5s ease 0.85s forwards;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .nav-links a,
+    .nav-trigger,
+    .menu-panel a {
+      text-decoration: none;
+      color: #2f5d62;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .nav-links a:hover,
+    .nav-trigger:hover,
+    .menu-panel a:hover {
+      opacity: 0.75;
+    }
+
+    .nav-menu {
+      position: relative;
+    }
+
+    .nav-trigger {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: #edf4f3;
+    }
+
+    .nav-trigger::-webkit-details-marker {
+      display: none;
+    }
+
+    .menu-panel {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 10px);
+      min-width: 190px;
+      padding: 12px;
+      border-radius: 16px;
+      background: white;
+      box-shadow: 0 16px 36px rgba(47, 93, 98, 0.16);
+      border: 1px solid #dce8e6;
+    }
+
+    .menu-panel a {
+      display: block;
+      padding: 10px 12px;
+      border-radius: 10px;
+    }
+
+    .account-points {
+      margin: 0 0 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f2f6f5;
+      color: #2f5d62;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .account-points strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .account-breakdown {
+      display: grid;
+      gap: 6px;
+      margin: 8px 0 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f8fbfa;
+      color: #456060;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .menu-panel a:hover {
+      background: #f2f6f5;
+      opacity: 1;
+    }
+
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: white;
+      border-radius: 18px;
+      padding: 42px 28px;
+      margin: 0 auto 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+
+    .hero h1 {
+      color: #2f5d62;
+      font-size: 2.5rem;
+      margin: 0 0 12px;
+    }
+
+    .hero .tagline {
+      font-size: 1.15rem;
+      font-weight: 600;
+      max-width: 760px;
+      margin: 0 auto 14px;
+      color: #2f5d62;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .hero-logo-badge {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 112px;
+      transform-origin: center;
+    }
+
+    .hero-logo-badge img {
+      display: block;
+      width: 100%;
+      height: auto;
+      animation: logoBreath 9s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    .welcome-banner {
+      max-width: 760px;
+      margin: 18px auto 0;
+      padding: 16px 18px;
+      border-radius: 16px;
+      background: #edf4f3;
+      color: #2f5d62;
+    }
+
+    .welcome-banner strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.02rem;
+    }
+
+    .welcome-banner p {
+      margin: 0 0 10px;
+    }
+
+    .welcome-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .section {
+      background: white;
+      margin: 0 auto 24px;
+      padding: 30px 26px;
+      border-radius: 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+
+    .section h2 {
+      color: #2f5d62;
+      margin-top: 0;
+      margin-bottom: 14px;
+      font-size: 1.65rem;
+    }
+
+    .section p {
+      max-width: 760px;
+      margin: 0 auto 14px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      max-width: 840px;
+      margin: 18px auto 0;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: center;
+      text-align: left;
+    }
+
+    .feature-copy p {
+      max-width: none;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .feature-badge {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #e6f1ef;
+      color: #2f5d62;
+      font-size: 0.88rem;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .feature-video-wrap {
+      position: relative;
+      padding: 14px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, rgba(47, 93, 98, 0.18), rgba(171, 206, 198, 0.42));
+      animation: gentleFloat 7s ease-in-out infinite;
+    }
+
+    .feature-video {
+      display: block;
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 12px 28px rgba(47, 93, 98, 0.18);
+      background: #d8e7e4;
+    }
+
+    @keyframes gentleFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    @keyframes logoBreath {
+      0% {
+        transform: scale(0.96);
+      }
+      44.44% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(0.96);
+      }
+    }
+
+    @keyframes headerLogoSweep {
+      0% {
+        transform: translateX(58vw) rotate(-10deg) scale(0.76);
+      }
+      62% {
+        transform: translateX(-10px) rotate(3deg) scale(1.05);
+      }
+      80% {
+        transform: translateX(4px) rotate(-1deg) scale(0.98);
+      }
+      100% {
+        transform: translateX(0) rotate(0deg) scale(1);
+      }
+    }
+
+    @keyframes brandTextReveal {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card {
+      background: #f2f6f5;
+      border-radius: 14px;
+      padding: 20px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .card-content {
+      flex-grow: 1;
+    }
+
+    .card-actions {
+      margin-top: auto;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #2f5d62;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      max-width: none;
+    }
+
+    .button {
+      display: inline-block;
+      background: #2f5d62;
+      color: white;
+      padding: 13px 22px;
+      border-radius: 9px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .button.secondary {
+      background: #e8f1ef;
+      color: #2f5d62;
+    }
+
+    .button:hover {
+      opacity: 0.92;
+    }
+
+    .small-link {
+      margin-top: 10px;
+      display: block;
+      font-size: 0.95rem;
+      word-break: break-word;
+    }
+
+    footer {
+      text-align: center;
+      color: #6e7878;
+      font-size: 14px;
+      margin-top: 36px;
+    }
+
+    .footer-note {
+      margin: 0 0 8px;
+      color: #4f5d5d;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .footer-links a {
+      color: #2f5d62;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 760px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .feature-copy p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .card {
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .navbar {
+        justify-content: center;
+      }
+
+      .navbar-brand {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .nav-links {
+        width: 100%;
+        margin-left: 0;
+        gap: 10px;
+        align-items: flex-start;
+      }
+
+      .nav-links a,
+      .nav-trigger {
+        font-size: 14px;
+      }
+
+      .nav-menu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .brand-mark {
+        animation-duration: 1.2s;
+      }
+
+      .menu-panel {
+        position: static;
+        left: auto;
+        right: auto;
+        transform: none;
+        min-width: 0;
+        width: 100%;
+        margin-top: 8px;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        background: transparent;
+        box-shadow: none;
+        border: none;
+      }
+
+      .menu-panel a {
+        display: inline-flex;
+        width: auto;
+        padding: 8px 12px;
+        background: #f2f6f5;
+      }
+
+      .hero-logo-badge {
+        top: 14px;
+        right: 14px;
+        width: 86px;
+      }
+
+      .hero,
+      .section {
+        padding: 22px 18px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .brand-mark,
+      .brand-text,
+      .hero-logo-badge {
+        animation: none;
+      }
+
+      .hero-logo-badge img {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <img src="mindease_logo.svg" alt="MindEase logo" class="brand-mark">
+      <span class="brand-text">MindEase</span>
+    </a>
+    <div class="nav-links">
+      <a href="about.html">About</a>
+      <a href="blog.html">Blog</a>
+      <a href="/journal.html">Journal</a>
+      <a href="/mood.html">Mood Check</a>
+      <details class="nav-menu">
+        <summary class="nav-trigger">Resources</summary>
+        <div class="menu-panel">
+          <a href="programs.html">Guided Programs</a>
+          <a href="priority-matrix.html">Priority Matrix</a>
+          <a href="coloring/color-for-calm.html">Color for Calm</a>
+          <a href="audio.html">Relaxation Audio</a>
+          <a href="materials.html">Resources Page</a>
+        </div>
+      </details>
+      <details class="nav-menu">
+        <summary class="nav-trigger">Sessions</summary>
+        <div class="menu-panel">
+          <a href="#workshops-card">Workshops</a>
+          <a href="#consultation-card">Consultation</a>
+        </div>
+      </details>
+      <details class="nav-menu" id="accountMenu">
+        <summary class="nav-trigger">Account</summary>
+        <div class="menu-panel">
+          <div class="account-points" id="accountPoints" hidden>
+            <strong>MindEase Points</strong>
+            <span id="accountPointsText">0 - MindEase Explorer</span>
+          </div>
+          <div class="account-breakdown" id="accountBreakdown" hidden>
+            <span id="accountRelaxText">Relax: 0</span>
+            <span id="accountKnowledgeText">Reading: 0</span>
+            <span id="accountOrganizeText">Organizing: 0</span>
+            <span id="accountCreativeText">Coloring: 0</span>
+          </div>
+          <a href="/dashboard.html" id="dashboardLink" hidden>Dashboard</a>
+          <a href="/login.html" id="loginLink">Login</a>
+          <a href="/signup.html" id="signupLink">Sign up</a>
+          <a href="#" id="signOutLink" hidden>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="page">
+
+    <section class="hero">
+      <div class="hero-logo-badge" aria-hidden="true">
+        <img src="mindease_logo.svg" alt="">
+      </div>
+      <h1>MindEase</h1>
+      <p class="tagline">
+        Evidence-informed tools for managing stress, anxiety, and emotional wellbeing.
+      </p>
+      <p>
+        MindEase offers practical support through workshops, individual consultation,
+        guided relaxation resources, educational content, and practical resources designed
+        to help people build healthier ways of responding to stress and anxiety in everyday life.
+      </p>
+      <div class="welcome-banner" id="welcomeBanner" hidden>
+        <strong id="welcomeTitle">Welcome back.</strong>
+        <p id="welcomeText">Your tools are ready when you are.</p>
+        <p id="welcomePoints" hidden>MindEase Points: 0 - MindEase Explorer</p>
+        <div class="welcome-actions">
+          <a class="button" href="/dashboard.html">Open Dashboard</a>
+          <a class="button" href="/journal.html">Open Journal</a>
+          <a class="button" href="/mood.html">Open Mood Tracker</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="feature-grid">
+        <div class="feature-copy">
+          <span class="feature-badge">Featured Practice</span>
+          <h2>Let the body settle first</h2>
+          <p>
+            Progressive Muscle Relaxation can help release physical tension and create a calmer starting
+            point for the mind. It is one of the simplest body-based ways to interrupt stress.
+          </p>
+          <a class="button" href="audio.html#pmr">Try Progressive Muscle Relaxation</a>
+        </div>
+
+        <div class="feature-video-wrap">
+          <video class="feature-video" autoplay muted loop playsinline>
+            <source src="PMR_post.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Explore MindEase</h2>
+      <p>
+        MindEase is a growing space for stress and anxiety support, combining research-informed guidance
+        with practical resources people can use in everyday life.
+      </p>
+      <p>
+        We offer workshops and individual consultations, alongside guided relaxation audio,
+        educational blog content, and practical resources such as journaling tools and a mood tracker.
+        You can also visit the About page to learn more about the professional background and selected
+        publications behind MindEase.
+      </p>
+    </section>
+
+    <section class="section" id="sessions">
+      <h2>Sessions & Workshops</h2>
+
+      <div class="cards">
+        <div class="card" id="workshops-card">
+          <div class="card-content">
+            <h3>Stress & Anxiety Workshops</h3>
+            <p>
+              Online workshops focused on understanding stress and anxiety, learning practical coping
+              strategies, relaxation techniques, grounding exercises, and guided practices.
+            </p>
+            <p>
+              <strong>Next workshop:</strong><br>
+              21 March 2026 - 10 AM ET
+            </p>
+          </div>
+          <div class="card-actions">
+            <a class="button" href="https://docs.google.com/forms/d/e/1FAIpQLSf5UUCFjOha-TPXf_qf2S33j9jHVq5zk0C2bJ3XW2przHoI_Q/viewform?usp=sharing&ouid=107778545710584818433" target="_blank" rel="noopener">
+              Sign Up for Workshop
+            </a>
+          </div>
+        </div>
+
+        <div class="card" id="consultation-card">
+          <div class="card-content">
+            <h3>Individual Consultation</h3>
+            <p>
+              Individual sessions focused on stress and anxiety management, emotional regulation,
+              relaxation techniques, and practical coping tools for everyday challenges.
+            </p>
+          </div>
+          <div class="card-actions">
+            <a class="small-link" href="mailto:consultation@mindease.ca">
+              consultation@mindease.ca
+            </a>
+            <a class="button" href="https://krisztiankasos.mindease.ca/en">
+              Request a Session
+            </a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-content">
+            <h3>Relaxation Audio</h3>
+            <p>
+              A growing library of guided practices including breathing exercises, grounding,
+              relaxation, and meditation.
+            </p>
+          </div>
+          <div class="card-actions">
+            <a class="button" href="audio.html">
+              Listen to Audio
+            </a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-content">
+            <h3>Blog & Resources</h3>
+            <p>
+              Read articles and explore practical resources for stress, anxiety, relaxation,
+              emotional wellbeing, guided programs, and interactive support tools.
+            </p>
+          </div>
+          <div class="card-actions">
+            <a class="button" href="blog.html">
+              Visit the Blog
+            </a>
+            <a class="button secondary" href="materials.html">
+              Explore Resources
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <h2>Contact</h2>
+      <p>Email: information@mindease.ca</p>
+    </section>
+
+    <footer>
+      <p class="footer-note">MindEase is for educational and wellness purposes only and is not medical advice.</p>
+      <div class="footer-links">
+        <a href="disclaimer.html">Disclaimer</a>
+        <a href="privacy.html">Privacy & Cookies</a>
+      </div>
+      2026 mindease inc.
+    </footer>
+
+  </div>
+
+  <script type="module">
+    import { auth, db } from "./firebase-config.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getOverallLevel, loadRewardData } from "./rewards-core.js";
+
+    const welcomeBanner = document.getElementById("welcomeBanner");
+    const welcomeTitle = document.getElementById("welcomeTitle");
+    const welcomeText = document.getElementById("welcomeText");
+    const welcomePoints = document.getElementById("welcomePoints");
+    const accountMenu = document.getElementById("accountMenu");
+    const navMenus = document.querySelectorAll(".nav-menu");
+    const accountPoints = document.getElementById("accountPoints");
+    const accountPointsText = document.getElementById("accountPointsText");
+    const accountBreakdown = document.getElementById("accountBreakdown");
+    const accountRelaxText = document.getElementById("accountRelaxText");
+    const accountKnowledgeText = document.getElementById("accountKnowledgeText");
+    const accountOrganizeText = document.getElementById("accountOrganizeText");
+    const accountCreativeText = document.getElementById("accountCreativeText");
+    const dashboardLink = document.getElementById("dashboardLink");
+    const loginLink = document.getElementById("loginLink");
+    const signupLink = document.getElementById("signupLink");
+    const signOutLink = document.getElementById("signOutLink");
+    function getFriendlyName(user) {
+      if (user.displayName && user.displayName.trim()) {
+        return user.displayName.trim();
+      }
+
+      if (user.email && user.email.includes("@")) {
+        return user.email.split("@")[0];
+      }
+
+      return "friend";
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const name = getFriendlyName(user);
+        let pointsText = "MindEase Points unavailable right now.";
+
+        try {
+          const rewardData = await loadRewardData(db, user.uid);
+          const overallLevel = getOverallLevel(rewardData.mindeasePoints);
+          pointsText = `${rewardData.mindeasePoints} - ${overallLevel.label}`;
+          accountRelaxText.textContent = `Relax: ${rewardData.relaxPoints}`;
+          accountKnowledgeText.textContent = `Reading: ${rewardData.knowledgePoints}`;
+          accountOrganizeText.textContent = `Organizing: ${rewardData.organizePoints}`;
+          accountCreativeText.textContent = `Coloring: ${rewardData.creativePoints}`;
+        } catch (error) {
+          pointsText = "MindEase Points unavailable right now.";
+          accountRelaxText.textContent = "Relax: unavailable";
+          accountKnowledgeText.textContent = "Reading: unavailable";
+          accountOrganizeText.textContent = "Organizing: unavailable";
+          accountCreativeText.textContent = "Coloring: unavailable";
+        }
+
+        welcomeTitle.textContent = `Welcome back, ${name}.`;
+        welcomeText.textContent = "Your journal, mood tracker, and guided tools are ready for you.";
+        welcomePoints.textContent = `MindEase Points: ${pointsText}`;
+        welcomePoints.hidden = false;
+        welcomeBanner.hidden = false;
+        accountPointsText.textContent = pointsText;
+        accountPoints.hidden = false;
+        accountBreakdown.hidden = false;
+        dashboardLink.hidden = false;
+        loginLink.hidden = true;
+        signupLink.hidden = true;
+        signOutLink.hidden = false;
+      } else {
+        welcomeBanner.hidden = true;
+        welcomePoints.hidden = true;
+        accountPoints.hidden = true;
+        accountBreakdown.hidden = true;
+        dashboardLink.hidden = true;
+        loginLink.hidden = false;
+        signupLink.hidden = false;
+        signOutLink.hidden = true;
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      navMenus.forEach((menu) => {
+        if (menu.open && !menu.contains(event.target)) {
+          menu.open = false;
+        }
+      });
+    });
+
+    signOutLink.addEventListener("click", async (event) => {
+      event.preventDefault();
+      accountMenu.open = false;
+      await signOut(auth);
+      window.location.href = "/index.html";
+    });
+  </script>
+</body>
+</html>
